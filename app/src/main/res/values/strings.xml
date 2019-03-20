@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CheatApp</string>
+    <string name="enable_discoverability">Enable Discoverability</string>
+    <string name="search">Search</string>
 </resources>
