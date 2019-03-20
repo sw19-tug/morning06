@@ -2,8 +2,10 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -20,8 +22,11 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class ConnectActivityEspressoTest {
+    @Rule
+    public ActivityTestRule<ConnectActivity> mainActivityTestRule = new ActivityTestRule<>(ConnectActivity.class);
+
     @Test
-    public void testButtonVisible()
+    public void testButtonsVisible()
     {
         onView(withId(R.id.bt_con_search)).check(matches(isDisplayed()));
         onView(withId(R.id.bt_con_enable)).check(matches(isDisplayed()));
