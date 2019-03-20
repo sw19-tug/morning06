@@ -30,4 +30,9 @@ public class ConnectActivityEspressoTest {
         onView(withId(R.id.bt_con_enable_discoverability)).check(matches(isDisplayed()));
 
     }
+
+    @Test
+    public void testListVisible() {
+        onView(withId(R.id.lv_con_devices)).check(matches(isDisplayed()));
+    }
 }
