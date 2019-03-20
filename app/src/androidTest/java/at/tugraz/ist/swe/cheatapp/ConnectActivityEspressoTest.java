@@ -1,7 +1,5 @@
 package at.tugraz.ist.swe.cheatapp;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -28,8 +26,8 @@ public class ConnectActivityEspressoTest {
     @Test
     public void testButtonsVisible()
     {
-        onView(withId(R.id.bt_con_search)).check(matches(isDisplayed()));
-        onView(withId(R.id.bt_con_enable)).check(matches(isDisplayed()));
+        onView(withId(R.id.bt_con_connect)).check(matches(isDisplayed()));
+        onView(withId(R.id.bt_con_enable_discoverability)).check(matches(isDisplayed()));
 
     }
 }

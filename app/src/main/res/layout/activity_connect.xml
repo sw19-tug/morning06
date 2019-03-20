@@ -12,14 +12,14 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <Button
-            android:id="@+id/bt_con_enable"
+            android:id="@+id/bt_con_enable_discoverability"
             android:text="@string/enable_discoverability"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
         <Button
-            android:id="@+id/bt_con_search"
-            android:text="@string/search"
+            android:id="@+id/bt_con_connect"
+            android:text="@string/connect"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
