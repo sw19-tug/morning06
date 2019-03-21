@@ -14,7 +14,9 @@ public class DummyBluetoothProvider implements BluetoothProvider {
     }
 
     @Override
-    public List<Device> getPairedDevices() { return this.devices; }
+    public List<Device> getPairedDevices() {
+        return this.devices;
+    }
 
     @Override
     public void connectToDevice(Device device) {

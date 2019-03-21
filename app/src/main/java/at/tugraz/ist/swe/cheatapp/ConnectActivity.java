@@ -1,7 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ConnectActivity extends AppCompatActivity {
@@ -45,10 +44,9 @@ public class ConnectActivity extends AppCompatActivity {
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(selectedListIndex < 0) {
+                if (selectedListIndex < 0) {
                     Toast.makeText(ConnectActivity.this, "No device selected.", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     bluetoothProvider.connectToDevice(bluetoothProvider.getPairedDevices().get(selectedListIndex));
                 }
             }
@@ -64,8 +62,7 @@ public class ConnectActivity extends AppCompatActivity {
             adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
             listView.setAdapter(adapter);
-        }
-        else {
+        } else {
             adapter.clear();
             adapter.addAll(deviceIDs);
             adapter.notifyDataSetChanged();
@@ -73,11 +70,9 @@ public class ConnectActivity extends AppCompatActivity {
 
     }
 
-    private List<String> getDeviceIDStringList(List<Device> deviceList)
-    {
+    private List<String> getDeviceIDStringList(List<Device> deviceList) {
         List<String> idList = new ArrayList<>();
-        for (Device device : deviceList)
-        {
+        for (Device device : deviceList) {
             idList.add(device.getID());
         }
 

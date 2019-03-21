@@ -3,12 +3,9 @@ package at.tugraz.ist.swe.cheatapp;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.Map;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -16,10 +13,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,8 +32,7 @@ public class ConnectActivityEspressoTest {
     public ActivityTestRule<ConnectActivity> connectActivityTestRule = new ActivityTestRule<>(ConnectActivity.class);
 
     @Test
-    public void testButtonsVisible()
-    {
+    public void testButtonsVisible() {
         onView(withId(R.id.bt_con_connect)).check(matches(isDisplayed()));
 
     }

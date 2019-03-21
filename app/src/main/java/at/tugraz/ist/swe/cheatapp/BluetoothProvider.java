@@ -4,5 +4,6 @@ import java.util.List;
 
 public interface BluetoothProvider {
     List<Device> getPairedDevices();
+
     void connectToDevice(Device device);
 }
