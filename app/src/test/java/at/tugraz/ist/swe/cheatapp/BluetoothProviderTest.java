@@ -36,13 +36,6 @@ public class BluetoothProviderTest {
 
     @Test
     public void testDiscoverDevicesAvailable() {
-        bluetoothProvider.setDummyDevices();
-        bluetoothProvider.startDiscover();
-        assertNotEquals(0L, bluetoothProvider.getDevices().size());
-    }
-
-    @Test
-    public void testDiscoverDevicesAvailable() {
         bluetoothProvider.enableDummyDevices(5);
         bluetoothProvider.startDiscover();
         assertEquals(5L, bluetoothProvider.getDevices().size());
