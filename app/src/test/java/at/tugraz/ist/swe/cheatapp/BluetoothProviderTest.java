@@ -24,26 +24,13 @@ public class BluetoothProviderTest {
     }
 
     @Test
-    public void testInitialState() {
+    public void testWithoutPairedDevices() {
         assertEquals(0L, bluetoothProvider.getPairedDevices().size());
     }
 
     @Test
-    public void testDiscoverDevicesNoneAvailable() {
-        bluetoothProvider.startDiscover();
-        assertEquals(0L, bluetoothProvider.getPairedDevices().size());
-    }
-
-    @Test
-    public void testDiscoverDevicesAvailable() {
+    public void testWithPairedDevices() {
         bluetoothProvider.enableDummyDevices(5);
-        bluetoothProvider.startDiscover();
         assertEquals(5L, bluetoothProvider.getPairedDevices().size());
-    }
-
-    @Test
-    public void testIsDiscoverable() {
-        bluetoothProvider.startDiscoverability();
-        assertTrue(bluetoothProvider.isDiscoverable());
     }
 }

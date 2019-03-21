@@ -13,16 +13,6 @@ public class DummyBluetoothProvider implements BluetoothProvider {
     }
 
     @Override
-    public void startDiscoverability() {
-        this.discoverable = true;
-    }
-
-    @Override
-    public void startDiscover() {
-
-    }
-
-    @Override
     public List<Device> getPairedDevices() {
         return this.devices;
     }
@@ -38,9 +28,5 @@ public class DummyBluetoothProvider implements BluetoothProvider {
         for (int i = 0; i < count; i++) {
             this.devices.add(new DummyDevice(Integer.toString(i)));
         }
-    }
-
-    public boolean isDiscoverable() {
-        return discoverable;
     }
 }
