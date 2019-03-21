@@ -1,8 +1,12 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.arch.persistence.room.Room;
+import android.content.Context;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -12,16 +16,29 @@ import static org.junit.Assert.assertTrue;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class DatabaseHandlerUnitTest {
-    private DatabaseHandler databaseHandler;
+    private MessageRepository messageRepository;
+    private Message message;
+    private CheatAppDatabase cheatappDatabase;
+    private Context context;
+    private String DB_NAME = "cheatapp_db";
 
     @Before
     public void setUp() {
-        databaseHandler = new DatabaseHandler();
+        messageRepository = new MessageRepository(context);
+        cheatappDatabase = new CheatAppDatabase();
     }
 
     @Test
     public void testInitialization() {
-        assertNotNull(databaseHandler);
-        assertTrue(databaseHandler.isDatabaseOpen());
+        assertNotNull(messageRepository);
+        assertNotNull(cheatappDatabase);
+        String text = "Test Message";
+        int userId = 37;
+        boolean sent = true;
+        messageRepository.insertMessage(userId, text, sent);
+        message = messageRepository.getMessages(userId)[0];
+        assertEquals(message.text, text);
+        assertEquals(message.userId, userId);
+        assertEquals(message.sent, sent);
     }
 }
