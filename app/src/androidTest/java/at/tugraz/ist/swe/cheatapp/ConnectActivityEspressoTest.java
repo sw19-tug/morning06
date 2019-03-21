@@ -40,7 +40,6 @@ public class ConnectActivityEspressoTest {
     public void testButtonsVisible()
     {
         onView(withId(R.id.bt_con_connect)).check(matches(isDisplayed()));
-        onView(withId(R.id.bt_con_enable_discoverability)).check(matches(isDisplayed()));
 
     }
 

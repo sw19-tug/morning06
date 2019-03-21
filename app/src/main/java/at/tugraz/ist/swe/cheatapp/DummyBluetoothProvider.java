@@ -5,7 +5,8 @@ import java.util.List;
 
 public class DummyBluetoothProvider implements BluetoothProvider {
     private List<Device> devices;
-    private boolean discoverable;
+    private Device connectedDevice;
+    private boolean connected;
 
 
     public DummyBluetoothProvider() {
@@ -13,13 +14,12 @@ public class DummyBluetoothProvider implements BluetoothProvider {
     }
 
     @Override
-    public List<Device> getPairedDevices() {
-        return this.devices;
-    }
+    public List<Device> getPairedDevices() { return this.devices; }
 
     @Override
     public void connectToDevice(Device device) {
-
+        connectedDevice = device;
+        connected = true;
     }
 
     public void enableDummyDevices(int count) {
@@ -28,5 +28,13 @@ public class DummyBluetoothProvider implements BluetoothProvider {
         for (int i = 0; i < count; i++) {
             this.devices.add(new DummyDevice(Integer.toString(i)));
         }
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public Device getConnectedDevice() {
+        return connectedDevice;
     }
 }
