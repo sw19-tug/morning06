@@ -15,6 +15,10 @@ import java.util.List;
 
 public class ConnectActivity extends AppCompatActivity {
 
+    private ListView listView;
+    private Button connectButton;
+    private ArrayAdapter<String> adapter;
+
     private BluetoothProvider bluetoothProvider;
     private int selectedListIndex = -1;
 
@@ -23,8 +27,8 @@ public class ConnectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
-        final ListView listView = findViewById(R.id.lv_con_devices);
-        final Button connectButton = findViewById(R.id.bt_con_connect);
+        listView = findViewById(R.id.lv_con_devices);
+        connectButton = findViewById(R.id.bt_con_connect);
 
         if(bluetoothProvider == null)
         {
@@ -32,12 +36,8 @@ public class ConnectActivity extends AppCompatActivity {
             bluetoothProvider = new DummyBluetoothProvider();
         }
 
-        final List<Device> deviceList = bluetoothProvider.getPairedDevices();
-        String[] values = getDeviceIDStringList(deviceList).toArray(new String[0]);
+        this.updateValues();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
-        listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -53,10 +53,28 @@ public class ConnectActivity extends AppCompatActivity {
                     Toast.makeText(ConnectActivity.this, "No device selected.", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    bluetoothProvider.connectToDevice(deviceList.get(selectedListIndex));
+                    bluetoothProvider.connectToDevice(bluetoothProvider.getPairedDevices().get(selectedListIndex));
                 }
             }
         });
+    }
+
+    private void updateValues() {
+        final List<Device> deviceList = bluetoothProvider.getPairedDevices();
+        List<String> deviceIDs = getDeviceIDStringList(deviceList);
+
+
+        if (this.adapter == null) {
+            adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
+            listView.setAdapter(adapter);
+        }
+        else {
+            adapter.clear();
+            adapter.addAll(deviceIDs);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     private List<String> getDeviceIDStringList(List<Device> deviceList)
@@ -70,7 +88,15 @@ public class ConnectActivity extends AppCompatActivity {
         return idList;
     }
 
-    public void setBluetoothProvider(BluetoothProvider bluetoothProvider) {
-        this.bluetoothProvider = bluetoothProvider;
+    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ConnectActivity.this.bluetoothProvider = bluetoothProvider;
+                ConnectActivity.this.updateValues();
+            }
+        });
+
     }
 }
