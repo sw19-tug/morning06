@@ -78,7 +78,7 @@ public class ConnectActivityEspressoTest {
     }
 
     @Test
-    public void testEnableDiscovery() {
+    public void testConnectWithSelection() {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 

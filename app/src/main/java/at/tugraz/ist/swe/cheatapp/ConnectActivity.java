@@ -30,14 +30,10 @@ public class ConnectActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_con_devices);
         connectButton = findViewById(R.id.bt_con_connect);
 
-        if(bluetoothProvider == null)
-        {
-            // TODO change this to real bluetooth provider later
-            bluetoothProvider = new DummyBluetoothProvider();
-        }
+        // TODO change this to real bluetooth provider later
+        bluetoothProvider = new DummyBluetoothProvider();
 
         this.updateValues();
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
