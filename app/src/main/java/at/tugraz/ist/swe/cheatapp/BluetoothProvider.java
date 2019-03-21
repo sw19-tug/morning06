@@ -5,6 +5,6 @@ import java.util.List;
 public interface BluetoothProvider {
     void startDiscoverability();
     void startDiscover();
-    List<Device> getDevices();
+    List<Device> getPairedDevices();
     void connectToDevice(Device device);
 }
