@@ -35,5 +35,4 @@ public class testTextField {
         onView(withId(R.id.textEntry)).perform(typeText(test_text), closeSoftKeyboard());
         onView(withId(R.id.textEntry)).check(matches(withText(test_text)));
     }
-
 }

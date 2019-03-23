@@ -14,9 +14,9 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="275dp"
         android:layout_marginRight="10dp"
-        android:layout_weight="1"
         android:hint="@string/enter_text"
-        android:inputType="text" />
+        android:inputType="textMultiLine"
+        />
 
 
 
