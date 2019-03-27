@@ -29,8 +29,7 @@ public class ConnectActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_con_devices);
         connectButton = findViewById(R.id.bt_con_connect);
 
-        // TODO change this to real bluetooth provider later
-        bluetoothProvider = new DummyBluetoothProvider();
+        bluetoothProvider = new RealBluetoothProvider();
 
         this.updateValues();
 
