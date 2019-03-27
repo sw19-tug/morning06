@@ -14,9 +14,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button sendButton=(Button) findViewById(R.id.sendButton);
 
-
-
         EditText textEntry = findViewById(R.id.textEntry);
-        String entryString = textEntry.getText().toString();
     }
 }

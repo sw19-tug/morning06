@@ -34,4 +34,8 @@ public class MainActivityEspressoTest {
         onView(withId(R.id.textEntry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.textEntry)).check(matches(withText(testText)));
     }
+    @Test
+    public void buttonVisible() {
+        onView(withId(R.id.sendButton)).check(matches(isDisplayed()));
+    }
 }
