@@ -30,6 +30,10 @@ public class MessageRepository {
         }.execute();
     }
 
+    public List<Message> getRawMessagesByUserId(int userId) {                   //For testing purposes
+        return cheatAppDatabase.messageDao().getRawMessagesByUserId(userId);
+    }
+
     public LiveData<List<Message>> getMessagesByUserId(int userId) {
         return cheatAppDatabase.messageDao().getMessagesByUserId(userId);
     }

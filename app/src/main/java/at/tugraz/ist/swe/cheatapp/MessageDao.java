@@ -13,7 +13,11 @@ public interface MessageDao {
     @Insert
     Long insertMessage(Message message);
 
-    @Query("SELECT * FROM Message WHERE userId=:userId ORDER BY messageId desc")
+    @Query("SELECT * FROM Message WHERE userId=:userId ORDER BY messageId asc")
+    List<Message> getRawMessagesByUserId(int userId);       //For testing purposes
+
+    @Query("SELECT * FROM Message WHERE userId=:userId ORDER BY messageId asc")
     LiveData<List<Message>> getMessagesByUserId(int userId);
+
 
 }
