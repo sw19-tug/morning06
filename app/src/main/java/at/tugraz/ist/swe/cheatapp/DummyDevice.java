@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 public class DummyDevice implements Device {
     String id;
+    private String message;
 
     public DummyDevice(String id) {
         this.id = id;
@@ -11,4 +12,9 @@ public class DummyDevice implements Device {
     public String getID() {
         return this.id;
     }
+
+    public String getMessage() { return this.message; }
+
+    public void setMessage(String message) { this.message = message; }
+
 }
