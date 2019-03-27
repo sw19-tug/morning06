@@ -29,7 +29,14 @@ public class ConnectActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_con_devices);
         connectButton = findViewById(R.id.bt_con_connect);
 
-        bluetoothProvider = new RealBluetoothProvider();
+        try {
+            bluetoothProvider = new RealBluetoothProvider();
+        }
+        catch (BluetoothException e) {
+            // TOOD: Think about this later...
+            bluetoothProvider = new DummyBluetoothProvider();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
         this.updateValues();
 
