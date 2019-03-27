@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CheatApp</string>
+    <string name="enter_text">Enter Text</string>
     <string name="connect">Connect</string>
 </resources>
