@@ -6,7 +6,7 @@ import java.util.List;
 public class RealBluetoothProvider implements BluetoothProvider {
     @Override
     public List<Device> getPairedDevices() {
-        
+
         List<Device> devices = new ArrayList<>();
         devices.add(new RealDevice());
 
