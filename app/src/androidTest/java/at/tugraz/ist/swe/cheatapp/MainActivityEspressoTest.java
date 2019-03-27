@@ -2,7 +2,6 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.EditText;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +17,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class testTextField {
+public class MainActivityEspressoTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -29,10 +28,10 @@ public class testTextField {
     }
 
     @Test
-    public void testInput(){
-        String test_text = "Test_Input";
+    public void testInput() {
+        String testText = "Test_Input";
         onView(withId(R.id.textEntry)).perform(replaceText(""));
-        onView(withId(R.id.textEntry)).perform(typeText(test_text), closeSoftKeyboard());
-        onView(withId(R.id.textEntry)).check(matches(withText(test_text)));
+        onView(withId(R.id.textEntry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.textEntry)).check(matches(withText(testText)));
     }
 }
