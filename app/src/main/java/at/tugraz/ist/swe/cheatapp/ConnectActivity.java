@@ -3,6 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,6 +40,9 @@ public class ConnectActivity extends AppCompatActivity {
         }
 
         this.updateValues();
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setSelector(R.color.colorHighlight);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
