@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onSendButtonClicked() {
         String textToSend = textEntry.getText().toString();
-        device.setMessage(textToSend);
+        device.sendMessage(textToSend);
         textEntry.getText().clear();
     }
 }

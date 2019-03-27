@@ -15,6 +15,6 @@ public class DummyDevice implements Device {
 
     public String getMessage() { return this.message; }
 
-    public void setMessage(String message) { this.message = message; }
+    public void sendMessage(String message) { this.message = message; }
 
 }
