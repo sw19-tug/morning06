@@ -13,4 +13,8 @@ public class RealDevice implements Device {
     public String getID() {
         return  device.getName();
     }
+
+    public BluetoothDevice getDevice() {
+        return device;
+    }
 }

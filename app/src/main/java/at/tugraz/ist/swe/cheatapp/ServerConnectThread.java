@@ -14,11 +14,13 @@ import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_UUID;
 public class ServerConnectThread extends Thread {
     private BluetoothAdapter adapter;
     private BluetoothSocket socket;
+    private Device device;
 
 
     public ServerConnectThread(BluetoothAdapter adapter) {
         this.adapter = adapter;
         this.socket = null;
+        this.device = null;
     }
 
     @Override
@@ -28,16 +30,35 @@ public class ServerConnectThread extends Thread {
 
             while (!this.isInterrupted()) {
                 try {
-                    this.socket = serverSocket.accept(1000);
+                    this.socket = serverSocket.accept(200);
                     this.interrupt();
                 }
                 catch (IOException ignore) {
+                    // Timeout
+                    if (this.device != null) {
+                        // TODO: Refactor
+
+                        try {
+                            this.socket = ((RealDevice) this.device).getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
+                            this.socket.connect();
+                            this.interrupt();
+                        }
+                        catch (IOException ex) {
+                            ex.printStackTrace();
+                            // TODO what to to here?
+                        }
+
+                    }
                 }
             }
         }
         catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void requestConnection(Device device) {
+        this.device = device;
     }
 
     public BluetoothSocket getSocket() {
