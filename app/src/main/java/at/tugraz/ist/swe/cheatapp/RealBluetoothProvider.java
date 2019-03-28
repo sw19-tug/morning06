@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,20 +35,23 @@ public class RealBluetoothProvider extends BluetoothProvider {
         communicationThread = new Thread(new Runnable() {
             BluetoothSocket socket;
             @Override
-            public void run() {
-                do {
-                    socket = RealBluetoothProvider.this.serverConnectThread.getSocket();
-                } while (socket == null);
+            public  void run() {
                 try {
-                    InputStreamReader inputReader = new InputStreamReader(socket.getInputStream());
+                    synchronized (RealBluetoothProvider.this.serverConnectThread) {
+                        RealBluetoothProvider.this.serverConnectThread.wait();
+                    }
+                    socket = RealBluetoothProvider.this.serverConnectThread.getSocket();
+
+                    BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     OutputStreamWriter outputWriter = new OutputStreamWriter(socket.getOutputStream());
 
                     while(true) {
-                        outputWriter.write(String.format("I'm a message for %s.%n", socket.getRemoteDevice().getName()));
-                        System.out.println(inputReader.read());
+                        // TODO: IO Loop
                     }
                 } catch (IOException e) {
                     // TODO
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -71,6 +75,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
     @Override
     public void connectToDevice(Device device) {
         System.out.println("Request connection as client;");
-        serverConnectThread.requestConnection(device);
+        serverConnectThread.requestConnection((RealDevice) device);
     }
 }

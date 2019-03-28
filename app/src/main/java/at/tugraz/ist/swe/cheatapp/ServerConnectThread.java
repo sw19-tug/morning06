@@ -14,13 +14,15 @@ import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_UUID;
 public class ServerConnectThread extends Thread {
     private BluetoothAdapter adapter;
     private BluetoothSocket socket;
-    private Device device;
+    private RealDevice device;
+    private boolean connected;
 
 
     public ServerConnectThread(BluetoothAdapter adapter) {
         this.adapter = adapter;
         this.socket = null;
         this.device = null;
+        this.connected = false;
     }
 
     @Override
@@ -36,34 +38,47 @@ public class ServerConnectThread extends Thread {
                 }
                 catch (IOException ignore) {
                     // Timeout
-                    if (this.device != null) {
-                        System.out.println("ServerConnectThread: Connection as client requested");
-                        // TODO: Refactor
 
-                        try {
-                            this.socket = ((RealDevice) this.device).getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
-                            this.socket.connect();
-                            this.interrupt();
-                        }
-                        catch (IOException ex) {
-                            ex.printStackTrace();
-                            // TODO what to to here?
-                        }
+                    synchronized (this) {
+                        if (this.device != null) {
+                            System.out.println("ServerConnectThread: Connection as client requested");
+                            // TODO: Refactor
 
+                            try {
+                                this.socket =  this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
+                                this.socket.connect();
+                                boolean connected = this.socket.isConnected();
+                                this.interrupt();
+                            }
+                            catch (IOException ex) {
+                                ex.printStackTrace();
+                                // TODO what to to here?
+                            }
+                        }
                     }
                 }
             }
+
+            synchronized (this) {
+                this.connected = true;
+                this.notify();
+            }
+
         }
         catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    public void requestConnection(Device device) {
+    public synchronized void requestConnection(RealDevice device) {
         this.device = device;
     }
 
-    public BluetoothSocket getSocket() {
+
+    public synchronized BluetoothSocket getSocket() throws InterruptedException {
+        if (!this.connected) {
+            this.wait();
+        }
         return socket;
     }
 }
