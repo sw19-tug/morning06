@@ -30,7 +30,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         this.serverConnectThread = new ServerConnectThread(adapter);
         this.serverConnectThread.start();
 
-        System.out.println("RealBluetoothProvider: Start Communication Thread");
+        System.out.println("RealBluetoothProvider Start Communication Thread");
         communicationThread = new Thread(new Runnable() {
             BluetoothSocket socket;
             @Override
@@ -40,7 +40,12 @@ public class RealBluetoothProvider extends BluetoothProvider {
                 } while (socket == null);
                 try {
                     InputStreamReader inputReader = new InputStreamReader(socket.getInputStream());
-                    OutputStreamWriter outputReader = new OutputStreamWriter(socket.getOutputStream());
+                    OutputStreamWriter outputWriter = new OutputStreamWriter(socket.getOutputStream());
+
+                    while(true) {
+                        outputWriter.write(String.format("I'm a message for %s.%n", socket.getRemoteDevice().getName()));
+                        System.out.println(inputReader.read());
+                    }
                 } catch (IOException e) {
                     // TODO
                     e.printStackTrace();
