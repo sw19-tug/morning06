@@ -62,4 +62,8 @@ public class MainActivityEspressoTest {
 
         assertEquals(testText, device.getMessage());
     }
+
+    @Test
+    public void chatHistoryVisible(){ onView(withId(R.id.chatHistory)).check(matches(isDisplayed())); }
+
 }
