@@ -19,10 +19,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityEspressoTest {
+public class ChatActivityEspressoTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<ChatActivity> mainActivityTestRule = new ActivityTestRule<>(ChatActivity.class);
 
     @Test
     public void testFieldVisible() {
