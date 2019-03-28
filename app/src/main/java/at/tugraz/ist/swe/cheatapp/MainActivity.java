@@ -1,22 +1,19 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private BluetoothProvider bluetoothProvider;
     private ConnectFragment connectFragment;
+    private ChatFragment chatFragment;
+
+    // TODO: Refactor
+    private Device device;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +21,18 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothProvider = new DummyBluetoothProvider();
         setContentView(R.layout.activity_main);
+        
+        device = new DummyDevice("1");
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         connectFragment = new ConnectFragment();
-        transaction.replace(R.id.placeholder_frame, connectFragment);
-        transaction.commit();
+        chatFragment = new ChatFragment();
+
+        showChatFragment();
+
+    }
+
+    public BluetoothProvider getBluetoothProvider() {
+        return this.bluetoothProvider;
     }
 
     public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
@@ -41,7 +45,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public BluetoothProvider getBluetoothProvider() {
-        return this.bluetoothProvider;
+    public Device getDevice() {
+        return this.device;
     }
+
+    // TODO: Remove this method once ChatFragment uses BluetoothProvider instead of Device
+    public void setDevice(Device device) {
+        this.device = device;
+    }
+
+    public void showConnectFragment() {
+        setFragment(connectFragment);
+    }
+
+    public void showChatFragment() {
+        setFragment(chatFragment);
+    }
+
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.placeholder_frame, fragment);
+        transaction.commit();
+    }
+
 }

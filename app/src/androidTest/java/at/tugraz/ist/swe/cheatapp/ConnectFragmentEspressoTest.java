@@ -3,6 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,11 @@ import static org.junit.Assert.assertTrue;
 public class ConnectFragmentEspressoTest {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void setUp() {
+        mainActivityTestRule.getActivity().showConnectFragment();
+    }
 
     @Test
     public void testButtonsVisible() {

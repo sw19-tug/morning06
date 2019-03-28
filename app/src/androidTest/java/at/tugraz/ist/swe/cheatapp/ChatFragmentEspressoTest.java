@@ -3,6 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +20,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class ChatActivityEspressoTest {
+public class ChatFragmentEspressoTest {
 
     @Rule
-    public ActivityTestRule<ChatActivity> mainActivityTestRule = new ActivityTestRule<>(ChatActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void setUp() {
+        mainActivityTestRule.getActivity().showChatFragment();
+    }
 
     @Test
     public void testFieldVisible() {
