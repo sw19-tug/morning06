@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class RealBluetoothProvider implements BluetoothProvider {
+public class RealBluetoothProvider extends BluetoothProvider {
 
     private BluetoothAdapter adapter;
 

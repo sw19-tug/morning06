@@ -3,7 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DummyBluetoothProvider implements BluetoothProvider {
+public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
     private Device connectedDevice;
     private boolean connected;

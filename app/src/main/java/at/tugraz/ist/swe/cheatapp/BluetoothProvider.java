@@ -1,9 +1,10 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import java.util.List;
+import java.util.Observable;
 
-public interface BluetoothProvider {
-    List<Device> getPairedDevices();
+public abstract class BluetoothProvider  extends Observable {
+    abstract List<Device> getPairedDevices();
 
-    void connectToDevice(Device device);
+    abstract void connectToDevice(Device device);
 }
