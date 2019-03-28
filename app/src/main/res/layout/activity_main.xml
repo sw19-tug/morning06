@@ -3,31 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_weight="1"
+    android:gravity = "bottom"
+    tools:context=".MainActivity"
+    >
 
-    <EditText
-        android:id="@+id/textEntry"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="275dp"
-        android:layout_marginRight="10dp"
-        android:hint="@string/enter_text"
-        android:inputType="textMultiLine"
-        />
+        android:id="@+id/relativeLayout1"
+        android:layout_height="wrap_content">
 
+        <Button
+            android:id="@+id/sendButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorPrimaryDark"
+            android:text="Send"
+            android:textColor="@android:color/background_light"
+            android:layout_alignParentBottom="true"
+            />
 
+        <EditText
+            android:id="@+id/textEntry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/sendButton"
+            android:background="@color/colorPrimary"
+            android:fadingEdge="none"
+            android:hint="Enter Text Here">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_alignParentBottom="true"
-        >
-
-    </LinearLayout>
+        </EditText>
+    </RelativeLayout>
 
 </RelativeLayout>
