@@ -18,6 +18,7 @@ import java.util.List;
 
 public class ConnectFragment extends Fragment {
 
+    private View view;
     private ListView listView;
     private Button connectButton;
     private ArrayAdapter<String> adapter;
@@ -26,15 +27,16 @@ public class ConnectFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_connect, container, false);
+        view = inflater.inflate(R.layout.activity_connect, container, false);
+        return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        listView = getView().findViewById(R.id.lv_con_devices);
-        connectButton = getView().findViewById(R.id.bt_con_connect);
+        listView = view.findViewById(R.id.lv_con_devices);
+        connectButton = view.findViewById(R.id.bt_con_connect);
 
         // TODO change this to real bluetooth provider later
         bluetoothProvider = new DummyBluetoothProvider();
@@ -52,7 +54,7 @@ public class ConnectFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (selectedListIndex < 0) {
-                    Toast.makeText(getActivity(), "No device selected.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
                 } else {
                     bluetoothProvider.connectToDevice(bluetoothProvider.getPairedDevices().get(selectedListIndex));
                 }
@@ -60,14 +62,12 @@ public class ConnectFragment extends Fragment {
         });
     }
 
-
     private void updateValues() {
         final List<Device> deviceList = bluetoothProvider.getPairedDevices();
         List<String> deviceIDs = getDeviceIDStringList(deviceList);
 
-
         if (this.adapter == null) {
-            adapter = new ArrayAdapter<>(getActivity(),
+            adapter = new ArrayAdapter<>(view.getContext(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
             listView.setAdapter(adapter);
         } else {
