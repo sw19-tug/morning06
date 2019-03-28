@@ -51,7 +51,7 @@ public class DatabaseIntegrationTest {
 
     @Test
     public void testInsertAndLoadOneMessage() throws InterruptedException {
-        messageRepository.insertMessage(0, "First Message!", true);
+        messageRepository.insertMessage(new Message(0, "First Message!", true));
 
         Thread.sleep(100);
 
@@ -67,9 +67,9 @@ public class DatabaseIntegrationTest {
 
     @Test
     public void testInsertAndLoadMultipleMessages() throws InterruptedException {
-        messageRepository.insertMessage(1, "First Message!", true);
-        messageRepository.insertMessage(1, "Response to first Message!", false);
-        messageRepository.insertMessage(1, "Second Message!", true);
+        messageRepository.insertMessage(new Message(1, "First Message!", true));
+        messageRepository.insertMessage(new Message(1, "Response to first Message!", false));
+        messageRepository.insertMessage(new Message(1, "Second Message!", true));
 
         Thread.sleep(100);
 
@@ -101,8 +101,8 @@ public class DatabaseIntegrationTest {
 
     @Test
     public void testSpecialCharacters() throws InterruptedException {
-        messageRepository.insertMessage(2, "\uD83D\uDE85\uD83D\uDCBE\uD83C\uDDE6\uD83C\uDDF9", true);
-        messageRepository.insertMessage(2, "′^°£%©±", true);
+        messageRepository.insertMessage(new Message(2, "\uD83D\uDE85\uD83D\uDCBE\uD83C\uDDE6\uD83C\uDDF9", true));
+        messageRepository.insertMessage(new Message(2, "′^°£%©±", true));
 
         Thread.sleep(100);
 

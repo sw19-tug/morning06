@@ -17,9 +17,7 @@ public class MessageRepository {
         cheatAppDatabase = Room.databaseBuilder(context, CheatAppDatabase.class, DB_NAME).build();
     }
 
-    public void insertMessage(int userId, String messageText, boolean messageSent) {
-
-        final Message newMessage = new Message(userId, messageText, messageSent);
+    public void insertMessage(final Message newMessage) {
 
         new AsyncTask<Void, Void, Void>() {
             @Override
