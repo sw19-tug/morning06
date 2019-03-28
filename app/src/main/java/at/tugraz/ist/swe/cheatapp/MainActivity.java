@@ -1,6 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,9 +15,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private BluetoothProvider bluetoothProvider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.placeholder_frame, new ConnectFragment());
+        transaction.commit();
     }
 }
