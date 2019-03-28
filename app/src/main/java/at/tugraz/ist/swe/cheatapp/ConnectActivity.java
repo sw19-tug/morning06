@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class ConnectActivity extends AppCompatActivity {
+public class ConnectActivity extends AppCompatActivity implements Observer {
 
     private ListView listView;
     private Button connectButton;
@@ -99,5 +101,10 @@ public class ConnectActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        // TODO get device from arg and give it to the main activity. Change to main activity
     }
 }

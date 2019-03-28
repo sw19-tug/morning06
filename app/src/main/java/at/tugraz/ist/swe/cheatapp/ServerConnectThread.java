@@ -32,10 +32,12 @@ public class ServerConnectThread extends Thread {
                 try {
                     this.socket = serverSocket.accept(200);
                     this.interrupt();
+                    System.out.println("ServerConnectThread: Connected as server.");
                 }
                 catch (IOException ignore) {
                     // Timeout
                     if (this.device != null) {
+                        System.out.println("ServerConnectThread: Connection as client requested");
                         // TODO: Refactor
 
                         try {
