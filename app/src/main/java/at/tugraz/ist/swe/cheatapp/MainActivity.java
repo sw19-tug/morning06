@@ -5,12 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button sendButton;
     private EditText textEntry;
     private Device device;
+    private TextView receivedMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

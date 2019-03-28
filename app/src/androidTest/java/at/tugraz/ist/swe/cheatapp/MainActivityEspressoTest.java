@@ -62,4 +62,20 @@ public class MainActivityEspressoTest {
 
         assertEquals(testText, device.getMessage());
     }
+
+    @Test
+    public void testReceivedMessageTextView(){
+
+        String testText = "Test Test Test";
+        mainActivityTestRule.getActivity().onMessageReceived(testText);
+        onView(withId(R.id.receivedMessage)).check(matches(withText(testText))));
+        onView(withId(R.id.receivedMessage)).check(matches(isDisplayed()));
+        
+        String testText2 = "Hallo\n@.-,-,.\n";
+        mainActivityTestRule.getActivity().onMessageReceived(testText2);
+        onView(withId(R.id.receivedMessage)).check(matches(withText(testText2)));
+        onView(withId(R.id.receivedMessage)).check(matches(isDisplayed()));
+
+    }
+
 }
