@@ -16,14 +16,32 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private BluetoothProvider bluetoothProvider;
+    private ConnectFragment connectFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bluetoothProvider = new DummyBluetoothProvider();
         setContentView(R.layout.activity_main);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.placeholder_frame, new ConnectFragment());
+        connectFragment = new ConnectFragment();
+        transaction.replace(R.id.placeholder_frame, connectFragment);
         transaction.commit();
+    }
+
+    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.this.bluetoothProvider = bluetoothProvider;
+                connectFragment.updateValues();
+            }
+        });
+    }
+
+    public BluetoothProvider getBluetoothProvider() {
+        return this.bluetoothProvider;
     }
 }

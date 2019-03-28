@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class ConnectFragmentEspressoTest {
     @Rule
-    public ActivityTestRule<ConnectActivity> connectActivityTestRule = new ActivityTestRule<>(ConnectActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void testButtonsVisible() {
@@ -47,7 +47,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        connectActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -63,7 +63,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        connectActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
         onView(withId(R.id.bt_con_connect)).perform(click());
 
@@ -76,7 +76,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        connectActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());

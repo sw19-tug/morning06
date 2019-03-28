@@ -17,12 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectFragment extends Fragment {
-
+    private MainActivity activity;
     private View view;
     private ListView listView;
     private Button connectButton;
     private ArrayAdapter<String> adapter;
-    private BluetoothProvider bluetoothProvider;
     private int selectedListIndex = -1;
 
     @Override
@@ -34,12 +33,12 @@ public class ConnectFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        activity = (MainActivity) getActivity();
 
         listView = view.findViewById(R.id.lv_con_devices);
         connectButton = view.findViewById(R.id.bt_con_connect);
 
         // TODO change this to real bluetooth provider later
-        bluetoothProvider = new DummyBluetoothProvider();
 
         this.updateValues();
 
@@ -56,14 +55,14 @@ public class ConnectFragment extends Fragment {
                 if (selectedListIndex < 0) {
                     Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
                 } else {
-                    bluetoothProvider.connectToDevice(bluetoothProvider.getPairedDevices().get(selectedListIndex));
+                    activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
                 }
             }
         });
     }
 
-    private void updateValues() {
-        final List<Device> deviceList = bluetoothProvider.getPairedDevices();
+    public void updateValues() {
+        final List<Device> deviceList = activity.getBluetoothProvider().getPairedDevices();
         List<String> deviceIDs = getDeviceIDStringList(deviceList);
 
         if (this.adapter == null) {
@@ -87,15 +86,16 @@ public class ConnectFragment extends Fragment {
         return idList;
     }
 
-    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ConnectFragment.this.bluetoothProvider = bluetoothProvider;
-                ConnectFragment.this.updateValues();
-            }
-        });
-
-    }
+//    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
+//
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ConnectFragment.this.activity.getBluetoothProvider() = bluetoothProvider;
+//                ConnectFragment.this.updateValues();
+//            }
+//        });
+//
+//    }
 }
