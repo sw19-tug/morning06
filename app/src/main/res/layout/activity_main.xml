@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:gravity = "bottom"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    >
 
 
     <RelativeLayout
@@ -26,12 +27,16 @@
             android:layout_alignParentBottom="true"
             />
 
-        <EditText android:id="@+id/textEntry"
+        <EditText
+            android:id="@+id/textEntry"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
             android:layout_toLeftOf="@+id/sendButton"
+            android:background="@color/colorPrimary"
+            android:fadingEdge="none"
             android:hint="Enter Text Here">
+
         </EditText>
     </RelativeLayout>
 
