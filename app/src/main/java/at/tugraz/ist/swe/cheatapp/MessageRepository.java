@@ -17,9 +17,8 @@ public class MessageRepository {
         cheatAppDatabase = Room.databaseBuilder(context, CheatAppDatabase.class, DB_NAME).build();
     }
 
-    public void insertMessage(final Message newMessage) {
-
-        new AsyncTask<Void, Void, Void>() {
+    public AsyncTask<Void, Void, Void> insertMessage(final Message newMessage) {
+        return new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 cheatAppDatabase.messageDao().insertMessage(newMessage);

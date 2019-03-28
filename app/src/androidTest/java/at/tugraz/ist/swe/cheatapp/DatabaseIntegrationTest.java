@@ -1,18 +1,16 @@
 package at.tugraz.ist.swe.cheatapp;
 
-import android.arch.lifecycle.Observer;
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -50,10 +48,8 @@ public class DatabaseIntegrationTest {
     }
 
     @Test
-    public void testInsertAndLoadOneMessage() throws InterruptedException {
-        messageRepository.insertMessage(new Message(0, "First Message!", true));
-
-        Thread.sleep(100);
+    public void testInsertAndLoadOneMessage() throws InterruptedException, ExecutionException {
+        messageRepository.insertMessage(new Message(0, "First Message!", true)).get();
 
         List<Message> allMessages = messageRepository.getRawMessagesByUserId(0);
         Message message = allMessages.get(0);
@@ -66,12 +62,10 @@ public class DatabaseIntegrationTest {
     }
 
     @Test
-    public void testInsertAndLoadMultipleMessages() throws InterruptedException {
-        messageRepository.insertMessage(new Message(1, "First Message!", true));
-        messageRepository.insertMessage(new Message(1, "Response to first Message!", false));
-        messageRepository.insertMessage(new Message(1, "Second Message!", true));
-
-        Thread.sleep(100);
+    public void testInsertAndLoadMultipleMessages() throws InterruptedException, ExecutionException {
+        messageRepository.insertMessage(new Message(1, "First Message!", true)).get();
+        messageRepository.insertMessage(new Message(1, "Response to first Message!", false)).get();
+        messageRepository.insertMessage(new Message(1, "Second Message!", true)).get();
 
         List<Message> allMessages = messageRepository.getRawMessagesByUserId(1);
         Message message1 = allMessages.get(0);
@@ -100,11 +94,9 @@ public class DatabaseIntegrationTest {
     }
 
     @Test
-    public void testSpecialCharacters() throws InterruptedException {
-        messageRepository.insertMessage(new Message(2, "\uD83D\uDE85\uD83D\uDCBE\uD83C\uDDE6\uD83C\uDDF9", true));
-        messageRepository.insertMessage(new Message(2, "′^°£%©±", true));
-
-        Thread.sleep(100);
+    public void testSpecialCharacters() throws InterruptedException, ExecutionException {
+        messageRepository.insertMessage(new Message(2, "\uD83D\uDE85\uD83D\uDCBE\uD83C\uDDE6\uD83C\uDDF9", true)).get();
+        messageRepository.insertMessage(new Message(2, "′^°£%©±", true)).get();
 
         List<Message> allMessages = messageRepository.getRawMessagesByUserId(2);
         Message message1 = allMessages.get(0);

@@ -1,4 +1,5 @@
 package at.tugraz.ist.swe.cheatapp;
+
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 

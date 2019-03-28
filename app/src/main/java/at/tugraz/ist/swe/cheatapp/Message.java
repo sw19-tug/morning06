@@ -13,41 +13,41 @@ public class Message {
     private String messageText;
     private boolean messageSent;
 
-    public Message(int userId, String messageText, boolean messageSent){
+    public Message(int userId, String messageText, boolean messageSent) {
         this.userId = userId;
         this.messageText = messageText;
         this.messageSent = messageSent;
     }
 
-    public int getMessageId(){
+    public int getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(int messageId){
+    public void setMessageId(int messageId) {
         this.messageId = messageId;
     }
 
-    public int getUserId(){
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId){
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public String getMessageText(){
+    public String getMessageText() {
         return messageText;
     }
 
-    public void setMessageText(String messageText){
+    public void setMessageText(String messageText) {
         this.messageText = messageText;
     }
 
-    public boolean getMessageSent(){
+    public boolean getMessageSent() {
         return messageSent;
     }
 
-    public void setMessageSent(boolean messageSent){
+    public void setMessageSent(boolean messageSent) {
         this.messageSent = messageSent;
     }
 }
