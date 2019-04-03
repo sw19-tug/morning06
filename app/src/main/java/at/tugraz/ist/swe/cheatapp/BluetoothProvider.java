@@ -6,15 +6,17 @@ import java.util.List;
 public abstract class BluetoothProvider {
     protected List<BluetoothEventHandler> eventHandlerList;
 
-    public abstract List<Device> getPairedDevices();
-    public abstract void connectToDevice(Device device);
-
-    public abstract void send(String message);
-    public abstract void disconnect();
-
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
     }
+
+    public abstract List<Device> getPairedDevices();
+
+    public abstract void connectToDevice(Device device);
+
+    public abstract void send(String message);
+
+    public abstract void disconnect();
 
     public void registerHandler(BluetoothEventHandler handler) {
         eventHandlerList.add(handler);

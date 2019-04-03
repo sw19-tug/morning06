@@ -3,7 +3,6 @@ package at.tugraz.ist.swe.cheatapp;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
@@ -147,7 +146,7 @@ public class BluetoothProviderTest {
 
         // TODO: Maybe change the name of this method?
         this.bluetoothProvider.setReceivedMessage("test");
-        
+
         assertEquals(calledList[0], "test");
     }
 
