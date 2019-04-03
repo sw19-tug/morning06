@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         device = new DummyDevice("1");
         textEntry = findViewById(R.id.textEntry);
-        sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<Message> messageList = new ArrayList<>();
         messageRecycler = findViewById(R.id.rvChat);
-        messageAdapter = new MessageAdapter(this, messageList);
+        messageAdapter = new MessageAdapter(messageList);
         messageRecycler.setAdapter(messageAdapter);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
     }

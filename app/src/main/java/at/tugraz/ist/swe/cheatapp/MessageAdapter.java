@@ -15,13 +15,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     private List<Message> messageList;
-    private Context context;
 
-    public MessageAdapter(Context context, List<Message> messageList) {
-        this.context = context;
+    public MessageAdapter(List<Message> messageList) {
         this.messageList = messageList;
     }
-
 
     @Override
     public int getItemCount() {
@@ -30,7 +27,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        Message message = (Message) messageList.get(position);
+        Message message = messageList.get(position);
         if (message.getMessageSent()) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -56,7 +53,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message message = (Message) messageList.get(position);
+        Message message = messageList.get(position);
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
@@ -73,8 +70,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         SentMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = (TextView) itemView.findViewById(R.id.text_message_body);
-            timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            messageText = itemView.findViewById(R.id.text_message_body);
+            timeText = itemView.findViewById(R.id.text_message_time);
         }
 
         void bind(Message message) {
@@ -90,15 +87,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = (TextView) itemView.findViewById(R.id.text_message_body);
-            timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            messageText = itemView.findViewById(R.id.text_message_body);
+            timeText = itemView.findViewById(R.id.text_message_time);
         }
 
         void bind(Message message) {
             messageText.setText(message.getMessageText());
 
             // Todo: Add timestamp here
-
         }
     }
 }
