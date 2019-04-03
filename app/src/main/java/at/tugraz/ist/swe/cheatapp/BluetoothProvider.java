@@ -11,4 +11,6 @@ public abstract class BluetoothProvider  extends Observable {
     protected abstract void onDisconnected();
     protected abstract void onConnected();
 
+    public abstract void sendMessage(String message);
+    public abstract void disconnect();
 }

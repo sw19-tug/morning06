@@ -7,6 +7,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
     private Device connectedDevice;
     private boolean connected;
+    private String sendMessage;
 
 
     public DummyBluetoothProvider() {
@@ -37,6 +38,22 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     @Override
     protected void onConnected() {
 
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        sendMessage = message;
+    }
+
+    @Override
+    public void disconnect() {
+        connectedDevice = null;
+        connected = false;
+    }
+
+    public String checkSendMessage()
+    {
+        return sendMessage;
     }
 
     public void enableDummyDevices(int count) {

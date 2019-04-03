@@ -101,6 +101,19 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
+    public void sendMessage(String message) {
+        synchronized (sentMessageQueue)
+        {
+            sentMessageQueue.add(message);
+        }
+    }
+
+    @Override
+    public void disconnect() {
+
+    }
+
+    @Override
     protected void onMessageReceived(String message) {
 
     }
