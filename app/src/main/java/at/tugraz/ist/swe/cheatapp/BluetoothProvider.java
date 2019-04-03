@@ -9,6 +9,9 @@ public abstract class BluetoothProvider {
     public abstract List<Device> getPairedDevices();
     public abstract void connectToDevice(Device device);
 
+    public abstract void send(String message);
+    public abstract void disconnect();
+
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
     }

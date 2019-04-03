@@ -118,4 +118,65 @@ public class BluetoothProviderTest {
 
         assertTrue(calledList[0]);
     }
+
+    @Test
+    public void testOnMessageReceivedCallback() {
+        // hack for setting variable out of BluetoothEventHandler class
+        final String[] calledList = new String[1];
+        calledList[0] = "";
+
+        BluetoothEventHandler handler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+                calledList[0] = message;
+            }
+
+            @Override
+            public void onConnected() {
+            }
+
+            @Override
+            public void onDisconnected() {
+            }
+        };
+
+        this.bluetoothProvider.registerHandler(handler);
+        this.bluetoothProvider.enableDummyDevices(1);
+        List<Device> devices = this.bluetoothProvider.getPairedDevices();
+        this.bluetoothProvider.connectToDevice(devices.get(0));
+
+        this.bluetoothProvider.send("test");
+
+        assertEquals(calledList[0], "test");
+    }
+
+    @Test
+    public void testOnDisconnectedCallback() {
+        // hack for setting variable out of BluetoothEventHandler class
+        final Boolean[] calledList = new Boolean[1];
+        calledList[0] = false;
+
+        BluetoothEventHandler handler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+            }
+
+            @Override
+            public void onConnected() {
+            }
+
+            @Override
+            public void onDisconnected() {
+                calledList[0] = true;
+            }
+        };
+
+        this.bluetoothProvider.registerHandler(handler);
+        this.bluetoothProvider.enableDummyDevices(1);
+        List<Device> devices = this.bluetoothProvider.getPairedDevices();
+        this.bluetoothProvider.connectToDevice(devices.get(0));
+        this.bluetoothProvider.disconnect();
+
+        assertTrue(calledList[0]);
+    }
 }
