@@ -3,6 +3,8 @@ package at.tugraz.ist.swe.cheatapp;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -28,4 +30,60 @@ public class BluetoothProviderTest {
         bluetoothProvider.enableDummyDevices(5);
         assertEquals(5L, bluetoothProvider.getPairedDevices().size());
     }
+
+    @Test
+    public void testAddEventHandler() {
+        BluetoothEventHandler handler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+
+            }
+
+            @Override
+            public void onConnected() {
+
+            }
+
+            @Override
+            public void onDisconnected() {
+
+            }
+        };
+
+        this.bluetoothProvider.registerHandler(handler);
+
+        List<BluetoothEventHandler> handlers = this.bluetoothProvider.getEventHandlers();
+
+        assertEquals(handlers.size(), 1);
+        assertEquals(handlers.get(0), handler);
+    }
+
+    @Test
+    public void testRemoveEventHandler() {
+        BluetoothEventHandler handler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+
+            }
+
+            @Override
+            public void onConnected() {
+
+            }
+
+            @Override
+            public void onDisconnected() {
+
+            }
+        };
+
+        this.bluetoothProvider.registerHandler(handler);
+        this.bluetoothProvider.unregisterHandler(handler);
+
+        List<BluetoothEventHandler> handlers = this.bluetoothProvider.getEventHandlers();
+
+        assertEquals(handlers.size(), 0);
+    }
+
+
 }

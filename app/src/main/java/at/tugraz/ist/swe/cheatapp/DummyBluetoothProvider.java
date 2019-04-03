@@ -38,4 +38,8 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     public Device getConnectedDevice() {
         return connectedDevice;
     }
+
+    public List<BluetoothEventHandler> getEventHandlers() {
+        return this.eventHandlerList;
+    }
 }
