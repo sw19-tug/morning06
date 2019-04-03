@@ -7,6 +7,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
     private Device connectedDevice;
     private boolean connected;
+    private String sendMessage;
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
@@ -22,6 +23,38 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         connectedDevice = device;
         connected = true;
         super.onConnected();
+    }
+
+    @Override
+    protected void onMessageReceived(String message) {
+
+    }
+
+    @Override
+    protected void onDisconnected() {
+
+    }
+
+    @Override
+    protected void onConnected() {
+
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        sendMessage = message;
+    }
+
+    @Override
+    public void disconnect() {
+        connectedDevice = null;
+        connected = false;
+        super.onDisconnected();
+    }
+
+    public String checkSendMessage()
+    {
+        return sendMessage;
     }
 
     public void enableDummyDevices(int count) {
@@ -46,10 +79,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     public void send(String message) {
 
-    }
-
-    public void disconnect() {
-        super.onDisconnected();
     }
 
     // TODO just for testing purposes, maybe remove later

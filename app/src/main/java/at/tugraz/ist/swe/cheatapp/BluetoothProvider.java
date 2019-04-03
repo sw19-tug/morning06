@@ -14,7 +14,7 @@ public abstract class BluetoothProvider {
 
     public abstract void connectToDevice(Device device);
 
-    public abstract void send(String message);
+    public abstract void sendMessage(String message);
 
     public abstract void disconnect();
 

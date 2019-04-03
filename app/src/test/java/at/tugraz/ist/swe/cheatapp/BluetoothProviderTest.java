@@ -5,8 +5,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -178,5 +179,16 @@ public class BluetoothProviderTest {
         this.bluetoothProvider.disconnect();
 
         assertTrue(calledList[0]);
+    }
+        
+    public void sendMessage() {
+        String message = "Test Message";
+        bluetoothProvider.sendMessage(message);
+        assertEquals(message, bluetoothProvider.checkSendMessage());
+    }
+    @Test
+    public void disconnectFromDevice() {
+        bluetoothProvider.disconnect();
+        assertFalse(bluetoothProvider.isConnected());
     }
 }

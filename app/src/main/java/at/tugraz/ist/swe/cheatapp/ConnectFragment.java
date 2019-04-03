@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class ConnectFragment extends Fragment {
     private MainActivity activity;
@@ -36,9 +39,11 @@ public class ConnectFragment extends Fragment {
         listView = view.findViewById(R.id.lv_con_devices);
         connectButton = view.findViewById(R.id.bt_con_connect);
 
-        // TODO change this to real bluetooth provider later
 
         this.updateValues();
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setSelector(R.color.colorHighlight);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,17 +88,4 @@ public class ConnectFragment extends Fragment {
 
         return idList;
     }
-
-
-//    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
-//
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ConnectFragment.this.activity.getBluetoothProvider() = bluetoothProvider;
-//                ConnectFragment.this.updateValues();
-//            }
-//        });
-//
-//    }
 }
