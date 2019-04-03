@@ -3,6 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +20,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityEspressoTest {
+public class ChatFragmentEspressoTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void setUp() {
+        mainActivityTestRule.getActivity().showChatFragment();
+    }
 
     @Test
     public void testFieldVisible() {
@@ -53,9 +59,11 @@ public class MainActivityEspressoTest {
     @Test
     public void saveTextIntoDummyDevice() {
         String testText = "Hello World";
-        DummyDevice device = new DummyDevice("1");
+        ChatFragment chatFragment = mainActivityTestRule.getActivity().getChatFragment();
+        DummyDevice device = new DummyDevice("1", chatFragment);
 
         mainActivityTestRule.getActivity().setDevice(device);
+
 
         onView(withId(R.id.textEntry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.sendButton)).perform(click());
@@ -64,15 +72,14 @@ public class MainActivityEspressoTest {
     }
 
     @Test
-    public void testReceivedMessageTextView(){
-
+    public void testReceivedMessageTextView() {
         String testText = "Test Test Test";
-        mainActivityTestRule.getActivity().onMessageReceived(testText);
+        mainActivityTestRule.getActivity().getChatFragment().onMessageReceived(testText);
         onView(withId(R.id.receivedMessage)).check(matches(withText(testText)));
         onView(withId(R.id.receivedMessage)).check(matches(isDisplayed()));
 
         String testText2 = "Hello asdfasdf Test";
-        mainActivityTestRule.getActivity().onMessageReceived(testText2);
+        mainActivityTestRule.getActivity().getChatFragment().onMessageReceived(testText2);
         onView(withId(R.id.receivedMessage)).check(matches(withText(testText2)));
         onView(withId(R.id.receivedMessage)).check(matches(isDisplayed()));
     }

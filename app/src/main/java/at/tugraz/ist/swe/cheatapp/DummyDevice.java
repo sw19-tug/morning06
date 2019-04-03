@@ -3,17 +3,17 @@ package at.tugraz.ist.swe.cheatapp;
 public class DummyDevice implements Device {
     String id;
     private String message;
-    MainActivity mainActivity;
+    ChatFragment chatFragment;
 
     public DummyDevice(String id) {
         this.id = id;
-        this.mainActivity = null;
+        this.chatFragment = null;
     }
 
     // This constructor is only for testing and can be removed if bluetooth communication works
-    public DummyDevice(String id, MainActivity mainActivity) {
+    public DummyDevice(String id, ChatFragment chatFragment) {
         this.id = id;
-        this.mainActivity = mainActivity;
+        this.chatFragment = chatFragment;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class DummyDevice implements Device {
     public String getMessage() { return this.message; }
 
     public void sendMessage(String message) {
-        mainActivity.onMessageReceived(message);
+        chatFragment.onMessageReceived(message);
         this.message = message;
     }
 }

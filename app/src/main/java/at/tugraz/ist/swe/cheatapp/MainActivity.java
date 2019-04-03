@@ -1,50 +1,72 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button sendButton;
-    private EditText textEntry;
+    private BluetoothProvider bluetoothProvider;
+    private ConnectFragment connectFragment;
+    private ChatFragment chatFragment;
+
+    // TODO: Refactor
     private Device device;
-    private TextView receivedMessageTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bluetoothProvider = new DummyBluetoothProvider();
         setContentView(R.layout.activity_main);
 
-        device = new DummyDevice("1", this);
+        connectFragment = new ConnectFragment();
+        chatFragment = new ChatFragment();
+        device = new DummyDevice("1", chatFragment);
+        showChatFragment();
 
-        receivedMessageTextView = findViewById(R.id.receivedMessage);
+    }
 
-        textEntry = findViewById(R.id.textEntry);
+    public BluetoothProvider getBluetoothProvider() {
+        return this.bluetoothProvider;
+    }
 
-        sendButton = (Button) findViewById(R.id.sendButton);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
+        runOnUiThread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                onSendButtonClicked();
+            public void run() {
+                MainActivity.this.bluetoothProvider = bluetoothProvider;
+                connectFragment.updateValues();
             }
         });
     }
 
+    public Device getDevice() {
+        return this.device;
+    }
+
+    // TODO: Remove this method once ChatFragment uses BluetoothProvider instead of Device
     public void setDevice(Device device) {
         this.device = device;
     }
 
-    private void onSendButtonClicked() {
-        String textToSend = textEntry.getText().toString();
-        device.sendMessage(textToSend);
-        textEntry.getText().clear();
+    public void showConnectFragment() {
+        setFragment(connectFragment);
     }
 
-    public void onMessageReceived(String messageText) {
-        receivedMessageTextView.setText(messageText);
+    public void showChatFragment() {
+        setFragment(chatFragment);
+    }
+
+    public ChatFragment getChatFragment() {
+        return chatFragment;
+    }
+
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.placeholder_frame, fragment);
+        transaction.commit();
     }
 }
