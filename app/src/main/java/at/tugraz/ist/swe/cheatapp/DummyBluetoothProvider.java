@@ -24,6 +24,21 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         connected = true;
     }
 
+    @Override
+    protected void onMessageReceived(String message) {
+
+    }
+
+    @Override
+    protected void onDisconnected() {
+
+    }
+
+    @Override
+    protected void onConnected() {
+
+    }
+
     public void enableDummyDevices(int count) {
         this.devices.clear();
 

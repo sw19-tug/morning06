@@ -6,28 +6,25 @@ import android.bluetooth.BluetoothSocket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observer;
 import java.util.Queue;
 import java.util.Set;
 
 public class RealBluetoothProvider extends BluetoothProvider {
 
 
+    private final Queue<String> sentMessageQueue;
     private BluetoothAdapter adapter;
     private ServerConnectThread serverConnectThread;
-
     private Thread communicationThread;
-    private Queue<Message> messageQueue;
 
-    public RealBluetoothProvider() throws  BluetoothException {
+    public RealBluetoothProvider() throws BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
-        messageQueue = new LinkedList<>();
+        sentMessageQueue = new LinkedList<>();
 
         if (adapter == null) {
             throw new BluetoothException("No bluetooth adapter available");
@@ -39,8 +36,9 @@ public class RealBluetoothProvider extends BluetoothProvider {
         System.out.println("RealBluetoothProvider Start Communication Thread");
         communicationThread = new Thread(new Runnable() {
             BluetoothSocket socket;
+
             @Override
-            public  void run() {
+            public void run() {
                 try {
                     synchronized (RealBluetoothProvider.this.serverConnectThread) {
                         RealBluetoothProvider.this.serverConnectThread.wait();
@@ -53,8 +51,22 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     OutputStreamWriter outputWriter = new OutputStreamWriter(socket.getOutputStream());
 
-                    while(true) {
-                        // TODO: IO Loop
+                    while (true) {
+                        if (inputReader.ready()) {
+                            String receivedMessage = inputReader.readLine();
+                            onMessageReceived(receivedMessage);
+                        } else {
+                            String sentMessage;
+
+                            synchronized (sentMessageQueue) {
+                                sentMessage = sentMessageQueue.poll();
+                            }
+
+                            if (sentMessage != null) {
+                                outputWriter.write(sentMessage);
+                            }
+                        }
+
                     }
                 } catch (IOException e) {
                     // TODO
@@ -94,7 +106,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    protected void onMessageReceived(Message message) {
+    protected void onMessageReceived(String message) {
 
     }
 

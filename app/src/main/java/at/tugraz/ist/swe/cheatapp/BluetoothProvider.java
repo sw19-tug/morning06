@@ -7,7 +7,7 @@ public abstract class BluetoothProvider  extends Observable {
     abstract List<Device> getPairedDevices();
 
     public abstract void connectToDevice(Device device);
-    protected abstract void onMessageReceived(Message message);
+    protected abstract void onMessageReceived(String message);
     protected abstract void onDisconnected();
     protected abstract void onConnected();
 
