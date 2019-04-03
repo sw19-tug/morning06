@@ -1,8 +1,10 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,31 +17,29 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ConnectActivity extends AppCompatActivity implements Observer {
-
+public class ConnectFragment extends Fragment {
+    private MainActivity activity;
+    private View view;
     private ListView listView;
     private Button connectButton;
     private ArrayAdapter<String> adapter;
-
-    private BluetoothProvider bluetoothProvider;
     private int selectedListIndex = -1;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connect);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.activity_connect, container, false);
+        return view;
+    }
 
-        listView = findViewById(R.id.lv_con_devices);
-        connectButton = findViewById(R.id.bt_con_connect);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (MainActivity) getActivity();
 
-        try {
-            bluetoothProvider = new RealBluetoothProvider();
-        }
-        catch (BluetoothException e) {
-            // TOOD: Think about this later...
-            bluetoothProvider = new DummyBluetoothProvider();
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        listView = view.findViewById(R.id.lv_con_devices);
+        connectButton = view.findViewById(R.id.bt_con_connect);
+
+        // TODO change this to real bluetooth provider later
 
         this.updateValues();
 
@@ -57,21 +57,20 @@ public class ConnectActivity extends AppCompatActivity implements Observer {
             @Override
             public void onClick(View v) {
                 if (selectedListIndex < 0) {
-                    Toast.makeText(ConnectActivity.this, "No device selected.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
                 } else {
-                    bluetoothProvider.connectToDevice(bluetoothProvider.getPairedDevices().get(selectedListIndex));
+                    activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
                 }
             }
         });
     }
 
-    private void updateValues() {
-        final List<Device> deviceList = bluetoothProvider.getPairedDevices();
+    public void updateValues() {
+        final List<Device> deviceList = activity.getBluetoothProvider().getPairedDevices();
         List<String> deviceIDs = getDeviceIDStringList(deviceList);
 
-
         if (this.adapter == null) {
-            adapter = new ArrayAdapter<>(this,
+            adapter = new ArrayAdapter<>(view.getContext(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
             listView.setAdapter(adapter);
         } else {
@@ -91,20 +90,15 @@ public class ConnectActivity extends AppCompatActivity implements Observer {
         return idList;
     }
 
-    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ConnectActivity.this.bluetoothProvider = bluetoothProvider;
-                ConnectActivity.this.updateValues();
-            }
-        });
-
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        // TODO get device from arg and give it to the main activity. Change to main activity
-    }
+//    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
+//
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ConnectFragment.this.activity.getBluetoothProvider() = bluetoothProvider;
+//                ConnectFragment.this.updateValues();
+//            }
+//        });
+//
+//    }
 }

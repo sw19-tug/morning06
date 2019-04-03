@@ -17,4 +17,14 @@ public class RealDevice implements Device {
     public BluetoothDevice getDevice() {
         return device;
     }
+
+    @Override
+    public String getMessage() {
+        return null;
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
+    }
 }
