@@ -20,4 +20,10 @@ public abstract class BluetoothProvider {
     public void unregisterHandler(BluetoothEventHandler handler) {
         eventHandlerList.remove(handler);
     }
+
+    protected void onConnected() {
+        for (BluetoothEventHandler handler : eventHandlerList) {
+            handler.onConnected();
+        }
+    }
 }

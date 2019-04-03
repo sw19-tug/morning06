@@ -112,6 +112,9 @@ public class BluetoothProviderTest {
         };
 
         this.bluetoothProvider.registerHandler(handler);
+        this.bluetoothProvider.enableDummyDevices(1);
+        List<Device> devices = this.bluetoothProvider.getPairedDevices();
+        this.bluetoothProvider.connectToDevice(devices.get(0));
 
         assertTrue(calledList[0]);
     }

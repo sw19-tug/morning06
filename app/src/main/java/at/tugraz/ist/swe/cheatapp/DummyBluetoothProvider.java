@@ -21,6 +21,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     public void connectToDevice(Device device) {
         connectedDevice = device;
         connected = true;
+        super.onConnected();
     }
 
     public void enableDummyDevices(int count) {
