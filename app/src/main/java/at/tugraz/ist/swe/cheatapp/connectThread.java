@@ -11,14 +11,14 @@ import java.util.UUID;
 import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_SERVICE_RECORD;
 import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_UUID;
 
-public class ServerConnectThread extends Thread {
+public class connectThread extends Thread {
     private BluetoothAdapter adapter;
     private BluetoothSocket socket;
     private RealDevice device;
     private boolean connected;
 
 
-    public ServerConnectThread(BluetoothAdapter adapter) {
+    public connectThread(BluetoothAdapter adapter) {
         this.adapter = adapter;
         this.socket = null;
         this.device = null;
@@ -34,14 +34,14 @@ public class ServerConnectThread extends Thread {
                 try {
                     this.socket = serverSocket.accept(200);
                     this.interrupt();
-                    System.out.println("ServerConnectThread: Connected as server.");
+                    System.out.println("connectThread: Connected as server.");
                 }
                 catch (IOException ignore) {
                     // Timeout
 
                     synchronized (this) {
                         if (this.device != null) {
-                            System.out.println("ServerConnectThread: Connection as client requested");
+                            System.out.println("connectThread: Connection as client requested");
                             // TODO: Refactor
 
                             try {
