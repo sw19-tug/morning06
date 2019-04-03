@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -27,5 +28,17 @@ public class BluetoothProviderTest {
     public void testWithPairedDevices() {
         bluetoothProvider.enableDummyDevices(5);
         assertEquals(5L, bluetoothProvider.getPairedDevices().size());
+    }
+
+    @Test
+    public void sendMessage() {
+        String message = "Test Message";
+        bluetoothProvider.sendMessage(message);
+        assertEquals(message, bluetoothProvider.checkSendMessage());
+    }
+    @Test
+    public void disconnectFromDevice() {
+        bluetoothProvider.disconnect();
+        assertTrue(bluetoothProvider.isConnected());
     }
 }
