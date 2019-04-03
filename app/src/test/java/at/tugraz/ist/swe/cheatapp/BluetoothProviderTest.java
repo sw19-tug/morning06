@@ -3,8 +3,10 @@ package at.tugraz.ist.swe.cheatapp;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -86,5 +88,31 @@ public class BluetoothProviderTest {
         assertEquals(handlers.size(), 0);
     }
 
+    @Test
+    public void testOnConnectedCallback() {
+        // hack for setting variable out of BluetoothEventHandler class
+        final Boolean[] calledList = new Boolean[1];
+        calledList[0] = false;
 
+        BluetoothEventHandler handler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+
+            }
+
+            @Override
+            public void onConnected() {
+                calledList[0] = true;
+            }
+
+            @Override
+            public void onDisconnected() {
+
+            }
+        };
+
+        this.bluetoothProvider.registerHandler(handler);
+
+        assertTrue(calledList[0]);
+    }
 }
