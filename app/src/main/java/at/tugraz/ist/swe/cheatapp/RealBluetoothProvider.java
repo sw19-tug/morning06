@@ -10,8 +10,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
+import java.util.Queue;
 import java.util.Set;
 
 public class RealBluetoothProvider extends BluetoothProvider {
@@ -20,9 +22,11 @@ public class RealBluetoothProvider extends BluetoothProvider {
     private ServerConnectThread serverConnectThread;
 
     private Thread communicationThread;
+    private Queue<Message> messageQueue;
 
     public RealBluetoothProvider() throws  BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
+        messageQueue = new LinkedList<>();
 
         if (adapter == null) {
             throw new BluetoothException("No bluetooth adapter available");

@@ -39,7 +39,6 @@ public class ConnectFragment extends Fragment {
         listView = view.findViewById(R.id.lv_con_devices);
         connectButton = view.findViewById(R.id.bt_con_connect);
 
-        // TODO change this to real bluetooth provider later
 
         this.updateValues();
 
@@ -89,16 +88,4 @@ public class ConnectFragment extends Fragment {
 
         return idList;
     }
-
-//    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
-//
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ConnectFragment.this.activity.getBluetoothProvider() = bluetoothProvider;
-//                ConnectFragment.this.updateValues();
-//            }
-//        });
-//
-//    }
 }
