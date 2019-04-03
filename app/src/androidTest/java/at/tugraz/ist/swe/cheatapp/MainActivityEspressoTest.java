@@ -64,6 +64,6 @@ public class MainActivityEspressoTest {
     }
 
     @Test
-    public void chatHistoryVisible(){ onView(withId(R.id.chatHistory)).check(matches(isDisplayed())); }
+    public void chatHistoryVisible(){ onView(withId(R.id.rvChat)).check(matches(isDisplayed())); }
 
 }

@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(AndroidJUnit4.class)
 public class ChatHistoryIntegrationTest {
 
@@ -29,7 +31,7 @@ public class ChatHistoryIntegrationTest {
 
         context = InstrumentationRegistry.getTargetContext().getApplicationContext();
 
-        MessageListAdapter messageListAdapter = new MessageListAdapter(context, messageList);
+        MessageAdapter messageListAdapter = new MessageAdapter(context, messageList);
         assertEquals(VIEW_TYPE_MESSAGE_SENT, messageListAdapter.getItemViewType(0));
         assertEquals(VIEW_TYPE_MESSAGE_RECEIVED, messageListAdapter.getItemViewType(1));
     }
