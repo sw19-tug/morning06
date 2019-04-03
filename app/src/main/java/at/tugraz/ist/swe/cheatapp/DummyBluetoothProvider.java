@@ -39,11 +39,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     }
 
-    @Override
-    protected void onException(Exception exception) {
-        
-    }
-
     public void enableDummyDevices(int count) {
         this.devices.clear();
 

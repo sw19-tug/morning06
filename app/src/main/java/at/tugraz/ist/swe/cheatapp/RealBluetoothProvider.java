@@ -43,6 +43,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
                         RealBluetoothProvider.this.connectThread.wait();
                     }
 
+
                     socket = RealBluetoothProvider.this.connectThread.getSocket();
                     RealBluetoothProvider.this.onConnected();
 
@@ -67,10 +68,9 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
                     }
                 } catch (Exception e) {
-                    onException(e);
+                    onDisconnected();
                 }
             }
-
 
         });
         communicationThread.start();
@@ -107,11 +107,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     protected void onDisconnected() {
-
-    }
-
-    @Override
-    protected void onException(Exception exception) {
 
     }
 }
