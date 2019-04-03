@@ -32,10 +32,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/sendButton"
+            android:layout_toStartOf="@+id/sendButton"
             android:background="@color/colorPrimary"
             android:fadingEdge="none"
-            android:hint="Enter Text Here">
+            android:hint="Enter Text Here"
+            android:minHeight="48dp">
 
         </EditText>
         <TextView
