@@ -3,11 +3,10 @@ package at.tugraz.ist.swe.cheatapp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DummyBluetoothProvider implements BluetoothProvider {
+public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
     private Device connectedDevice;
     private boolean connected;
-
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
@@ -22,6 +21,7 @@ public class DummyBluetoothProvider implements BluetoothProvider {
     public void connectToDevice(Device device) {
         connectedDevice = device;
         connected = true;
+        super.onConnected();
     }
 
     public void enableDummyDevices(int count) {
@@ -38,5 +38,22 @@ public class DummyBluetoothProvider implements BluetoothProvider {
 
     public Device getConnectedDevice() {
         return connectedDevice;
+    }
+
+    public List<BluetoothEventHandler> getEventHandlers() {
+        return this.eventHandlerList;
+    }
+
+    public void send(String message) {
+
+    }
+
+    public void disconnect() {
+        super.onDisconnected();
+    }
+
+    // TODO just for testing purposes, maybe remove later
+    public void setReceivedMessage(String message) {
+        super.onMessageReceived(message);
     }
 }
