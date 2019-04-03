@@ -145,8 +145,9 @@ public class BluetoothProviderTest {
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
 
-        this.bluetoothProvider.send("test");
-
+        // TODO: Maybe change the name of this method?
+        this.bluetoothProvider.setReceivedMessage("test");
+        
         assertEquals(calledList[0], "test");
     }
 
