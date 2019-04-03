@@ -68,11 +68,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
                         }
 
                     }
-                } catch (IOException e) {
-                    // TODO
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    onException(e);
                 }
             }
 
@@ -112,6 +109,11 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     protected void onDisconnected() {
+
+    }
+
+    @Override
+    protected void onException(Exception exception) {
 
     }
 }
