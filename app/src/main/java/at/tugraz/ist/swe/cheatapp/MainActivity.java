@@ -12,14 +12,16 @@ public class MainActivity extends AppCompatActivity {
     private Button sendButton;
     private EditText textEntry;
     private Device device;
-    private TextView receivedMessage;
+    private TextView receivedMessageTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        device = new DummyDevice("1");
+        device = new DummyDevice("1", this);
+
+        receivedMessageTextView = findViewById(R.id.receivedMessage);
 
         textEntry = findViewById(R.id.textEntry);
 
@@ -30,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
                 onSendButtonClicked();
             }
         });
-
-
     }
 
     public void setDevice(Device device) {
@@ -42,5 +42,9 @@ public class MainActivity extends AppCompatActivity {
         String textToSend = textEntry.getText().toString();
         device.sendMessage(textToSend);
         textEntry.getText().clear();
+    }
+
+    public void onMessageReceived(String messageText) {
+        receivedMessageTextView.setText(messageText);
     }
 }
