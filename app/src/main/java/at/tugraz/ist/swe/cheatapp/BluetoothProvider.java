@@ -6,5 +6,9 @@ import java.util.Observable;
 public abstract class BluetoothProvider  extends Observable {
     abstract List<Device> getPairedDevices();
 
-    abstract void connectToDevice(Device device);
+    public abstract void connectToDevice(Device device);
+    protected abstract void onMessageReceived(Message message);
+    protected abstract void onDisconnected();
+    protected abstract void onConnected();
+
 }

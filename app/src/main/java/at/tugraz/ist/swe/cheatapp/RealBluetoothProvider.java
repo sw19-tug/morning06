@@ -18,6 +18,7 @@ import java.util.Set;
 
 public class RealBluetoothProvider extends BluetoothProvider {
 
+
     private BluetoothAdapter adapter;
     private ServerConnectThread serverConnectThread;
 
@@ -44,7 +45,10 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     synchronized (RealBluetoothProvider.this.serverConnectThread) {
                         RealBluetoothProvider.this.serverConnectThread.wait();
                     }
+
+
                     socket = RealBluetoothProvider.this.serverConnectThread.getSocket();
+                    RealBluetoothProvider.this.onConnected();
 
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     OutputStreamWriter outputWriter = new OutputStreamWriter(socket.getOutputStream());
@@ -59,6 +63,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     e.printStackTrace();
                 }
             }
+
+
         });
         communicationThread.start();
     }
@@ -80,5 +86,20 @@ public class RealBluetoothProvider extends BluetoothProvider {
     public void connectToDevice(Device device) {
         System.out.println("Request connection as client;");
         serverConnectThread.requestConnection((RealDevice) device);
+    }
+
+    @Override
+    protected void onConnected() {
+
+    }
+
+    @Override
+    protected void onMessageReceived(Message message) {
+
+    }
+
+    @Override
+    protected void onDisconnected() {
+
     }
 }
