@@ -29,4 +29,16 @@ public abstract class BluetoothProvider {
             handler.onConnected();
         }
     }
+
+    protected void onDisconnected() {
+        for (BluetoothEventHandler handler : eventHandlerList) {
+            handler.onDisconnected();
+        }
+    }
+
+    protected void onMessageReceived(String message) {
+        for (BluetoothEventHandler handler : eventHandlerList) {
+            handler.onMessageReceived(message);
+        }
+    }
 }

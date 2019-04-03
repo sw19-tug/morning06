@@ -43,4 +43,17 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     public List<BluetoothEventHandler> getEventHandlers() {
         return this.eventHandlerList;
     }
+
+    public void send(String message) {
+
+    }
+
+    public void disconnect() {
+        super.onDisconnected();
+    }
+
+    // TODO just for testing purposes, maybe remove later
+    public void setReceivedMessage(String message) {
+        super.onMessageReceived(message);
+    }
 }
