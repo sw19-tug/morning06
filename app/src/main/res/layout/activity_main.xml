@@ -8,44 +8,8 @@
     tools:context=".MainActivity"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvChat"
-        android:transcriptMode="alwaysScroll"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
-
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/placeholder_frame"
         android:layout_width="match_parent"
-        android:id="@+id/relativeLayout1"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/sendButton"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentRight="true"
-            android:background="@color/colorPrimaryDark"
-            android:text="Send"
-            android:textColor="@android:color/background_light"
-            android:layout_alignParentBottom="true"
-            />
-
-        <EditText
-            android:id="@+id/textEntry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/sendButton"
-            android:background="@color/colorPrimary"
-            android:fadingEdge="none"
-            android:hint="Enter Text Here">
-
-        </EditText>
-    </RelativeLayout>
-
+        android:layout_height="match_parent"></FrameLayout>
 </RelativeLayout>

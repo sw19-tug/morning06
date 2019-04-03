@@ -3,6 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,9 +28,14 @@ import static org.junit.Assert.assertTrue;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ConnectActivityEspressoTest {
+public class ConnectFragmentEspressoTest {
     @Rule
-    public ActivityTestRule<ConnectActivity> connectActivityTestRule = new ActivityTestRule<>(ConnectActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void setUp() {
+        mainActivityTestRule.getActivity().showConnectFragment();
+    }
 
     @Test
     public void testButtonsVisible() {
@@ -47,7 +53,7 @@ public class ConnectActivityEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        connectActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -63,7 +69,7 @@ public class ConnectActivityEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        connectActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
         onView(withId(R.id.bt_con_connect)).perform(click());
 
@@ -76,7 +82,7 @@ public class ConnectActivityEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        connectActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
