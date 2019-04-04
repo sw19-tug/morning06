@@ -7,5 +7,5 @@ public interface BluetoothEventHandler {
 
     void onDisconnected();
 
-    void onError();
+    void onError(String errorMsg);
 }

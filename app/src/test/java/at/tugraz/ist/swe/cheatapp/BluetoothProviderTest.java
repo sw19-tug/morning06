@@ -53,7 +53,7 @@ public class BluetoothProviderTest {
             }
 
             @Override
-            public void onError() {
+            public void onError(String errorMsg) {
 
             }
         };
@@ -85,7 +85,7 @@ public class BluetoothProviderTest {
             }
 
             @Override
-            public void onError() {
+            public void onError(String errorMsg) {
 
             }
         };
@@ -121,7 +121,7 @@ public class BluetoothProviderTest {
             }
 
             @Override
-            public void onError() {
+            public void onError(String errorMsg) {
 
             }
         };
@@ -155,7 +155,7 @@ public class BluetoothProviderTest {
             }
 
             @Override
-            public void onError() {
+            public void onError(String errorMsg) {
 
             }
         };
@@ -192,7 +192,7 @@ public class BluetoothProviderTest {
             }
 
             @Override
-            public void onError() {
+            public void onError(String errorMsg) {
 
             }
         };

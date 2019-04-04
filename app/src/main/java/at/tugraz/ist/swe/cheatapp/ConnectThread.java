@@ -50,8 +50,8 @@ public class ConnectThread extends Thread {
                                 this.interrupt();
                             }
                             catch (IOException ex) {
-                                ex.printStackTrace();
-                                // TODO what to to here?
+                                this.interrupt();
+                                throw new RuntimeException(ex.getMessage());
                             }
                         }
                     }
@@ -65,7 +65,7 @@ public class ConnectThread extends Thread {
 
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 

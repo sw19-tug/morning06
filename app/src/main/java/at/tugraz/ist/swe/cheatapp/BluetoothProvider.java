@@ -43,4 +43,10 @@ public abstract class BluetoothProvider {
             handler.onMessageReceived(message);
         }
     }
+
+    protected void onError(String errorMsg) {
+        for (BluetoothEventHandler handler : eventHandlerList) {
+            handler.onError(errorMsg);
+        }
+    }
 }

@@ -26,21 +26,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    protected void onMessageReceived(String message) {
-
-    }
-
-    @Override
-    protected void onDisconnected() {
-
-    }
-
-    @Override
-    protected void onConnected() {
-
-    }
-
-    @Override
     public void sendMessage(String message) {
         sendMessage = message;
     }
@@ -75,10 +60,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     public List<BluetoothEventHandler> getEventHandlers() {
         return this.eventHandlerList;
-    }
-
-    public void send(String message) {
-
     }
 
     // TODO just for testing purposes, maybe remove later
