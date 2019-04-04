@@ -52,13 +52,15 @@ public class ChatFragment extends Fragment {
         messageRepository.getMessagesByUserId(1).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
             @Override
             public void onChanged(@Nullable List<Message> messages) {
+                messageList.clear();
                 for(Message msg : messages) {
-                    System.out.println("-----------------------");
-                    System.out.println(msg.getUserId());
-                    System.out.println(msg.getMessageText());
-                    System.out.println(msg.getMessageSent());
+                    // System.out.println("-----------------------");
+                    // System.out.println(msg.getUserId());
+                    // System.out.println(msg.getMessageText());
+                    // System.out.println(msg.getMessageSent());
                     messageList.add(msg);
                 }
+                messageAdapter.notifyDataSetChanged();
             }
         });
 
@@ -75,5 +77,6 @@ public class ChatFragment extends Fragment {
     }
 
     public void onMessageReceived(String messageText) {
+        messageRepository.insertMessage(new Message(1,messageText,false));
     }
 }
