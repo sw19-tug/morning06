@@ -3,6 +3,9 @@ package at.tugraz.ist.swe.cheatapp;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 @Entity
 public class Message {
 
@@ -16,6 +19,13 @@ public class Message {
     public Message(int userId, String messageText, boolean messageSent) {
         this.userId = userId;
         this.messageText = messageText;
+        this.messageSent = messageSent;
+    }
+
+    public Message(String jsonMessageString, boolean messageSent) throws JSONException {
+        JSONObject jsonMessage = new JSONObject(jsonMessageString);
+        this.userId = jsonMessage.getInt("userId");
+        this.messageText = jsonMessage.getString("messageText");
         this.messageSent = messageSent;
     }
 
@@ -49,5 +59,13 @@ public class Message {
 
     public void setMessageSent(boolean messageSent) {
         this.messageSent = messageSent;
+    }
+
+    public String getJsonString() throws JSONException {
+        JSONObject jsonMessage = new JSONObject();
+        jsonMessage.put("type", "chat message");
+        jsonMessage.put("userId", this.userId);
+        jsonMessage.put("messageText", messageText);
+        return jsonMessage.toString();
     }
 }
