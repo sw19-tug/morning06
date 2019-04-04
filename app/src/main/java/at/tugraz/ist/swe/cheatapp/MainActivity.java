@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
 
-        showChatFragment();
+        showConnectFragment();
 
     }
 
