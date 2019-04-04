@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
 }

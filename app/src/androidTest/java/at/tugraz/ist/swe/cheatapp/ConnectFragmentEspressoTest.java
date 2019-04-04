@@ -100,7 +100,8 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-
+        onData(allOf(is(instanceOf(String.class)), is("0")))
+                .perform(click());
         onView(withId(R.id.bt_con_connect)).check(matches(isDisplayed()));
         onView(withId(R.id.bt_con_connect)).perform(click());
 
