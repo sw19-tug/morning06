@@ -51,6 +51,11 @@ public class BluetoothProviderTest {
             public void onDisconnected() {
 
             }
+
+            @Override
+            public void onError(String errorMsg) {
+
+            }
         };
 
         this.bluetoothProvider.registerHandler(handler);
@@ -76,6 +81,11 @@ public class BluetoothProviderTest {
 
             @Override
             public void onDisconnected() {
+
+            }
+
+            @Override
+            public void onError(String errorMsg) {
 
             }
         };
@@ -109,6 +119,11 @@ public class BluetoothProviderTest {
             public void onDisconnected() {
 
             }
+
+            @Override
+            public void onError(String errorMsg) {
+
+            }
         };
 
         this.bluetoothProvider.registerHandler(handler);
@@ -137,6 +152,11 @@ public class BluetoothProviderTest {
 
             @Override
             public void onDisconnected() {
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+
             }
         };
 
@@ -170,6 +190,11 @@ public class BluetoothProviderTest {
             public void onDisconnected() {
                 calledList[0] = true;
             }
+
+            @Override
+            public void onError(String errorMsg) {
+
+            }
         };
 
         this.bluetoothProvider.registerHandler(handler);
@@ -180,14 +205,14 @@ public class BluetoothProviderTest {
 
         assertTrue(calledList[0]);
     }
-        
-    public void sendMessage() {
+     @Test
+    public void testSendMessage() {
         String message = "Test Message";
         bluetoothProvider.sendMessage(message);
         assertEquals(message, bluetoothProvider.checkSendMessage());
     }
     @Test
-    public void disconnectFromDevice() {
+    public void testDisconnectFromDevice() {
         bluetoothProvider.disconnect();
         assertFalse(bluetoothProvider.isConnected());
     }

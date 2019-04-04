@@ -59,6 +59,7 @@ public class ConnectFragment extends Fragment {
                     Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
                 } else {
                     activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
+                    activity.showChatFragment();
                 }
             }
         });

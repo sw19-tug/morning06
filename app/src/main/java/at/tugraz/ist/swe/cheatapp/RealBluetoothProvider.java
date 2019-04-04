@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -29,11 +30,20 @@ public class RealBluetoothProvider extends BluetoothProvider {
             throw new BluetoothException("No bluetooth adapter available");
         }
 
+        Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler(){
+            @Override
+            public void uncaughtException(Thread t, Throwable ex) {
+                onError(ex.getMessage());
+            }
+        };
+
         this.connectThread = new ConnectThread(adapter);
+        this.connectThread.setUncaughtExceptionHandler(exceptionHandler);
         this.connectThread.start();
 
         System.out.println("RealBluetoothProvider Start Communication Thread");
-        communicationThread = new Thread(new Runnable() {
+
+        this.communicationThread = new Thread(new Runnable() {
             BluetoothSocket socket;
 
             @Override
@@ -67,13 +77,15 @@ public class RealBluetoothProvider extends BluetoothProvider {
                         }
 
                     }
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
+                    onError(e.getMessage());
+                } catch (IOException e) {
                     onDisconnected();
                 }
             }
 
         });
-        communicationThread.start();
+        this.communicationThread.start();
     }
 
     @Override

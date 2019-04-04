@@ -46,6 +46,7 @@ public class ChatFragment extends Fragment {
     }
 
     public void onMessageReceived(String messageText) {
+       if(receivedMessageTextView != null)
         receivedMessageTextView.setText(messageText);
     }
 }

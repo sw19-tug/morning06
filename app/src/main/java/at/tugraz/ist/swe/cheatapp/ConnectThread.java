@@ -47,12 +47,11 @@ public class ConnectThread extends Thread {
                             try {
                                 this.socket =  this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
                                 this.socket.connect();
-                                boolean connected = this.socket.isConnected();
                                 this.interrupt();
                             }
                             catch (IOException ex) {
-                                ex.printStackTrace();
-                                // TODO what to to here?
+                                this.interrupt();
+                                throw new RuntimeException(ex.getMessage());
                             }
                         }
                     }
@@ -66,7 +65,7 @@ public class ConnectThread extends Thread {
 
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 

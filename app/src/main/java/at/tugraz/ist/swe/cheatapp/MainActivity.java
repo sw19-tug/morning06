@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,13 +20,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bluetoothProvider = new DummyBluetoothProvider();
+        try {
+            bluetoothProvider = new RealBluetoothProvider();
+        } catch (BluetoothException e) {
+            // TODO Refactor
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
         setContentView(R.layout.activity_main);
 
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
         device = new DummyDevice("1", chatFragment);
-        showChatFragment();
+
+        showConnectFragment();
+
 
     }
 
@@ -67,6 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 }

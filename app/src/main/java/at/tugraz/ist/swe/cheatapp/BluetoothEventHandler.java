@@ -6,4 +6,6 @@ public interface BluetoothEventHandler {
     void onConnected();
 
     void onDisconnected();
+
+    void onError(String errorMsg);
 }
