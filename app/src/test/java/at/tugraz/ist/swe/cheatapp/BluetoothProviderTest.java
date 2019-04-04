@@ -51,6 +51,11 @@ public class BluetoothProviderTest {
             public void onDisconnected() {
 
             }
+
+            @Override
+            public void onError() {
+
+            }
         };
 
         this.bluetoothProvider.registerHandler(handler);
@@ -76,6 +81,11 @@ public class BluetoothProviderTest {
 
             @Override
             public void onDisconnected() {
+
+            }
+
+            @Override
+            public void onError() {
 
             }
         };
@@ -109,6 +119,11 @@ public class BluetoothProviderTest {
             public void onDisconnected() {
 
             }
+
+            @Override
+            public void onError() {
+
+            }
         };
 
         this.bluetoothProvider.registerHandler(handler);
@@ -137,6 +152,11 @@ public class BluetoothProviderTest {
 
             @Override
             public void onDisconnected() {
+            }
+
+            @Override
+            public void onError() {
+
             }
         };
 
@@ -169,6 +189,11 @@ public class BluetoothProviderTest {
             @Override
             public void onDisconnected() {
                 calledList[0] = true;
+            }
+
+            @Override
+            public void onError() {
+
             }
         };
 

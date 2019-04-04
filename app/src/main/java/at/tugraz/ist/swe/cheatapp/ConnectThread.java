@@ -47,7 +47,6 @@ public class ConnectThread extends Thread {
                             try {
                                 this.socket =  this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
                                 this.socket.connect();
-                                boolean connected = this.socket.isConnected();
                                 this.interrupt();
                             }
                             catch (IOException ex) {
