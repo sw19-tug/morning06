@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         chatFragment = new ChatFragment();
 
         showChatFragment();
-
     }
 
     public BluetoothProvider getBluetoothProvider() {

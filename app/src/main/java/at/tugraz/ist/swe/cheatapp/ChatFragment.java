@@ -1,6 +1,8 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +46,21 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        Message messageSent = new Message(1, "Hi, how are you?", true);
-        Message messageReceived = new Message(2, "I'm fine. Thanks.", false);
+        messageRepository = new MessageRepository(this.getContext());
 
-        List<Message> messageList = new ArrayList<>();
-        messageList.add(messageSent);
-        messageList.add(messageReceived);
+       final List<Message> messageList = new ArrayList<>();
+        messageRepository.getMessagesByUserId(1).observe(this, new Observer<List<Message>>() {
+            @Override
+            public void onChanged(@Nullable List<Message> messages) {
+                for(Message msg : messages) {
+                    System.out.println("-----------------------");
+                    System.out.println(msg.getUserId());
+                    System.out.println(msg.getMessageText());
+                    System.out.println(msg.getMessageSent());
+                    messageList.add(msg);
+                }
+            }
+        });
 
         messageRecycler = view.findViewById(R.id.rvChat);
         messageAdapter = new MessageAdapter(messageList);

@@ -84,6 +84,15 @@ public class ChatFragmentEspressoTest {
         Message messageSent = new Message(1, "Hi, how are you?", true);
         Message messageReceived = new Message(2, "I'm fine. Thanks.", false);
 
+               /* messageRepository.insertMessage(new Message(1, "Hi, how are you?", true));
+        messageRepository.insertMessage(new Message(1, "I'm fine. Thanks.", false));
+        messageRepository.insertMessage(new Message(1, "What are you doin'?", true));
+        messageRepository.insertMessage(new Message(1, "Nothing. Wanna drink some coffee?", false));
+        messageRepository.insertMessage(new Message(1, "Sure!", true));
+        messageRepository.insertMessage(new Message(1, "When? Where?", true));
+        messageRepository.insertMessage(new Message(1, "At 3? Ducks Coffee?", false));
+        */
+               
         List<Message> messageList = new ArrayList<>();
         messageList.add(messageSent);
         messageList.add(messageReceived);
