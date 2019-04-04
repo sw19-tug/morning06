@@ -49,7 +49,7 @@ public class ChatFragment extends Fragment {
         messageRepository = new MessageRepository(this.getContext());
 
         final List<Message> messageList = new ArrayList<>();
-        messageRepository.getMessagesByUserId(1).observe(this, new Observer<List<Message>>() {
+        messageRepository.getMessagesByUserId(1).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
             @Override
             public void onChanged(@Nullable List<Message> messages) {
                 for(Message msg : messages) {

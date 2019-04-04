@@ -1,6 +1,5 @@
 package at.tugraz.ist.swe.cheatapp;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +42,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.sent_message_layout, parent, false);
             return new SentMessageHolder(view);
-        } else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+        }
+        else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.received_message_layout, parent, false);
             return new ReceivedMessageHolder(view);
@@ -76,8 +76,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         void bind(Message message) {
             messageText.setText(message.getMessageText());
-
-            // Todo: Add Timestamp here
         }
     }
 
@@ -93,8 +91,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         void bind(Message message) {
             messageText.setText(message.getMessageText());
-
-            // Todo: Add timestamp here
         }
     }
 }

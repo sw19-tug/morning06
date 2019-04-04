@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 public class ChatHistoryTest {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     @Test
-    public void chatHistoryMessagesVisible(){
+    public void chatHistoryCheckMessageViewType(){
         Message messageSent = new Message(1, "Hi, how are you?", true);
         Message messageReceived = new Message(2, "I'm fine. Thanks.", false);
 
