@@ -26,7 +26,7 @@ public class DatabaseIntegrationTest {
     private MessageRepository messageRepository;
     private Context context;
 
-    private void deleteDatabase(Context appContext) {
+    public void deleteDatabase(Context appContext) {
         File databases = new File(appContext.getApplicationInfo().dataDir + "/databases");
         File db = new File(databases, "cheatapp_db");
         if (db.delete())

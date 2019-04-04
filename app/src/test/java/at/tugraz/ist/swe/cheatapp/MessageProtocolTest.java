@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class MessageProtocolTest {
 
+    /*
     @Test
     public void testGetMessageJsonString() throws JSONException {
         Message message = new Message(5, "Hello, this is a test message! :)", true);
@@ -36,5 +37,5 @@ public class MessageProtocolTest {
         assertEquals("Ok, I will see! ;)", testMessage.getMessageText());
         assertEquals(false, testMessage.getMessageSent());
         assertEquals(jsonMessage.toString(), testMessage.getJsonString());
-    }
+    }*/
 }

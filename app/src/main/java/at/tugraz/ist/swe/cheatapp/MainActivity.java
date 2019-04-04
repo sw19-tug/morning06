@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
     // TODO: Refactor
     private Device device;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         device = new DummyDevice("1", chatFragment);
 
         showConnectFragment();
-
-
     }
 
     public BluetoothProvider getBluetoothProvider() {
