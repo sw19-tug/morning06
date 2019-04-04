@@ -48,6 +48,7 @@ public class ChatFragment extends Fragment {
 
         messageRepository = new MessageRepository(this.getContext());
 
+
        final List<Message> messageList = new ArrayList<>();
         messageRepository.getMessagesByUserId(1).observe(this, new Observer<List<Message>>() {
             @Override
