@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class ChatFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private Button sendButton;
     private EditText textEntry;
+    private TextView receivedMessageTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,7 +29,7 @@ public class ChatFragment extends Fragment {
 
         textEntry = view.findViewById(R.id.textEntry);
         sendButton = view.findViewById(R.id.sendButton);
-
+        receivedMessageTextView = view.findViewById(R.id.receivedMessage);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,8 +37,6 @@ public class ChatFragment extends Fragment {
                 onSendButtonClicked();
             }
         });
-
-
     }
 
     private void onSendButtonClicked() {
@@ -45,4 +45,7 @@ public class ChatFragment extends Fragment {
         textEntry.getText().clear();
     }
 
+    public void onMessageReceived(String messageText) {
+        receivedMessageTextView.setText(messageText);
+    }
 }

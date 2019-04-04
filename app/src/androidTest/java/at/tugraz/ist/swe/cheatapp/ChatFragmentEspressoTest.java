@@ -59,13 +59,28 @@ public class ChatFragmentEspressoTest {
     @Test
     public void saveTextIntoDummyDevice() {
         String testText = "Hello World";
-        DummyDevice device = new DummyDevice("1");
+        ChatFragment chatFragment = mainActivityTestRule.getActivity().getChatFragment();
+        DummyDevice device = new DummyDevice("1", chatFragment);
 
         mainActivityTestRule.getActivity().setDevice(device);
+
 
         onView(withId(R.id.textEntry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.sendButton)).perform(click());
 
         assertEquals(testText, device.getMessage());
+    }
+
+    @Test
+    public void testReceivedMessageTextView() {
+        String testText = "Test Test Test";
+        mainActivityTestRule.getActivity().getChatFragment().onMessageReceived(testText);
+        onView(withId(R.id.receivedMessage)).check(matches(withText(testText)));
+        onView(withId(R.id.receivedMessage)).check(matches(isDisplayed()));
+
+        String testText2 = "Hello asdfasdf Test";
+        mainActivityTestRule.getActivity().getChatFragment().onMessageReceived(testText2);
+        onView(withId(R.id.receivedMessage)).check(matches(withText(testText2)));
+        onView(withId(R.id.receivedMessage)).check(matches(isDisplayed()));
     }
 }

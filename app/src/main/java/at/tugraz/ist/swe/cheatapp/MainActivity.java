@@ -21,12 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothProvider = new DummyBluetoothProvider();
         setContentView(R.layout.activity_main);
-        
-        device = new DummyDevice("1");
 
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
-
+        device = new DummyDevice("1", chatFragment);
         showChatFragment();
 
     }
@@ -62,10 +60,13 @@ public class MainActivity extends AppCompatActivity {
         setFragment(chatFragment);
     }
 
+    public ChatFragment getChatFragment() {
+        return chatFragment;
+    }
+
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
         transaction.commit();
     }
-
 }
