@@ -18,7 +18,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     private final Queue<String> sentMessageQueue;
     private BluetoothAdapter adapter;
-    private final connectThread connectThread;
+    private final ConnectThread connectThread;
     private Thread communicationThread;
 
     public RealBluetoothProvider() throws BluetoothException {
@@ -29,7 +29,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
             throw new BluetoothException("No bluetooth adapter available");
         }
 
-        this.connectThread = new connectThread(adapter);
+        this.connectThread = new ConnectThread(adapter);
         this.connectThread.start();
 
         System.out.println("RealBluetoothProvider Start Communication Thread");
