@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
             bluetoothProvider = new RealBluetoothProvider();
         } catch (BluetoothException e) {
             // TODO Refactor
+            bluetoothProvider = new DummyBluetoothProvider();
+            ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
             Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
         }
         setContentView(R.layout.activity_main);
