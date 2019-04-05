@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.provider.ContactsContract;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -26,6 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentEspressoTest {
@@ -93,16 +98,16 @@ public class ChatFragmentEspressoTest {
 
         messageRepository.insertMessage(new Message(1, "Hi, how are you?", true));
         messageRepository.insertMessage(new Message(1, "I'm fine. Thanks.", false));
-        messageRepository.insertMessage(new Message(1, "What are you doin'?", true));
+        messageRepository.insertMessage(new Message(1, "What are you doing?", true));
         messageRepository.insertMessage(new Message(1, "Nothing. Wanna drink some coffee?", false));
         messageRepository.insertMessage(new Message(1, "Sure!", true));
         messageRepository.insertMessage(new Message(1, "When? Where?", true));
         messageRepository.insertMessage(new Message(1, "At 3? Ducks Coffee?", false));
         messageRepository.insertMessage(new Message(1, "You are late!!", false));
         messageRepository.insertMessage(new Message(1, "-.-", false));
-        messageRepository.insertMessage(new Message(1, "Sorry, the tram is late....", true));
+        messageRepository.insertMessage(new Message(1, "Sorry, the tram is late...", true));
         messageRepository.insertMessage(new Message(1, "I'll buy you some cake :D", true));
-        messageRepository.insertMessage(new Message(1, "hmmm. ok...", false));
+        messageRepository.insertMessage(new Message(1, "Hmmm. ok...", false));
         messageRepository.insertMessage(new Message(1, "It was a nice day with you :)", false));
         messageRepository.insertMessage(new Message(1, "We definitely have to do this again!", true));
         messageRepository.insertMessage(new Message(1, "On Saturday?", false));
@@ -112,25 +117,21 @@ public class ChatFragmentEspressoTest {
         messageRepository.insertMessage(new Message(1, "I think I forgot my jacket in your flat", true));
         messageRepository.insertMessage(new Message(1, "Can you bring it on Saturday?", true));
         messageRepository.insertMessage(new Message(1, "I hope I won't forget ;)", false));
-        messageRepository.insertMessage(new Message(1, "Send me an reminder pls xD", false));
+        messageRepository.insertMessage(new Message(1, "Send me a reminder please xD", false));
         messageRepository.insertMessage(new Message(1, "OK :D", true));
         messageRepository.insertMessage(new Message(1, ":P", true));
         messageRepository.insertMessage(new Message(1, ":)", true));
 
-
         DummyDevice device = new DummyDevice("1");
         mainActivityTestRule.getActivity().setDevice(device);
 
-        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        sleep(5000);
-        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(22));
-
-        sleep(5000);
+        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
+        sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
-
-        sleep(5000);
-        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(22));
-        sleep(5000);
+        sleep(1000);
+        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
+        sleep(1000);
+        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
     }
 
     @Test
@@ -139,7 +140,7 @@ public class ChatFragmentEspressoTest {
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
         db.deleteDatabase(context);
 
-        String testText = "Hello, i am a test message. ;-)";
+        String testText = "Hello, I am a test message. ;-)";
         onView(withId(R.id.textEntry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.sendButton)).perform(click());
 
