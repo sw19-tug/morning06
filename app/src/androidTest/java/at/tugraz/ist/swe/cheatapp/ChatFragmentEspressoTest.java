@@ -132,4 +132,21 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(22));
         sleep(5000);
     }
+
+    @Test
+    public void testChatHistoryOnMessageSend() {
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
+
+        String testText = "Hello, i am a test message. ;-)";
+        onView(withId(R.id.textEntry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.sendButton)).perform(click());
+
+        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+
+        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(0);
+        assertEquals(testText, receiveMessage.getMessageText());
+    }
+
 }
