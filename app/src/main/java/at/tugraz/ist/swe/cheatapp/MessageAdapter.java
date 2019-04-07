@@ -70,8 +70,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         SentMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.text_message_body);
-            timeText = itemView.findViewById(R.id.text_message_time);
+            messageText = itemView.findViewById(R.id.txt_message_body);
+            timeText = itemView.findViewById(R.id.txt_message_time);
         }
 
         void bind(Message message) {
@@ -85,8 +85,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.text_message_body);
-            timeText = itemView.findViewById(R.id.text_message_time);
+            messageText = itemView.findViewById(R.id.txt_message_body);
+            timeText = itemView.findViewById(R.id.txt_message_time);
         }
 
         void bind(Message message) {

@@ -9,7 +9,7 @@
     android:paddingTop="8dp">
 
     <TextView
-        android:id="@+id/text_message_body"
+        android:id="@+id/txt_message_body"
         android:text=""
         android:background="@drawable/received_message_view"
         android:layout_width="wrap_content"
@@ -22,13 +22,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_message_time"
+        android:id="@+id/txt_message_time"
         android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"
         android:layout_marginLeft="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
-        app:layout_constraintLeft_toRightOf="@+id/text_message_body" />
+        app:layout_constraintBottom_toBottomOf="@+id/txt_message_body"
+        app:layout_constraintLeft_toRightOf="@+id/txt_message_body" />
 
 </android.support.constraint.ConstraintLayout>

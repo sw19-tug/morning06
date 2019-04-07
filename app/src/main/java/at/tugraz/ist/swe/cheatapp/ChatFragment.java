@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +35,8 @@ public class ChatFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
 
-        textEntry = view.findViewById(R.id.textEntry);
-        sendButton = view.findViewById(R.id.sendButton);
+        textEntry = view.findViewById(R.id.txt_chat_entry);
+        sendButton = view.findViewById(R.id.btn_chat_send);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

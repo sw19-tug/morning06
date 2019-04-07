@@ -39,7 +39,7 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testButtonsVisible() {
-        onView(withId(R.id.bt_con_connect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
 
     }
 
@@ -58,7 +58,7 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
-        onView(withId(R.id.bt_con_connect)).perform(click());
+        onView(withId(R.id.btn_con_connect)).perform(click());
 
         assertTrue(provider.isConnected());
         assertEquals(provider.getConnectedDevice().getID(), "0");
@@ -71,7 +71,7 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onView(withId(R.id.bt_con_connect)).perform(click());
+        onView(withId(R.id.btn_con_connect)).perform(click());
 
         assertFalse(provider.isConnected());
         assertNull(provider.getConnectedDevice());
@@ -87,7 +87,7 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
-        onView(withId(R.id.bt_con_connect)).perform(click());
+        onView(withId(R.id.btn_con_connect)).perform(click());
 
         assertTrue(provider.isConnected());
         assertEquals(provider.getConnectedDevice().getID(), "0");
@@ -102,9 +102,9 @@ public class ConnectFragmentEspressoTest {
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
-        onView(withId(R.id.bt_con_connect)).check(matches(isDisplayed()));
-        onView(withId(R.id.bt_con_connect)).perform(click());
+        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_con_connect)).perform(click());
 
-        onView(withId(R.id.sendButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
     }
 }
