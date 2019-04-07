@@ -22,15 +22,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentEspressoTest {
 
-    private MessageRepository messageRepository;
-
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    private MessageRepository messageRepository;
 
     @Before
     public void setUp() {
@@ -78,7 +76,9 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void chatHistoryVisible(){ onView(withId(R.id.rvChat)).check(matches(isDisplayed())); }
+    public void chatHistoryVisible() {
+        onView(withId(R.id.rvChat)).check(matches(isDisplayed()));
+    }
 
     @Test
     public void chatHistoryScrollable() throws InterruptedException {

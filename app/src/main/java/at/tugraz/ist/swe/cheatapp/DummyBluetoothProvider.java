@@ -37,8 +37,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         super.onDisconnected();
     }
 
-    public String checkSendMessage()
-    {
+    public String checkSendMessage() {
         return sendMessage;
     }
 

@@ -12,7 +12,7 @@ public class MessageAdapterTest {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     @Test
-    public void testGetItemViewType(){
+    public void testGetItemViewType() {
         Message messageSent = new Message(1, "Hi, how are you?", true);
         Message messageReceived = new Message(2, "I'm fine. Thanks.", false);
 

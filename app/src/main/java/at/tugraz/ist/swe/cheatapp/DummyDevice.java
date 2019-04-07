@@ -2,8 +2,8 @@ package at.tugraz.ist.swe.cheatapp;
 
 public class DummyDevice implements Device {
     String id;
-    private String message;
     ChatFragment chatFragment;
+    private String message;
 
     public DummyDevice(String id) {
         this.id = id;
@@ -21,7 +21,9 @@ public class DummyDevice implements Device {
         return this.id;
     }
 
-    public String getMessage() { return this.message; }
+    public String getMessage() {
+        return this.message;
+    }
 
     public void sendMessage(String message) {
         chatFragment.onMessageReceived(message);

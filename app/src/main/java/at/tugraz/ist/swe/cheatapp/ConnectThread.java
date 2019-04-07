@@ -1,12 +1,10 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_SERVICE_RECORD;
 import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_UUID;
@@ -35,8 +33,7 @@ public class ConnectThread extends Thread {
                     this.socket = serverSocket.accept(200);
                     this.interrupt();
                     System.out.println("ConnectThread: Connected as server.");
-                }
-                catch (IOException ignore) {
+                } catch (IOException ignore) {
                     // Timeout
 
                     synchronized (this) {
@@ -45,11 +42,10 @@ public class ConnectThread extends Thread {
                             // TODO: Refactor
 
                             try {
-                                this.socket =  this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
+                                this.socket = this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
                                 this.socket.connect();
                                 this.interrupt();
-                            }
-                            catch (IOException ex) {
+                            } catch (IOException ex) {
                                 this.interrupt();
                                 throw new RuntimeException(ex.getMessage());
                             }
@@ -63,8 +59,7 @@ public class ConnectThread extends Thread {
                 this.notify();
             }
 
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }

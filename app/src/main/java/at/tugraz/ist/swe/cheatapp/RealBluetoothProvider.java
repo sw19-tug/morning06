@@ -18,8 +18,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
 
     private final Queue<String> sentMessageQueue;
-    private BluetoothAdapter adapter;
     private final ConnectThread connectThread;
+    private BluetoothAdapter adapter;
     private Thread communicationThread;
 
     public RealBluetoothProvider() throws BluetoothException {
@@ -30,7 +30,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
             throw new BluetoothException("No bluetooth adapter available");
         }
 
-        Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler(){
+        Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable ex) {
                 onError(ex.getMessage());
@@ -114,8 +114,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void sendMessage(String message) {
-        synchronized (sentMessageQueue)
-        {
+        synchronized (sentMessageQueue) {
             sentMessageQueue.add(message);
         }
     }

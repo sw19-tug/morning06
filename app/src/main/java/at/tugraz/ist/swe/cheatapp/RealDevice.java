@@ -11,7 +11,7 @@ public class RealDevice implements Device {
 
     @Override
     public String getID() {
-        return  device.getName();
+        return device.getName();
     }
 
     public BluetoothDevice getDevice() {

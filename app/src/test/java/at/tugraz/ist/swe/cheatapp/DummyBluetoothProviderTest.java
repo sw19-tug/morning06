@@ -207,8 +207,7 @@ public class DummyBluetoothProviderTest {
     }
 
     @Test
-    public void testConnectToDevice()
-    {
+    public void testConnectToDevice() {
         Device device = new DummyDevice("1");
         bluetoothProvider.connectToDevice(device);
 
