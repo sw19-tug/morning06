@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 
-public class BluetoothProviderTest {
+public class DummyBluetoothProviderTest {
     private DummyBluetoothProvider bluetoothProvider;
 
     @Before
@@ -205,12 +205,24 @@ public class BluetoothProviderTest {
 
         assertTrue(calledList[0]);
     }
-     @Test
+
+    @Test
+    public void testConnectToDevice()
+    {
+        Device device = new DummyDevice("1");
+        bluetoothProvider.connectToDevice(device);
+
+        assertEquals(bluetoothProvider.getConnectedDevice().getID(), "1");
+        assertTrue(bluetoothProvider.isConnected());
+    }
+
+    @Test
     public void testSendMessage() {
         String message = "Test Message";
         bluetoothProvider.sendMessage(message);
         assertEquals(message, bluetoothProvider.checkSendMessage());
     }
+    
     @Test
     public void testDisconnectFromDevice() {
         bluetoothProvider.disconnect();
