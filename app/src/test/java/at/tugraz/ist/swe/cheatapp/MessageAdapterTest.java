@@ -7,12 +7,12 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class ChatHistoryTest {
+public class MessageAdapterTest {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     @Test
-    public void chatHistoryCheckMessageViewType(){
+    public void testGetItemViewType(){
         Message messageSent = new Message(1, "Hi, how are you?", true);
         Message messageReceived = new Message(2, "I'm fine. Thanks.", false);
 
@@ -25,4 +25,5 @@ public class ChatHistoryTest {
         assertEquals(VIEW_TYPE_MESSAGE_RECEIVED, messageListAdapter.getItemViewType(1));
         assertEquals(messageList.size(), messageListAdapter.getItemCount());
     }
+
 }

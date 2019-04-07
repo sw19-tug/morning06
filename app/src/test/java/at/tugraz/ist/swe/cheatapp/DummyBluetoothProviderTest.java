@@ -222,7 +222,7 @@ public class DummyBluetoothProviderTest {
         bluetoothProvider.sendMessage(message);
         assertEquals(message, bluetoothProvider.checkSendMessage());
     }
-    
+
     @Test
     public void testDisconnectFromDevice() {
         bluetoothProvider.disconnect();
