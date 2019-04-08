@@ -75,7 +75,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
                                 outputWriter.write(sentMessage);
                             }
                         }
-
+                        Thread.sleep(100);
                     }
                 } catch (InterruptedException e) {
                     onError(e.getMessage());
