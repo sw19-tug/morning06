@@ -33,12 +33,17 @@ public class MainActivity extends AppCompatActivity {
         mainActivityEventHandler = new BluetoothEventHandler() {
             @Override
             public void onMessageReceived(String message) {
-
+                chatFragment.onMessageReceived(message);
             }
 
             @Override
             public void onConnected() {
-                showChatFragment();
+                try {
+                    showChatFragment();
+                } catch (InterruptedException e) {
+                    onError(e.getMessage());
+                    onDisconnected();
+                }
             }
 
             @Override
@@ -88,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
         setFragment(connectFragment);
     }
 
-    public void showChatFragment() {
+    public void showChatFragment() throws InterruptedException {
         setFragment(chatFragment);
+        chatFragment.waitForFragmentReady();
     }
 
     public ChatFragment getChatFragment() {

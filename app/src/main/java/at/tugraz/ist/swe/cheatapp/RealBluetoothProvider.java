@@ -41,9 +41,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
         this.connectThread.setUncaughtExceptionHandler(exceptionHandler);
         this.connectThread.start();
 
-        // TODO delete
-        sentMessageQueue.add("Test12!!!!!!!");
-
         System.out.println("RealBluetoothProvider Start Communication Thread");
 
         this.communicationThread = new Thread(new Runnable() {
@@ -56,12 +53,16 @@ public class RealBluetoothProvider extends BluetoothProvider {
                         RealBluetoothProvider.this.connectThread.wait();
                     }
 
-
                     socket = RealBluetoothProvider.this.connectThread.getSocket();
                     RealBluetoothProvider.this.onConnected();
 
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());
+
+                    synchronized (sentMessageQueue)
+                    {
+                        sentMessageQueue.add(String.format("You connected to device %s. Welcome!", socket.getRemoteDevice().getName()));
+                    }
 
                     while (true) {
                         if (inputReader.ready()) {
@@ -126,6 +127,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     @Override
     protected void onMessageReceived(String message) {
         System.out.format("RealBluetoothProvider Message received %s%n", message);
+        super.onMessageReceived(message);
     }
 
     @Override
