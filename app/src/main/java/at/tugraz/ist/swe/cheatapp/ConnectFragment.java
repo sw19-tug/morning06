@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,8 +13,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 public class ConnectFragment extends Fragment {
     private MainActivity activity;
@@ -37,7 +34,7 @@ public class ConnectFragment extends Fragment {
         activity = (MainActivity) getActivity();
 
         listView = view.findViewById(R.id.lv_con_devices);
-        connectButton = view.findViewById(R.id.bt_con_connect);
+        connectButton = view.findViewById(R.id.btn_con_connect);
 
 
         this.updateValues();

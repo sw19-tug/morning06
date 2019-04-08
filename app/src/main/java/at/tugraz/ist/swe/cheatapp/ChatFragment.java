@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +35,8 @@ public class ChatFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
 
-        textEntry = view.findViewById(R.id.textEntry);
-        sendButton = view.findViewById(R.id.sendButton);
+        textEntry = view.findViewById(R.id.txt_chat_entry);
+        sendButton = view.findViewById(R.id.btn_chat_send);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +52,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Message> messages) {
                 messageList.clear();
-                for(Message msg : messages) {
+                for (Message msg : messages) {
                     // System.out.println("-----------------------");
                     // System.out.println(msg.getUserId());
                     // System.out.println(msg.getMessageText());
@@ -77,6 +76,6 @@ public class ChatFragment extends Fragment {
     }
 
     public void onMessageReceived(String messageText) {
-        messageRepository.insertMessage(new Message(1,messageText,false));
+        messageRepository.insertMessage(new Message(1, messageText, false));
     }
 }
