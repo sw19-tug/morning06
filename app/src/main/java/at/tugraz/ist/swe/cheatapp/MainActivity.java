@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothProvider bluetoothProvider;
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
+    private BluetoothEventHandler mainActivityEventHandler;
 
     // TODO: Refactor
     private Device device;
@@ -28,6 +29,30 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
         setContentView(R.layout.activity_main);
+
+        mainActivityEventHandler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+
+            }
+
+            @Override
+            public void onConnected() {
+                showChatFragment();
+            }
+
+            @Override
+            public void onDisconnected() {
+
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+
+            }
+        };
+
+        bluetoothProvider.registerHandler(mainActivityEventHandler);
 
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();

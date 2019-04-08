@@ -112,11 +112,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    protected void onConnected() {
-
-    }
-
-    @Override
     public void sendMessage(String message) {
         synchronized (sentMessageQueue) {
             sentMessageQueue.add(message);
