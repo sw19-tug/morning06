@@ -32,7 +32,11 @@ public class ChatFragmentEspressoTest {
 
     @Before
     public void setUp() {
-        mainActivityTestRule.getActivity().showChatFragment();
+        try {
+            mainActivityTestRule.getActivity().showChatFragment();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
