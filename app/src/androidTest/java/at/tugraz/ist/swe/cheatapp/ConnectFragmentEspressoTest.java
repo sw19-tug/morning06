@@ -109,7 +109,7 @@ public class ConnectFragmentEspressoTest {
     }
 
     @Test
-    public void testChangeViewOnDisconnect() {
+    public void testChangeViewOnDisconnect() throws InterruptedException {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
@@ -120,12 +120,13 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_con_connect)).perform(click());
         onView(withId(R.id.btn_chat_disconnect)).perform(click());
 
-        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
+        Thread.sleep(500);
 
+        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testDisconnect() {
+    public void testDisconnect() throws InterruptedException {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
@@ -136,9 +137,10 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_con_connect)).perform(click());
         onView(withId(R.id.btn_chat_disconnect)).perform(click());
 
+        Thread.sleep(500);
+
         assertFalse(provider.isConnected());
         assertNull(provider.getConnectedDevice());
-
     }
 
 

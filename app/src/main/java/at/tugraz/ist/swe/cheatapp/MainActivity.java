@@ -14,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothProvider bluetoothProvider;
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
+    private BluetoothEventHandler bluetoothEventHandler;
+
     private Toolbar toolbar;
     private Button disconnectButton;
 
@@ -42,10 +44,33 @@ public class MainActivity extends AppCompatActivity {
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showConnectFragment();
+                MainActivity.this.bluetoothProvider.disconnect();
 
             }
         });
+
+        bluetoothEventHandler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+                chatFragment.onMessageReceived(message);
+            }
+
+            @Override
+            public void onConnected() {
+            }
+
+            @Override
+            public void onDisconnected() {
+                MainActivity.this.showConnectFragment();
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+
+            }
+        };
+
+        bluetoothProvider.registerHandler(bluetoothEventHandler);
 
         // Attaching the layout to the toolbar object
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,10 +85,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
+        MainActivity.this.bluetoothProvider.unregisterHandler(bluetoothEventHandler);
+        MainActivity.this.bluetoothProvider = bluetoothProvider;
+        MainActivity.this.bluetoothProvider.registerHandler(bluetoothEventHandler);
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MainActivity.this.bluetoothProvider = bluetoothProvider;
+
                 connectFragment.updateValues();
             }
         });

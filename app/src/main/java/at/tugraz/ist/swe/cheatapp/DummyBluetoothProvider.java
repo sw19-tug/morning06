@@ -32,9 +32,25 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void disconnect() {
-        connectedDevice = null;
-        connected = false;
-        super.onDisconnected();
+
+
+        final Thread disconnectThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (DummyBluetoothProvider.this) {
+                    connectedDevice = null;
+                    connected = false;
+
+                }
+                DummyBluetoothProvider.super.onDisconnected();
+            }
+        });
+        disconnectThread.start();
     }
 
     public String checkSendMessage() {
@@ -49,11 +65,11 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         }
     }
 
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         return connected;
     }
 
-    public Device getConnectedDevice() {
+    public synchronized Device getConnectedDevice() {
         return connectedDevice;
     }
 
