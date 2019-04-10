@@ -31,7 +31,7 @@ public class ChatFragmentEspressoTest {
     private MessageRepository messageRepository;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         mainActivityTestRule.getActivity().showChatFragment();
     }
 

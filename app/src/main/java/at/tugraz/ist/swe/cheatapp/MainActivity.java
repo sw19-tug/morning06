@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothProvider bluetoothProvider;
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
+    private BluetoothEventHandler mainActivityEventHandler;
 
     // TODO: Refactor
     private Device device;
@@ -29,11 +30,44 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
 
+        mainActivityEventHandler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(String message) {
+                chatFragment.onMessageReceived(message);
+            }
+
+            @Override
+            public void onConnected() {
+                try {
+                    showChatFragment();
+                } catch (InterruptedException e) {
+                    onError(e.getMessage());
+                    onDisconnected();
+                }
+            }
+
+            @Override
+            public void onDisconnected() {
+
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+
+            }
+        };
+
+        bluetoothProvider.registerHandler(mainActivityEventHandler);
+
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
         device = new DummyDevice("1", chatFragment);
 
         showConnectFragment();
+    }
+
+    public BluetoothEventHandler getMainActivityEventHandler() {
+        return mainActivityEventHandler;
     }
 
     public BluetoothProvider getBluetoothProvider() {
@@ -63,8 +97,9 @@ public class MainActivity extends AppCompatActivity {
         setFragment(connectFragment);
     }
 
-    public void showChatFragment() {
+    public void showChatFragment() throws InterruptedException {
         setFragment(chatFragment);
+        chatFragment.waitForFragmentReady();
     }
 
     public ChatFragment getChatFragment() {

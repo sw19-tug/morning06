@@ -99,7 +99,7 @@ public class DummyBluetoothProviderTest {
     }
 
     @Test
-    public void testOnConnectedCallback() {
+    public void testOnConnectedCallback() throws InterruptedException {
         // hack for setting variable out of BluetoothEventHandler class
         final Boolean[] calledList = new Boolean[1];
         calledList[0] = false;
@@ -130,6 +130,7 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
+        this.bluetoothProvider.getConnectThread().join();
 
         assertTrue(calledList[0]);
     }

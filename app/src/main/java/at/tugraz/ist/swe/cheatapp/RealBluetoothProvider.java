@@ -7,7 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,12 +53,16 @@ public class RealBluetoothProvider extends BluetoothProvider {
                         RealBluetoothProvider.this.connectThread.wait();
                     }
 
-
                     socket = RealBluetoothProvider.this.connectThread.getSocket();
                     RealBluetoothProvider.this.onConnected();
 
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    OutputStreamWriter outputWriter = new OutputStreamWriter(socket.getOutputStream());
+                    PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());
+
+                    synchronized (sentMessageQueue)
+                    {
+                        sentMessageQueue.add(String.format("You connected to device %s. Welcome!", socket.getRemoteDevice().getName()));
+                    }
 
                     while (true) {
                         if (inputReader.ready()) {
@@ -72,7 +76,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
                             }
 
                             if (sentMessage != null) {
-                                outputWriter.write(sentMessage);
+                                outputWriter.println(sentMessage);
+                                outputWriter.flush();
                             }
                         }
                         Thread.sleep(100);
@@ -103,13 +108,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void connectToDevice(Device device) {
-        System.out.println("Request connection as client;");
+        System.out.println("RealBluetoothProvider Request connection as client;");
         connectThread.requestConnection((RealDevice) device);
-    }
-
-    @Override
-    protected void onConnected() {
-
     }
 
     @Override
@@ -126,7 +126,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     protected void onMessageReceived(String message) {
-
+        System.out.format("RealBluetoothProvider Message received %s%n", message);
+        super.onMessageReceived(message);
     }
 
     @Override
