@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
     private Toolbar toolbar;
+    private Button disconnectButton;
 
     // TODO: Refactor
     private Device device;
@@ -34,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
         device = new DummyDevice("1", chatFragment);
+        disconnectButton = findViewById(R.id.btn_chat_disconnect);
+
+        disconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConnectFragment();
+
+            }
+        });
 
         // Attaching the layout to the toolbar object
         toolbar = (Toolbar) findViewById(R.id.toolbar);

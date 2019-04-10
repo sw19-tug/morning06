@@ -24,6 +24,7 @@ public class ChatFragment extends Fragment {
     private MessageAdapter messageAdapter;
     private MessageRepository messageRepository;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_chat, container, false);
