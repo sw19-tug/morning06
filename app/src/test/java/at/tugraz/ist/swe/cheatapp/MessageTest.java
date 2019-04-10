@@ -48,24 +48,11 @@ public class MessageTest {
         BluetoothMessage disconnectMessage = new BluetoothMessage();
         BluetoothMessage chatMessage = new BluetoothMessage();
 
-        connectMessage.messageType = BluetoothMessage.Type.CONNECT;
-        connectMessage.messagePayload.put("userId", 1);
-        connectMessage.messagePayload.put("timeStamp", "04-04-2019-08-00-00");
-
-        disconnectMessage.messageType = BluetoothMessage.Type.DISCONNECT;
-        disconnectMessage.messagePayload.put("userId", 1);
-        disconnectMessage.messagePayload.put("timeStamp","04-04-2019-08-00-00");
-
-        chatMessage.messageType = BluetoothMessage.Type.CHAT;
-        chatMessage.messagePayload.put("userId", 1);
-        chatMessage.messagePayload.put("timeStamp", "04-04-2019-08-00-00");
-        chatMessage.messagePayload.put("messageText", "TEST TEXT");
-
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
         chatJson.put("timeStamp", "04-04-2019-08-00-00");
         chatJson.put("messageText", "TEST TEXT");
-        
+
         JSONObject connectJson = new JSONObject();
         connectJson.put("userId", 1);
         connectJson.put("timeStamp", "04-04-2019-08-00-00");
@@ -74,11 +61,37 @@ public class MessageTest {
         disconnectJson.put("userId", 1);
         disconnectJson.put("timeStamp", "04-04-2019-08-00-00");
 
+        connectMessage.setMessageType(BluetoothMessage.Type.CONNECT);
+        connectMessage.setMessagePayload(connectJson);
+
+        disconnectMessage.setMessageType(BluetoothMessage.Type.DISCONNECT);
+        disconnectMessage.setMessagePayload(disconnectJson);
+
+        chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
+        chatMessage.setMessagePayload(chatJson);
+
         assertEquals(chatJson.toString(), chatMessage.getMessagePayload().toString());
         assertEquals(BluetoothMessage.Type.CHAT, chatMessage.getMessageType());
         assertEquals(connectJson.toString(), connectMessage.getMessagePayload().toString());
         assertEquals(BluetoothMessage.Type.CONNECT, connectMessage.getMessageType());
         assertEquals(disconnectJson.toString(), disconnectMessage.getMessagePayload().toString());
         assertEquals(BluetoothMessage.Type.DISCONNECT, disconnectMessage.getMessageType());
+    }
+
+    @Test
+    public void testGetMessageObject() throws JSONException
+    {
+        BluetoothMessage chatMessage = new BluetoothMessage();
+        JSONObject chatJson = new JSONObject();
+        chatJson.put("userId", 1);
+        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("messageText", "TEST TEXT");
+
+        chatMessage.setMessagePayload(chatJson);
+        chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
+
+        Message testMessage = new Message(chatJson.toString(), true);
+
+        assertEquals(testMessage, chatMessage.getMessageObject());
     }
 }
