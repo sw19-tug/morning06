@@ -31,12 +31,8 @@ public class ChatFragmentEspressoTest {
     private MessageRepository messageRepository;
 
     @Before
-    public void setUp() {
-        try {
-            mainActivityTestRule.getActivity().showChatFragment();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void setUp() throws InterruptedException {
+        mainActivityTestRule.getActivity().showChatFragment();
     }
 
     @Test

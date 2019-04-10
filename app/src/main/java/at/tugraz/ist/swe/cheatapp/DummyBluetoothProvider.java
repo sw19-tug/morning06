@@ -8,6 +8,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     private Device connectedDevice;
     private boolean connected;
     private String sendMessage;
+    private  Thread connectThread;
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
@@ -18,14 +19,18 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         return this.devices;
     }
 
+    public Thread getConnectThread() {
+        return connectThread;
+    }
+
     @Override
     public void connectToDevice(Device device) {
         connectedDevice = device;
         connected = true;
-        Thread connectThread = new Thread(new Runnable() {
+        connectThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                DummyBluetoothProvider.this.onConnected();
+                DummyBluetoothProvider.super.onConnected();
             }
         });
         connectThread.start();
