@@ -95,9 +95,7 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testChangeViewOnConnect() {
-        BluetoothEventHandler eventHandlerCopy = mainActivityTestRule.getActivity().getMainActivityEventHandler();
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.registerHandler(eventHandlerCopy);
         provider.enableDummyDevices(1);
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
@@ -109,4 +107,39 @@ public class ConnectFragmentEspressoTest {
 
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testChangeViewOnDisconnect() throws InterruptedException {
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        onData(allOf(is(instanceOf(String.class)), is("0")))
+                .perform(click());
+        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_chat_disconnect)).perform(click());
+
+        provider.getThread().join();
+        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testDisconnect() throws InterruptedException {
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        onData(allOf(is(instanceOf(String.class)), is("0")))
+                .perform(click());
+        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_chat_disconnect)).perform(click());
+
+        provider.getThread().join();
+        assertFalse(provider.isConnected());
+        assertNull(provider.getConnectedDevice());
+    }
+
+
 }

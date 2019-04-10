@@ -8,7 +8,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     private Device connectedDevice;
     private boolean connected;
     private String sendMessage;
-    private  Thread connectThread;
+    private Thread thread;
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
@@ -19,21 +19,17 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         return this.devices;
     }
 
-    public Thread getConnectThread() {
-        return connectThread;
-    }
-
     @Override
     public void connectToDevice(Device device) {
         connectedDevice = device;
         connected = true;
-        connectThread = new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 DummyBluetoothProvider.super.onConnected();
             }
         });
-        connectThread.start();
+        thread.start();
     }
 
     @Override
@@ -43,9 +39,23 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void disconnect() {
-        connectedDevice = null;
-        connected = false;
-        super.onDisconnected();
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (DummyBluetoothProvider.this) {
+                    connectedDevice = null;
+                    connected = false;
+
+                }
+                DummyBluetoothProvider.super.onDisconnected();
+            }
+        });
+        thread.start();
     }
 
     public String checkSendMessage() {
@@ -60,11 +70,11 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         }
     }
 
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         return connected;
     }
 
-    public Device getConnectedDevice() {
+    public synchronized Device getConnectedDevice() {
         return connectedDevice;
     }
 
@@ -75,5 +85,9 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     // TODO just for testing purposes, maybe remove later
     public void setReceivedMessage(String message) {
         super.onMessageReceived(message);
+    }
+
+    public Thread getThread() {
+        return this.thread;
     }
 }
