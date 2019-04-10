@@ -99,4 +99,8 @@ public class ChatFragment extends Fragment {
             this.wait();
         }
     }
+
+    public MessageAdapter getMessageAdapter() {
+        return messageAdapter;
+    }
 }

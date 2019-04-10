@@ -92,4 +92,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getMessageText());
         }
     }
+
+    public List<Message> getMessageList() {
+        return messageList;
+    }
 }

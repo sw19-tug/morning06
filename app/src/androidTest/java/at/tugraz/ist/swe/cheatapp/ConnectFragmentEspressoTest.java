@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -109,6 +110,8 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_con_connect)).perform(click());
 
+        // TODO join for connect thread
+
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
     }
 
@@ -128,6 +131,7 @@ public class ConnectFragmentEspressoTest {
         MessageAdapter messageAdapter = mainActivityTestRule.getActivity().getChatFragment().getMessageAdapter();
         List<Message> messageList = messageAdapter.getMessageList();
 
-        assertTrue(messageList.get(messageList.size() - 1).getMessageText().contains("You connected to device"));
+        assertEquals(messageList.get(messageList.size() - 1).getMessageText(),
+                String.format(ON_CONNECTED_MESSAGE, "0"));
     }
 }
