@@ -4,6 +4,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -44,20 +46,20 @@ public class MessageTest {
     {
         BluetoothMessage connectMessage = new BluetoothMessage();
         BluetoothMessage disconnectMessage = new BluetoothMessage();
-        BluetoothMessage chatMessage = new BLuetoothMessage();
+        BluetoothMessage chatMessage = new BluetoothMessage();
 
-        connectMessage.type = Type.CONNECT;
-        connectMessage.payload.put("userId", 1);
-        connectMessage.payload.put("timeStamp", "04-04-2019-08-00-00");
+        connectMessage.messageType = BluetoothMessage.Type.CONNECT;
+        connectMessage.messagePayload.put("userId", 1);
+        connectMessage.messagePayload.put("timeStamp", "04-04-2019-08-00-00");
 
-        disconnectMessage.type = Type.DISCONNECT;
-        disconnectMessage.payload.put("userId", 1);
-        disconnectMessage.payload.put("timeStamp","04-04-2019-08-00-00");
+        disconnectMessage.messageType = BluetoothMessage.Type.DISCONNECT;
+        disconnectMessage.messagePayload.put("userId", 1);
+        disconnectMessage.messagePayload.put("timeStamp","04-04-2019-08-00-00");
 
-        chatMessage.type = Type.CHAT;
-        chatMessage.payload.put("userId", 1);
-        chatMessage.payload.put("timeStamp", "04-04-2019-08-00-00");
-        chatMessage.payload.put("messageText", "TEST TEXT");
+        chatMessage.messageType = BluetoothMessage.Type.CHAT;
+        chatMessage.messagePayload.put("userId", 1);
+        chatMessage.messagePayload.put("timeStamp", "04-04-2019-08-00-00");
+        chatMessage.messagePayload.put("messageText", "TEST TEXT");
 
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
@@ -72,8 +74,11 @@ public class MessageTest {
         disconnectJson.put("userId", 1);
         disconnectJson.put("timeStamp", "04-04-2019-08-00-00");
 
-        assertEquals(chatJson.toString(), chatMessage.payload.getJsonString());
-        assertEquals(connectJson.toString(), connectMessage.payload.getJsonString());
-        assertEquals(disconnectJson.toString(), disconnectMessage.payload.getJsonString());
+        assertEquals(chatJson.toString(), chatMessage.getMessagePayload().toString());
+        assertEquals(BluetoothMessage.Type.CHAT, chatMessage.getMessageType());
+        assertEquals(connectJson.toString(), connectMessage.getMessagePayload().toString());
+        assertEquals(BluetoothMessage.Type.CONNECT, connectMessage.getMessageType());
+        assertEquals(disconnectJson.toString(), disconnectMessage.getMessagePayload().toString());
+        assertEquals(BluetoothMessage.Type.DISCONNECT, disconnectMessage.getMessageType());
     }
 }
