@@ -96,4 +96,24 @@ public class MessageTest {
         assertEquals(testMessage.getUserId(), chatMessage.getMessageObject().getUserId());
         assertEquals(testMessage.getMessageText(), chatMessage.getMessageObject().getMessageText());
     }
+
+    @Test
+    public void testConvertMessageToBluetoothMessage()
+    {
+        Message testMessage = new Message(1,"Test Text", true);
+
+        BluetoothMessage testBluetoothMessage = new BluetoothMessage();
+        JSONObject chatJson = new JSONObject();
+        chatJson.put("userId", 1);
+        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("messageText", "TEST TEXT");
+
+        testBluetoothMessage.setMessagePayload(chatJson);
+        testBluetoothMessage.setMessageType(BluetoothMessage.Type.CHAT);
+
+        BluetoothMessage convertedMessage = new BluetoothMessage (testMessage);
+        
+        assertEquals(convertedMessage.getMessagePayload().toString(), testBluetoothMessage.getMessagePayload().toString());
+        assertEquals(convertedMessage.getMessageType(), testBluetoothMessage.getMessageType());
+    }
 }
