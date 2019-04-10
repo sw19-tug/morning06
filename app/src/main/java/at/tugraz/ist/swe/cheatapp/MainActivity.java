@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -11,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothProvider bluetoothProvider;
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
+    private Toolbar toolbar;
 
     // TODO: Refactor
     private Device device;
@@ -32,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
         device = new DummyDevice("1", chatFragment);
+
+        // Attaching the layout to the toolbar object
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Setting toolbar as the ActionBar with setSupportActionBar() call
+        setSupportActionBar(toolbar);
 
         showConnectFragment();
     }
