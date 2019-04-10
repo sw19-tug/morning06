@@ -49,8 +49,14 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void buttonVisible() {
+    public void testSendButtonVisible() {
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void testDisconnectButtonVisible() {
+        onView(withId(R.id.btn_chat_disconnect)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -141,5 +147,6 @@ public class ChatFragmentEspressoTest {
         Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(0);
         assertEquals(testText, receiveMessage.getMessageText());
     }
+
 
 }
