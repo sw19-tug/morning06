@@ -98,21 +98,21 @@ public class MessageTest {
     }
 
     @Test
-    public void testConvertMessageToBluetoothMessage()
+    public void testConvertMessageToBluetoothMessage()  throws JSONException
     {
         Message testMessage = new Message(1,"Test Text", true);
-
         BluetoothMessage testBluetoothMessage = new BluetoothMessage();
         JSONObject chatJson = new JSONObject();
+
         chatJson.put("userId", 1);
         chatJson.put("timeStamp", "04-04-2019-08-00-00");
-        chatJson.put("messageText", "TEST TEXT");
+        chatJson.put("messageText", "Test Text");
 
         testBluetoothMessage.setMessagePayload(chatJson);
         testBluetoothMessage.setMessageType(BluetoothMessage.Type.CHAT);
 
-        BluetoothMessage convertedMessage = new BluetoothMessage (testMessage);
-        
+        BluetoothMessage convertedMessage = new BluetoothMessage(testMessage);
+
         assertEquals(convertedMessage.getMessagePayload().toString(), testBluetoothMessage.getMessagePayload().toString());
         assertEquals(convertedMessage.getMessageType(), testBluetoothMessage.getMessageType());
     }

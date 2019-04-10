@@ -14,6 +14,19 @@ public class BluetoothMessage {
         messagePayload = new JSONObject();
     }
 
+    public BluetoothMessage(Message message) throws JSONException{
+
+        if(message == null)
+            return;
+
+        messageType = Type.CHAT;
+        messagePayload = new JSONObject();
+
+        messagePayload.put("userId", message.getUserId());
+        messagePayload.put("timeStamp", "04-04-2019-08-00-00");     // currently hardcoded, change in later issue
+        messagePayload.put("messageText", message.getMessageText());
+    }
+
     public void setMessageType(Type messageType) {
         this.messageType = messageType;
     }
