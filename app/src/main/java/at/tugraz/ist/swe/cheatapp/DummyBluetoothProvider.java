@@ -22,7 +22,13 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     public void connectToDevice(Device device) {
         connectedDevice = device;
         connected = true;
-        super.onConnected();
+        Thread connectThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DummyBluetoothProvider.this.onConnected();
+            }
+        });
+        connectThread.start();
     }
 
     @Override
