@@ -123,4 +123,23 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
 
     }
+
+    @Test
+    public void testDisconnect() {
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        onData(allOf(is(instanceOf(String.class)), is("0")))
+                .perform(click());
+        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_chat_disconnect)).perform(click());
+
+        assertFalse(provider.isConnected());
+        assertNull(provider.getConnectedDevice());
+
+    }
+
+
 }
