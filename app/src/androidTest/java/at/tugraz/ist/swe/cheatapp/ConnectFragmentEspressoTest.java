@@ -120,8 +120,7 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_con_connect)).perform(click());
         onView(withId(R.id.btn_chat_disconnect)).perform(click());
 
-        Thread.sleep(500);
-
+        provider.getThread().join();
         onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
     }
 
@@ -137,8 +136,7 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_con_connect)).perform(click());
         onView(withId(R.id.btn_chat_disconnect)).perform(click());
 
-        Thread.sleep(500);
-
+        provider.getThread().join();
         assertFalse(provider.isConnected());
         assertNull(provider.getConnectedDevice());
     }

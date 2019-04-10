@@ -8,6 +8,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     private Device connectedDevice;
     private boolean connected;
     private String sendMessage;
+    private Thread thread;
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
@@ -32,9 +33,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void disconnect() {
-
-
-        final Thread disconnectThread = new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -50,7 +49,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                 DummyBluetoothProvider.super.onDisconnected();
             }
         });
-        disconnectThread.start();
+        thread.start();
     }
 
     public String checkSendMessage() {
@@ -80,5 +79,9 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     // TODO just for testing purposes, maybe remove later
     public void setReceivedMessage(String message) {
         super.onMessageReceived(message);
+    }
+
+    public Thread getThread() {
+        return this.thread;
     }
 }
