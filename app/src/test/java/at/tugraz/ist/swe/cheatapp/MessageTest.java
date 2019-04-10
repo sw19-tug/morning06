@@ -90,8 +90,10 @@ public class MessageTest {
         chatMessage.setMessagePayload(chatJson);
         chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
 
-        Message testMessage = new Message(chatJson.toString(), true);
+        Message testMessage = new Message(chatJson.toString(), false);
 
-        assertEquals(testMessage, chatMessage.getMessageObject());
+        assertEquals(testMessage.getMessageSent(), chatMessage.getMessageObject().getMessageSent());
+        assertEquals(testMessage.getUserId(), chatMessage.getMessageObject().getUserId());
+        assertEquals(testMessage.getMessageText(), chatMessage.getMessageObject().getMessageText());
     }
 }
