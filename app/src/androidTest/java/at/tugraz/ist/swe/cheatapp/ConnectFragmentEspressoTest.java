@@ -8,6 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -108,5 +110,24 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_con_connect)).perform(click());
 
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testHandshakeMessageAfterConnect() {
+        BluetoothEventHandler eventHandlerCopy = mainActivityTestRule.getActivity().getMainActivityEventHandler();
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.registerHandler(eventHandlerCopy);
+        provider.enableDummyDevices(1);
+
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        onData(allOf(is(instanceOf(String.class)), is("0")))
+                .perform(click());
+        onView(withId(R.id.btn_con_connect)).perform(click());
+
+        MessageAdapter messageAdapter = mainActivityTestRule.getActivity().getChatFragment().getMessageAdapter();
+        List<Message> messageList = messageAdapter.getMessageList();
+
+        assertTrue(messageList.get(messageList.size() - 1).getMessageText().contains("You connected to device"));
     }
 }
