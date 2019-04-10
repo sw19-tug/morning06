@@ -95,7 +95,9 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testChangeViewOnConnect() {
+        BluetoothEventHandler eventHandlerCopy = mainActivityTestRule.getActivity().getMainActivityEventHandler();
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.registerHandler(eventHandlerCopy);
         provider.enableDummyDevices(1);
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);

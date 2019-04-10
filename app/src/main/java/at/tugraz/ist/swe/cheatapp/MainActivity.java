@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
         showConnectFragment();
     }
 
+    public BluetoothEventHandler getMainActivityEventHandler() {
+        return mainActivityEventHandler;
+    }
+
     public BluetoothProvider getBluetoothProvider() {
         return this.bluetoothProvider;
     }
