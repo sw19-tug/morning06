@@ -117,14 +117,26 @@ public class MainActivity extends AppCompatActivity {
 
     public void showConnectFragment() {
         setFragment(connectFragment);
-        connectFragmentVisible = true;
-        connectDisconnectButton.setText("Connect");
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectFragmentVisible = true;
+                connectDisconnectButton.setText("Connect");
+            }
+        });
     }
 
     public void showChatFragment() throws InterruptedException {
         setFragment(chatFragment);
-        connectFragmentVisible = false;
-        connectDisconnectButton.setText("Disconnect");
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectFragmentVisible = false;
+                connectDisconnectButton.setText("Disconnect");
+            }
+        });
         chatFragment.waitForFragmentReady();
     }
 
