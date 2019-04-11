@@ -15,9 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
     private BluetoothEventHandler bluetoothEventHandler;
-
+    private boolean connectFragmentVisible;
     private Toolbar toolbar;
-    private Button disconnectButton;
+    private Button connectDisconnectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +35,17 @@ public class MainActivity extends AppCompatActivity {
 
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
-        disconnectButton = findViewById(R.id.btn_chat_disconnect);
+        connectDisconnectButton = findViewById(R.id.btn_connect_disconnect);
 
-        disconnectButton.setOnClickListener(new View.OnClickListener() {
+        connectDisconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.this.bluetoothProvider.disconnect();
-
+                if (connectFragmentVisible) {
+                    connectFragment.onConnectClicked();
+                }
+                else {
+                    MainActivity.this.bluetoothProvider.disconnect();
+                }
             }
         });
 
@@ -104,10 +108,26 @@ public class MainActivity extends AppCompatActivity {
 
     public void showConnectFragment() {
         setFragment(connectFragment);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectFragmentVisible = true;
+                connectDisconnectButton.setText(getString(R.string.connect));
+            }
+        });
     }
 
     public void showChatFragment() throws InterruptedException {
         setFragment(chatFragment);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectFragmentVisible = false;
+                connectDisconnectButton.setText(getString(R.string.disconnect));
+            }
+        });
         chatFragment.waitForFragmentReady();
     }
 

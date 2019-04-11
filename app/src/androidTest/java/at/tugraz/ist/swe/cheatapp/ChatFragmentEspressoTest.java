@@ -55,12 +55,13 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
     }
 
-/*
+
     @Test
     public void testDisconnectButtonVisible() {
-        onView(withId(R.id.btn_chat_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(withText(R.string.disconnect)));
     }
-*/
+
     @Test
     public void clearTextField() {
         String testText = "This text is redundant because it will be cleared anyway ;-)";

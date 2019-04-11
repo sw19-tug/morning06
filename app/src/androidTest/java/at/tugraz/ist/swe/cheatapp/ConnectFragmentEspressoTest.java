@@ -16,6 +16,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -42,7 +43,9 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testButtonsVisible() {
-        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(withText(R.string.connect)));
+
 
     }
 
@@ -61,7 +64,7 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
-        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
@@ -75,7 +78,7 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
 
         assertFalse(provider.isConnected());
         assertNull(provider.getConnectedDevice());
@@ -91,7 +94,7 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
-        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
@@ -107,8 +110,8 @@ public class ConnectFragmentEspressoTest {
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
-        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
-        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
@@ -123,13 +126,13 @@ public class ConnectFragmentEspressoTest {
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
-        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.btn_chat_disconnect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.btn_con_connect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -142,10 +145,10 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
-        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.btn_chat_disconnect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
         assertFalse(provider.isConnected());
@@ -163,7 +166,7 @@ public class ConnectFragmentEspressoTest {
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
-        onView(withId(R.id.btn_con_connect)).perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
         MessageAdapter messageAdapter = mainActivityTestRule.getActivity().getChatFragment().getMessageAdapter();
