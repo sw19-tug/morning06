@@ -10,12 +10,6 @@ public class DummyDevice implements Device {
         this.chatFragment = null;
     }
 
-    // This constructor is only for testing and can be removed if bluetooth communication works
-    public DummyDevice(String id, ChatFragment chatFragment) {
-        this.id = id;
-        this.chatFragment = chatFragment;
-    }
-
     @Override
     public String getID() {
         return this.id;

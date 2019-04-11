@@ -222,13 +222,6 @@ public class DummyBluetoothProviderTest {
     }
 
     @Test
-    public void testSendMessage() {
-        String message = "Test Message";
-        bluetoothProvider.sendMessage(message);
-        assertEquals(message, bluetoothProvider.checkSendMessage());
-    }
-
-    @Test
     public void testDisconnectFromDevice() throws InterruptedException {
         bluetoothProvider.disconnect();
         this.bluetoothProvider.getThread().join();

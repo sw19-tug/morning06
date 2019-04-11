@@ -8,7 +8,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
     private Device connectedDevice;
     private boolean connected;
-    private String sendMessage;
     private Thread thread;
 
     public DummyBluetoothProvider() {
@@ -36,8 +35,14 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    public void sendMessage(String message) {
-        sendMessage = message;
+    public void sendMessage(final String message) {
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DummyBluetoothProvider.super.onMessageReceived(message);
+            }
+        });
+        thread.start();
     }
 
     @Override
@@ -59,10 +64,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
             }
         });
         thread.start();
-    }
-
-    public String checkSendMessage() {
-        return sendMessage;
     }
 
     public void enableDummyDevices(int count) {
