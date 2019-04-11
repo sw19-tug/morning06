@@ -70,7 +70,7 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void saveTextIntoDummyDevice() {
+    public void saveTextIntoDummyDevice() throws InterruptedException {
         String testText = "I'm a dummy test!";
 
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
@@ -79,6 +79,7 @@ public class ChatFragmentEspressoTest {
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
 
         MessageAdapter messageAdapter = mainActivityTestRule.getActivity().getChatFragment().getMessageAdapter();
         List<Message> messageList = messageAdapter.getMessageList();
@@ -135,7 +136,12 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void testChatHistoryOnMessageSend() {
+    public void testChatHistoryOnMessageSend() throws InterruptedException {
+
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
         db.deleteDatabase(context);
@@ -143,6 +149,7 @@ public class ChatFragmentEspressoTest {
         String testText = "Hello, I am a test message. ;-)";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
 
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
