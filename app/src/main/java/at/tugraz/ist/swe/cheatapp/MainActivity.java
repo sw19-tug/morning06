@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 connectFragmentVisible = true;
-                connectDisconnectButton.setText("Connect");
+                connectDisconnectButton.setText(getString(R.string.connect));
             }
         });
     }
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 connectFragmentVisible = false;
-                connectDisconnectButton.setText("Disconnect");
+                connectDisconnectButton.setText(getString(R.string.disconnect));
             }
         });
         chatFragment.waitForFragmentReady();

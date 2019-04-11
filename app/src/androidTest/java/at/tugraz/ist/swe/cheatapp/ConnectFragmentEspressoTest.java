@@ -44,7 +44,7 @@ public class ConnectFragmentEspressoTest {
     @Test
     public void testButtonsVisible() {
         onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
-        onView(withId(R.id.btn_connect_disconnect)).check(matches(withText("Connect")));
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(withText(R.string.connect)));
 
 
     }

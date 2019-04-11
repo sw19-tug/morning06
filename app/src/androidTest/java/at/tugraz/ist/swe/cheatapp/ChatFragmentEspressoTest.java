@@ -57,7 +57,7 @@ public class ChatFragmentEspressoTest {
     @Test
     public void testDisconnectButtonVisible() {
         onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
-        onView(withId(R.id.btn_connect_disconnect)).check(matches(withText("Disconnect")));
+        onView(withId(R.id.btn_connect_disconnect)).check(matches(withText(R.string.disconnect)));
     }
 
     @Test
