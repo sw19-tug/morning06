@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/btn_connect_disconnect"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="match_parent"
         android:text="Disconnect"
         android:layout_gravity="right"
