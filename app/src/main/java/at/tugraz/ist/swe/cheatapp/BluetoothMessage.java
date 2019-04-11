@@ -43,7 +43,7 @@ public class BluetoothMessage {
         return messagePayload;
     }
 
-    public Message getMessageObject() throws JSONException { // if a BluetoothMessage is received it can be converted to a Message object
+    public Message getMessageObject() throws JSONException {    // if a BluetoothMessage is received it can be converted to a Message object
 
         if(messageType != Type.CHAT)
             return null;
@@ -52,5 +52,21 @@ public class BluetoothMessage {
         String messageText = messagePayload.getString("messageText");
         Message messageObject = new Message(userId, messageText, false );   // if I am the receiver, sent is always false
         return messageObject;
+    }
+
+    public String serializeMessage() throws JSONException{
+
+        JSONObject serializedMessage = new JSONObject();
+        serializedMessage.put("type", messageType.toString());
+        serializedMessage.put("payload", messagePayload);
+        return serializedMessage.toString();
+    }
+
+    public void deserializeMessage(String message) throws JSONException{
+
+        JSONObject jsonMessage = new JSONObject(message);
+        String type = jsonMessage.getString("type");
+        messageType = Type.valueOf(type);
+        messagePayload = jsonMessage.getJSONObject("payload");
     }
 }

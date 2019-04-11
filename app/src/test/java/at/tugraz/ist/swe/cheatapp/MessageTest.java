@@ -116,4 +116,40 @@ public class MessageTest {
         assertEquals(convertedMessage.getMessagePayload().toString(), testBluetoothMessage.getMessagePayload().toString());
         assertEquals(convertedMessage.getMessageType(), testBluetoothMessage.getMessageType());
     }
+
+    @Test
+    public void testSerializeMessage() throws JSONException {
+        BluetoothMessage chatMessage = new BluetoothMessage();
+
+        JSONObject chatJson = new JSONObject();
+        chatJson.put("userId", 1);
+        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("messageText", "TEST TEXT");
+        chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
+        chatMessage.setMessagePayload(chatJson);
+
+        JSONObject serializedMessage = new JSONObject();
+        serializedMessage.put("type", BluetoothMessage.Type.CHAT);
+        serializedMessage.put("payload", chatJson);
+
+        assertEquals(serializedMessage.toString(), chatMessage.serializeMessage());
+    }
+
+    @Test
+    public void testDeserializeMessage() throws JSONException{
+        BluetoothMessage chatMessage = new BluetoothMessage();
+
+        JSONObject chatJson = new JSONObject();
+        chatJson.put("userId", 1);
+        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("messageText", "TEST TEXT");
+
+        JSONObject message = new JSONObject();
+        message.put("type", BluetoothMessage.Type.CHAT);
+        message.put("payload", chatJson);
+
+        chatMessage.deserializeMessage(message.toString());
+        assertEquals(BluetoothMessage.Type.CHAT, chatMessage.getMessageType());
+        assertEquals(chatJson.toString(), chatMessage.getMessagePayload().toString());
+    }
 }
