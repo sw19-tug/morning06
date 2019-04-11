@@ -15,9 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
     private BluetoothEventHandler bluetoothEventHandler;
-
+    private boolean connectFragmentVisible;
     private Toolbar toolbar;
-    private Button disconnectButton;
+    private Button connectDisconnectButton;
 
     // TODO: Refactor
     private Device device;
@@ -39,13 +39,17 @@ public class MainActivity extends AppCompatActivity {
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
         device = new DummyDevice("1", chatFragment);
-        disconnectButton = findViewById(R.id.btn_connect_disconnect);
+        connectDisconnectButton = findViewById(R.id.btn_connect_disconnect);
 
-        disconnectButton.setOnClickListener(new View.OnClickListener() {
+        connectDisconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.this.bluetoothProvider.disconnect();
-
+                if (connectFragmentVisible) {
+                    connectFragment.onConnectClicked();
+                }
+                else {
+                    MainActivity.this.bluetoothProvider.disconnect();
+                }
             }
         });
 
@@ -113,10 +117,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void showConnectFragment() {
         setFragment(connectFragment);
+        connectFragmentVisible = true;
+        connectDisconnectButton.setText("Connect");
     }
 
     public void showChatFragment() throws InterruptedException {
         setFragment(chatFragment);
+        connectFragmentVisible = false;
+        connectDisconnectButton.setText("Disconnect");
         chatFragment.waitForFragmentReady();
     }
 

@@ -18,7 +18,6 @@ public class ConnectFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private ListView listView;
-    private Button connectButton;
     private ArrayAdapter<String> adapter;
     private int selectedListIndex = -1;
 
@@ -34,7 +33,6 @@ public class ConnectFragment extends Fragment {
         activity = (MainActivity) getActivity();
 
         listView = view.findViewById(R.id.lv_con_devices);
-        connectButton = view.findViewById(R.id.btn_con_connect);
 
 
         this.updateValues();
@@ -49,16 +47,6 @@ public class ConnectFragment extends Fragment {
             }
         });
 
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedListIndex < 0) {
-                    Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
-                } else {
-                    activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
-                }
-            }
-        });
     }
 
     public void updateValues() {
@@ -84,5 +72,13 @@ public class ConnectFragment extends Fragment {
         }
 
         return idList;
+    }
+
+    public void onConnectClicked(){
+        if (selectedListIndex < 0) {
+            Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
+        } else {
+            activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
+        }
     }
 }
