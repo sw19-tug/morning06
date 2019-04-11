@@ -11,7 +11,7 @@
         android:id="@+id/btn_connect_disconnect"
         android:layout_width="110dp"
         android:layout_height="match_parent"
-        android:text="Disconnect"
+        android:text=""
         android:layout_gravity="right"
         android:textColor="#000000"
         />
