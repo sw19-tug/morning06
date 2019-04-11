@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothEventHandler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(String message) {
+            public void onMessageReceived(final Message message) {
                 chatFragment.onMessageReceived(message);
             }
 

@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,7 +20,7 @@ import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class RealBluetoothProvider extends BluetoothProvider {
 
-    private final Queue<String> sentMessageQueue;
+    private final Queue<Message> sentMessageQueue;
     private final ConnectThread connectThread;
     private BluetoothAdapter adapter;
     private Thread communicationThread;
@@ -62,15 +64,27 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
                     synchronized (sentMessageQueue)
                     {
-                        sentMessageQueue.add(String.format(ON_CONNECTED_MESSAGE, adapter.getName()));
+                        // TODO: Is this correct???
+                        final Message message = new Message(1, String.format(ON_CONNECTED_MESSAGE, adapter.getName()), true);
+                        sentMessageQueue.add(message);
                     }
 
                     while (true) {
                         if (inputReader.ready()) {
                             String receivedMessage = inputReader.readLine();
+
+                            // TODO: Message deserialization
+                            final BluetoothMessage btMessage = new BluetoothMessage();
+                            try {
+                                btMessage.deserializeMessage(receivedMessage);
+                            }
+                            catch (JSONException exception) {
+                                exception.printStackTrace();
+                            }
+
                             onMessageReceived(receivedMessage);
                         } else {
-                            String sentMessage;
+                            Message sentMessage;
 
                             synchronized (sentMessageQueue) {
                                 sentMessage = sentMessageQueue.poll();
@@ -114,7 +128,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(final Message message) {
         synchronized (sentMessageQueue) {
             sentMessageQueue.add(message);
         }
@@ -126,7 +140,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    protected void onMessageReceived(String message) {
+    protected void onMessageReceived(final Message message) {
         System.out.format("RealBluetoothProvider Message received %s%n", message);
         super.onMessageReceived(message);
     }

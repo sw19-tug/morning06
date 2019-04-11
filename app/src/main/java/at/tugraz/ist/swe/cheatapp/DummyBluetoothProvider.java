@@ -27,15 +27,20 @@ public class DummyBluetoothProvider extends BluetoothProvider {
             @Override
             public void run() {
                 DummyBluetoothProvider.super.onConnected();
-                DummyBluetoothProvider.super.onMessageReceived(String.format
-                        (ON_CONNECTED_MESSAGE, connectedDevice.getID()));
+                // TODO: User-ID???
+                final Message message = new Message(0,
+                        String.format(ON_CONNECTED_MESSAGE, connectedDevice.getID()),
+                        true);
+//                DummyBluetoothProvider.super.onMessageReceived(String.format
+//                        (ON_CONNECTED_MESSAGE, connectedDevice.getID()));
+                DummyBluetoothProvider.super.onMessageReceived(message);
             }
         });
         thread.start();
     }
 
     @Override
-    public void sendMessage(final String message) {
+    public void sendMessage(final Message message) {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,7 +92,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     }
 
     // TODO just for testing purposes, maybe remove later
-    public void setReceivedMessage(String message) {
+    public void setReceivedMessage(final Message message) {
         super.onMessageReceived(message);
     }
 

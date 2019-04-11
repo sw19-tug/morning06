@@ -63,7 +63,6 @@ public class BluetoothMessage {
     }
 
     public void deserializeMessage(String message) throws JSONException{
-
         JSONObject jsonMessage = new JSONObject(message);
         String type = jsonMessage.getString("type");
         messageType = Type.valueOf(type);
