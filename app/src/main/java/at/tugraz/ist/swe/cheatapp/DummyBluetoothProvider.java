@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import java.util.ArrayList;
 import java.util.List;
+import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
@@ -27,6 +28,8 @@ public class DummyBluetoothProvider extends BluetoothProvider {
             @Override
             public void run() {
                 DummyBluetoothProvider.super.onConnected();
+                DummyBluetoothProvider.super.onMessageReceived(String.format
+                        (ON_CONNECTED_MESSAGE, connectedDevice.getID()));
             }
         });
         thread.start();

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
+
 public class RealBluetoothProvider extends BluetoothProvider {
 
 
@@ -61,7 +63,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
                     synchronized (sentMessageQueue)
                     {
-                        sentMessageQueue.add(String.format("You connected to device %s. Welcome!", socket.getRemoteDevice().getName()));
+                        sentMessageQueue.add(String.format(ON_CONNECTED_MESSAGE, socket.getRemoteDevice().getName()));
                     }
 
                     while (true) {

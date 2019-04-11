@@ -136,7 +136,7 @@ public class DummyBluetoothProviderTest {
     }
 
     @Test
-    public void testOnMessageReceivedCallback() {
+    public void testOnMessageReceivedCallback() throws InterruptedException {
         // hack for setting variable out of BluetoothEventHandler class
         final String[] calledList = new String[1];
         calledList[0] = "";
@@ -165,6 +165,7 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
+        this.bluetoothProvider.getThread().join();
 
         // TODO: Maybe change the name of this method?
         this.bluetoothProvider.setReceivedMessage("test");
@@ -202,22 +203,21 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
+        this.bluetoothProvider.getThread().join();
         this.bluetoothProvider.disconnect();
         this.bluetoothProvider.getThread().join();
-
 
         assertTrue(calledList[0]);
     }
 
     @Test
     public void testConnectToDevice() throws InterruptedException {
-        Device device = new DummyDevice("1");
-        bluetoothProvider.connectToDevice(device);
-
+        this.bluetoothProvider.enableDummyDevices(1);
+        List<Device> devices = this.bluetoothProvider.getPairedDevices();
+        this.bluetoothProvider.connectToDevice(devices.get(0));
         this.bluetoothProvider.getThread().join();
 
-
-        assertEquals(bluetoothProvider.getConnectedDevice().getID(), "1");
+        assertEquals(bluetoothProvider.getConnectedDevice().getID(), "0");
         assertTrue(bluetoothProvider.isConnected());
     }
 
