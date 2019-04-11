@@ -71,8 +71,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onError(String errorMsg) {
-
+            public void onError(final String errorMsg) {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         };
 

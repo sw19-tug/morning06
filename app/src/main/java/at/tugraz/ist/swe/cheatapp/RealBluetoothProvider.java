@@ -18,7 +18,6 @@ import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class RealBluetoothProvider extends BluetoothProvider {
 
-
     private final Queue<String> sentMessageQueue;
     private final ConnectThread connectThread;
     private BluetoothAdapter adapter;
