@@ -62,7 +62,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
                     synchronized (sentMessageQueue)
                     {
-                        sentMessageQueue.add(String.format(ON_CONNECTED_MESSAGE, socket.getRemoteDevice().getName()));
+                        sentMessageQueue.add(String.format(ON_CONNECTED_MESSAGE, adapter.getName()));
                     }
 
                     while (true) {
