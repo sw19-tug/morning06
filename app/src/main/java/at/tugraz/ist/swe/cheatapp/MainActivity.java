@@ -19,9 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Button disconnectButton;
 
-    // TODO: Refactor
-    private Device device;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
-        device = new DummyDevice("1", chatFragment);
         disconnectButton = findViewById(R.id.btn_chat_disconnect);
 
         disconnectButton.setOnClickListener(new View.OnClickListener() {
@@ -104,15 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 connectFragment.updateValues();
             }
         });
-    }
-
-    public Device getDevice() {
-        return this.device;
-    }
-
-    // TODO: Remove this method once ChatFragment uses BluetoothProvider instead of Device
-    public void setDevice(Device device) {
-        this.device = device;
     }
 
     public void showConnectFragment() {
