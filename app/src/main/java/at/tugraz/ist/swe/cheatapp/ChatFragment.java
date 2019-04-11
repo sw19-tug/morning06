@@ -87,6 +87,7 @@ public class ChatFragment extends Fragment {
     private void onSendButtonClicked() {
         String textToSend = textEntry.getText().toString();
         activity.getBluetoothProvider().sendMessage(textToSend);
+        messageRepository.insertMessage(new Message(1, textToSend, true));
         textEntry.getText().clear();
     }
 
