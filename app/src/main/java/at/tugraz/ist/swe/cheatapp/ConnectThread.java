@@ -39,13 +39,13 @@ public class ConnectThread extends Thread {
                     synchronized (this) {
                         if (this.device != null) {
                             System.out.println("ConnectThread: Connection as client requested");
-                            // TODO: Refactor
-
                             try {
                                 this.socket = this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
-                                // TODO check if socket is null
-                                this.socket.connect();
-                                this.interrupt();
+                                if(this.socket != null)
+                                {
+                                    this.socket.connect();
+                                    this.interrupt();
+                                }
                             } catch (IOException ex) {
                                 this.interrupt();
                                 throw new RuntimeException(ex.getMessage());
