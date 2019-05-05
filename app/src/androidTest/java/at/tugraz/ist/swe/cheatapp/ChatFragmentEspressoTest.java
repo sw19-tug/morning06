@@ -159,4 +159,23 @@ public class ChatFragmentEspressoTest {
     }
 
 
+    @Test
+    public void timestampVisibleOnSend() throws InterruptedException {
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
+
+        String testText = "Hello, I is there a timestamp?";
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        onView(withId(R.id.lbl_chat_timestamp)).check(matches(isDisplayed()));
+
+    }
+
 }
