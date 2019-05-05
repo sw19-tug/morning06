@@ -105,7 +105,7 @@ public class MessageTest {
         JSONObject chatJson = new JSONObject();
 
         chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("timeStamp", testMessage.getTimestamp());
         chatJson.put("messageText", "Test Text");
 
         testBluetoothMessage.setMessagePayload(chatJson);

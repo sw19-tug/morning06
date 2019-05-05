@@ -174,8 +174,7 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.lbl_chat_timestamp)).check(matches(isDisplayed()));
-
+        onView(withId(R.id.txt_chat_receivedMessage)).check(matches(isDisplayed()));
     }
 
 }

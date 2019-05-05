@@ -23,7 +23,7 @@ public class BluetoothMessage {
         messagePayload = new JSONObject();
 
         messagePayload.put("userId", message.getUserId());
-        messagePayload.put("timeStamp", "04-04-2019-08-00-00");     // currently hardcoded, change in later issue
+        messagePayload.put("timeStamp", message.getTimestamp());     // currently hardcoded, change in later issue
         messagePayload.put("messageText", message.getMessageText());
     }
 

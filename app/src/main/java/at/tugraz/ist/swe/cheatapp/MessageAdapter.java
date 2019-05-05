@@ -1,11 +1,14 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter {
@@ -14,6 +17,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     private List<Message> messageList;
+    Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public MessageAdapter(List<Message> messageList) {
         this.messageList = messageList;
@@ -75,6 +79,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         void bind(Message message) {
             messageText.setText(message.getMessageText());
+            timeText.setText(dateFormat.format(message.getTimestamp()));
         }
     }
 
@@ -89,6 +94,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
+            timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
         }
     }
