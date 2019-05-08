@@ -50,7 +50,8 @@ public class ChatFragment extends Fragment {
         messageRepository = new MessageRepository(this.getContext());
 
         final List<Message> messageList = new ArrayList<>();
-        messageRepository.getMessagesByUserId(1).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
+        long connectedUserId = activity.getBluetoothProvider().getConnectedUserId();
+        messageRepository.getMessagesByUserId(connectedUserId).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
             @Override
             public void onChanged(@Nullable List<Message> messages) {
                 messageList.clear();
