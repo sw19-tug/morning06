@@ -75,7 +75,6 @@ public class Message {
         jsonMessage.put("userId", this.userId);
         jsonMessage.put("timeStamp", this.timestamp);
         jsonMessage.put("messageText", messageText);
-        System.out.println(jsonMessage.toString());
         return jsonMessage.toString();
     }
 }
