@@ -30,7 +30,7 @@ public class Message {
         this.userId = jsonMessage.getInt("userId");
         this.messageText = jsonMessage.getString("messageText");
         this.messageSent = messageSent;
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = jsonMessage.getLong("timeStamp");
     }
 
     public int getMessageId() {
@@ -73,6 +73,7 @@ public class Message {
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", this.userId);
+        jsonMessage.put("timeStamp", this.timestamp);
         jsonMessage.put("messageText", messageText);
         return jsonMessage.toString();
     }

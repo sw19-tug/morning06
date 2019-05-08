@@ -23,6 +23,7 @@ public class MessageTest {
         jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 5);
         jsonMessage.put("messageText", "Hello, this is a test message! :)");
+        jsonMessage.put("timeStamp", message.getTimestamp());
         assertEquals(jsonMessage.toString(), message.getJsonString());
     }
 
@@ -32,6 +33,8 @@ public class MessageTest {
         jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 4);
         jsonMessage.put("messageText", "Ok, I will see! ;)");
+        long systemTime = System.currentTimeMillis();
+        jsonMessage.put("timeStamp", systemTime);
 
         Message testMessage = new Message(jsonMessage.toString(), false);
 
@@ -39,6 +42,7 @@ public class MessageTest {
         assertEquals("Ok, I will see! ;)", testMessage.getMessageText());
         assertEquals(false, testMessage.getMessageSent());
         assertEquals(jsonMessage.toString(), testMessage.getJsonString());
+        assertEquals(systemTime, testMessage.getTimestamp());
     }
 
     @Test
