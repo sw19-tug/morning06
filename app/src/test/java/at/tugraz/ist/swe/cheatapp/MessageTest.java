@@ -23,6 +23,7 @@ public class MessageTest {
         jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 5);
         jsonMessage.put("messageText", "Hello, this is a test message! :)");
+        jsonMessage.put("timeStamp", message.getTimestamp());
         assertEquals(jsonMessage.toString(), message.getJsonString());
     }
 
@@ -32,6 +33,8 @@ public class MessageTest {
         jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 4);
         jsonMessage.put("messageText", "Ok, I will see! ;)");
+        long systemTime = System.currentTimeMillis();
+        jsonMessage.put("timeStamp", systemTime);
 
         Message testMessage = new Message(jsonMessage.toString(), false);
 
@@ -39,6 +42,7 @@ public class MessageTest {
         assertEquals("Ok, I will see! ;)", testMessage.getMessageText());
         assertEquals(false, testMessage.getMessageSent());
         assertEquals(jsonMessage.toString(), testMessage.getJsonString());
+        assertEquals(systemTime, testMessage.getTimestamp());
     }
 
     @Test
@@ -50,16 +54,16 @@ public class MessageTest {
 
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("timeStamp", System.currentTimeMillis());
         chatJson.put("messageText", "TEST TEXT");
 
         JSONObject connectJson = new JSONObject();
         connectJson.put("userId", 1);
-        connectJson.put("timeStamp", "04-04-2019-08-00-00");
+        connectJson.put("timeStamp", System.currentTimeMillis());
 
         JSONObject disconnectJson = new JSONObject();
         disconnectJson.put("userId", 1);
-        disconnectJson.put("timeStamp", "04-04-2019-08-00-00");
+        disconnectJson.put("timeStamp", System.currentTimeMillis());
 
         connectMessage.setMessageType(BluetoothMessage.Type.CONNECT);
         connectMessage.setMessagePayload(connectJson);
@@ -84,7 +88,7 @@ public class MessageTest {
         BluetoothMessage chatMessage = new BluetoothMessage();
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("timeStamp", System.currentTimeMillis());
         chatJson.put("messageText", "TEST TEXT");
 
         chatMessage.setMessagePayload(chatJson);
@@ -105,7 +109,7 @@ public class MessageTest {
         JSONObject chatJson = new JSONObject();
 
         chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("timeStamp", testMessage.getTimestamp());
         chatJson.put("messageText", "Test Text");
 
         testBluetoothMessage.setMessagePayload(chatJson);
@@ -123,7 +127,7 @@ public class MessageTest {
 
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("timeStamp", System.currentTimeMillis());
         chatJson.put("messageText", "TEST TEXT");
         chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
         chatMessage.setMessagePayload(chatJson);
@@ -141,7 +145,7 @@ public class MessageTest {
 
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
+        chatJson.put("timeStamp", System.currentTimeMillis());
         chatJson.put("messageText", "TEST TEXT");
 
         JSONObject message = new JSONObject();
