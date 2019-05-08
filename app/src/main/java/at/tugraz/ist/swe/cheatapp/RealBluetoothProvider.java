@@ -77,12 +77,13 @@ public class RealBluetoothProvider extends BluetoothProvider {
                             final BluetoothMessage btMessage = new BluetoothMessage();
                             try {
                                 btMessage.deserializeMessage(receivedMessage);
+                                onMessageReceived(btMessage.getMessageObject());
+
                             }
                             catch (JSONException exception) {
                                 exception.printStackTrace();
                             }
 
-                            onMessageReceived(receivedMessage);
                         } else {
                             Message sentMessage;
 
