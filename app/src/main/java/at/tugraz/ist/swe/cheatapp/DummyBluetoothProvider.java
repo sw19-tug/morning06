@@ -44,7 +44,9 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                DummyBluetoothProvider.super.onMessageReceived(message);
+                final Message receivedMessage = new Message(message);
+                receivedMessage.setMessageSent(false);
+                DummyBluetoothProvider.super.onMessageReceived(receivedMessage);
             }
         });
         thread.start();

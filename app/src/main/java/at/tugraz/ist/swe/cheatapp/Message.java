@@ -29,6 +29,12 @@ public class Message {
         this.messageSent = messageSent;
     }
 
+    public Message(final Message other) {
+        this.userId = other.userId;
+        this.messageText = other.messageText;
+        this.messageSent = other.messageSent;
+    }
+
     public int getMessageId() {
         return messageId;
     }
