@@ -35,14 +35,12 @@ public class ConnectThread extends Thread {
                     System.out.println("ConnectThread: Connected as server.");
                 } catch (IOException ignore) {
                     // Timeout
-
                     synchronized (this) {
                         if (this.device != null) {
                             System.out.println("ConnectThread: Connection as client requested");
                             try {
                                 this.socket = this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
-                                if(this.socket != null)
-                                {
+                                if (this.socket != null) {
                                     this.socket.connect();
                                     this.interrupt();
                                 }

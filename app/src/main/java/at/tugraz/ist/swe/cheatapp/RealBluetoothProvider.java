@@ -60,8 +60,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());
 
-                    synchronized (sentMessageQueue)
-                    {
+                    synchronized (sentMessageQueue) {
                         sentMessageQueue.add(String.format(ON_CONNECTED_MESSAGE, adapter.getName()));
                     }
 
