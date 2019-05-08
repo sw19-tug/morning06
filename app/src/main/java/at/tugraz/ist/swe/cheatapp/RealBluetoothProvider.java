@@ -73,17 +73,9 @@ public class RealBluetoothProvider extends BluetoothProvider {
                         if (inputReader.ready()) {
                             String receivedMessage = inputReader.readLine();
 
-
-                            // TODO: Message deserialization
                             final BluetoothMessage btMessage = new BluetoothMessage();
-                            try {
-                                btMessage.deserializeMessage(receivedMessage);
-                                onMessageReceived(btMessage.getMessageObject());
-
-                            }
-                            catch (JSONException exception) {
-                                exception.printStackTrace();
-                            }
+                            btMessage.deserializeMessage(receivedMessage);
+                            onMessageReceived(btMessage.getMessageObject());
 
                         } else {
                             BluetoothMessage message;
@@ -103,9 +95,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     onError(e.getMessage());
                 } catch (IOException e) {
                     onDisconnected();
-                } catch (JSONException ex) {
-                    // TODO!
-                    ex.printStackTrace();
+                } catch (JSONException e) {
+                    onError(e.getMessage());
                 }
             }
 
