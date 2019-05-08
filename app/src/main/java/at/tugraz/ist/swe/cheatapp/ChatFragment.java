@@ -60,6 +60,8 @@ public class ChatFragment extends Fragment {
                     messageList.add(msg);
                 }
                 messageAdapter.notifyDataSetChanged();
+                if(messageAdapter.getItemCount() > 1)
+                    messageRecycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
             }
         });
 
@@ -67,6 +69,7 @@ public class ChatFragment extends Fragment {
         messageAdapter = new MessageAdapter(messageList);
         messageRecycler.setAdapter(messageAdapter);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
     }
 
     private void onSendButtonClicked() {

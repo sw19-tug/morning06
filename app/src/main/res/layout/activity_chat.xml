@@ -7,14 +7,7 @@
     android:gravity = "bottom"
     tools:context=".MainActivity"
     >
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvChat"
-        android:transcriptMode="alwaysScroll"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,6 +16,17 @@
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvChat"
+            android:transcriptMode="alwaysScroll"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@id/txt_chat_entry"
+            android:paddingBottom="5dp" />
 
 
         <Button
@@ -60,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
+
     </RelativeLayout>
 
 </RelativeLayout>
