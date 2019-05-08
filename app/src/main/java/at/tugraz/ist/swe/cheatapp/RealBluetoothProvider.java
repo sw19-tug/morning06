@@ -20,14 +20,14 @@ import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class RealBluetoothProvider extends BluetoothProvider {
 
-    private final Queue<Message> sentMessageQueue;
+    private final Queue<BluetoothMessage> messageQueue;
     private final ConnectThread connectThread;
     private BluetoothAdapter adapter;
     private Thread communicationThread;
 
     public RealBluetoothProvider() throws BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
-        sentMessageQueue = new LinkedList<>();
+        messageQueue = new LinkedList<>();
 
         if (adapter == null) {
             throw new BluetoothException("No bluetooth adapter available");
@@ -62,16 +62,17 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());
 
-                    synchronized (sentMessageQueue)
+                    synchronized (messageQueue)
                     {
                         // TODO: Is this correct???
                         final Message message = new Message(1, String.format(ON_CONNECTED_MESSAGE, adapter.getName()), true);
-                        sentMessageQueue.add(message);
+                        messageQueue.add(new BluetoothMessage(message));
                     }
 
                     while (true) {
                         if (inputReader.ready()) {
                             String receivedMessage = inputReader.readLine();
+
 
                             // TODO: Message deserialization
                             final BluetoothMessage btMessage = new BluetoothMessage();
@@ -85,14 +86,14 @@ public class RealBluetoothProvider extends BluetoothProvider {
                             }
 
                         } else {
-                            Message sentMessage;
+                            BluetoothMessage message;
 
-                            synchronized (sentMessageQueue) {
-                                sentMessage = sentMessageQueue.poll();
+                            synchronized (messageQueue) {
+                                message = messageQueue.poll();
                             }
 
-                            if (sentMessage != null) {
-                                outputWriter.println(sentMessage);
+                            if (message != null) {
+                                outputWriter.println(message.serializeMessage());
                                 outputWriter.flush();
                             }
                         }
@@ -102,6 +103,9 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     onError(e.getMessage());
                 } catch (IOException e) {
                     onDisconnected();
+                } catch (JSONException ex) {
+                    // TODO!
+                    ex.printStackTrace();
                 }
             }
 
@@ -130,8 +134,14 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void sendMessage(final Message message) {
-        synchronized (sentMessageQueue) {
-            sentMessageQueue.add(message);
+        synchronized (messageQueue) {
+            try {
+                final BluetoothMessage btMessage = new BluetoothMessage(message);
+                messageQueue.add(btMessage);
+            }
+            catch (JSONException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
