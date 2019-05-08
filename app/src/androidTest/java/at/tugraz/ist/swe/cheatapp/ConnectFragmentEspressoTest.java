@@ -65,7 +65,7 @@ public class ConnectFragmentEspressoTest {
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
-        assertEquals(provider.getConnectedDevice().getID(), "0");
+        assertEquals(provider.getConnectedDevice().getDeviceName(), "0");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class ConnectFragmentEspressoTest {
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
-        assertEquals(provider.getConnectedDevice().getID(), "0");
+        assertEquals(provider.getConnectedDevice().getDeviceName(), "0");
     }
 
     @Test

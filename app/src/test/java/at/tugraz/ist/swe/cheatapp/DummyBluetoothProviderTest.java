@@ -217,7 +217,7 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.connectToDevice(devices.get(0));
         this.bluetoothProvider.getThread().join();
 
-        assertEquals(bluetoothProvider.getConnectedDevice().getID(), "0");
+        assertEquals(bluetoothProvider.getConnectedDevice().getDeviceName(), "0");
         assertTrue(bluetoothProvider.isConnected());
     }
 

@@ -4,14 +4,20 @@ import android.bluetooth.BluetoothDevice;
 
 public class RealDevice implements Device {
     private BluetoothDevice device;
+    private long deviceId;
 
     public RealDevice(BluetoothDevice device) {
         this.device = device;
     }
 
     @Override
-    public String getID() {
+    public String getDeviceName() {
         return device.getName();
+    }
+
+    @Override
+    public long getDeviceId() {
+        return this.deviceId;
     }
 
     public BluetoothDevice getDevice() {

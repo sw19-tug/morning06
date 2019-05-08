@@ -1,9 +1,8 @@
 package at.tugraz.ist.swe.cheatapp;
 
 public interface Device {
-    String getID();
-
+    String getDeviceName();
+    long getDeviceId();
     String getMessage();
-
     void sendMessage(String message);
 }

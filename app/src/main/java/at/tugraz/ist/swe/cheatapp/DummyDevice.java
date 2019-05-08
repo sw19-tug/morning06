@@ -1,24 +1,30 @@
 package at.tugraz.ist.swe.cheatapp;
 
 public class DummyDevice implements Device {
-    String id;
+    long deviceId;
+    String deviceName;
     ChatFragment chatFragment;
     private String message;
 
-    public DummyDevice(String id) {
-        this.id = id;
+    public DummyDevice(String name) {
+        this.deviceName = name;
         this.chatFragment = null;
     }
 
     // This constructor is only for testing and can be removed if bluetooth communication works
-    public DummyDevice(String id, ChatFragment chatFragment) {
-        this.id = id;
+    public DummyDevice(String name, ChatFragment chatFragment) {
+        this.deviceName = name;
         this.chatFragment = chatFragment;
     }
 
     @Override
-    public String getID() {
-        return this.id;
+    public String getDeviceName() {
+        return this.deviceName;
+    }
+
+    @Override
+    public long getDeviceId() {
+        return this.deviceId;
     }
 
     public String getMessage() {

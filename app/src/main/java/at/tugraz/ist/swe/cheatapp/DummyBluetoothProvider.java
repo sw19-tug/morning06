@@ -29,7 +29,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
             public void run() {
                 DummyBluetoothProvider.super.onConnected();
                 DummyBluetoothProvider.super.onMessageReceived(String.format
-                        (ON_CONNECTED_MESSAGE, connectedDevice.getID()));
+                        (ON_CONNECTED_MESSAGE, connectedDevice.getDeviceName()));
             }
         });
         thread.start();
