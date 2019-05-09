@@ -8,69 +8,76 @@ public class BluetoothMessage {
     enum Type {CONNECT, DISCONNECT, CHAT}
 
     private Type messageType;
-    private JSONObject messagePayload;
+    private Message message = null;
+    private ConnectMessage connectMessage = null;
 
-    public BluetoothMessage(){
-        messagePayload = new JSONObject();
-    }
-
-    public BluetoothMessage(Message message) throws JSONException{
-
-        if(message == null)
-            return;
-
+    public BluetoothMessage(Message message) {
         messageType = Type.CHAT;
-        messagePayload = new JSONObject();
-
-        messagePayload.put("userId", message.getUserId());
-        messagePayload.put("timeStamp", "04-04-2019-08-00-00");     // currently hardcoded, change in later issue
-        messagePayload.put("messageText", message.getMessageText());
+        this.message = message;
     }
 
-    public BluetoothMessage(Type messageType, JSONObject messagePayload) throws JSONException {
+    public BluetoothMessage(ConnectMessage connectMessage) {
         this.messageType = messageType;
-        this.messagePayload = messagePayload;
-    }
-
-    public void setMessageType(Type messageType) {
-        this.messageType = messageType;
-    }
-
-    public void setMessagePayload(JSONObject messagePayload) {
-        this.messagePayload = messagePayload;
+        this.connectMessage = connectMessage;
     }
 
     public  Type getMessageType() {
         return messageType;
     }
 
-    public JSONObject getMessagePayload() {
-        return messagePayload;
+    public Message getMessage() {
+        return message;
     }
 
-    public Message getMessageObject() throws JSONException {    // if a BluetoothMessage is received it can be converted to a Message object
-
-        if(messageType != Type.CHAT)
-            return null;
-
-        int userId = messagePayload.getInt("userId");
-        String messageText = messagePayload.getString("messageText");
-        Message messageObject = new Message(userId, messageText, false );   // if I am the receiver, sent is always false
-        return messageObject;
+    public ConnectMessage getConnectMessage() {
+        return connectMessage;
     }
 
-    public String serializeMessage() throws JSONException{
+    public String toJSONString() throws JSONException{
 
         JSONObject serializedMessage = new JSONObject();
         serializedMessage.put("type", messageType.toString());
-        serializedMessage.put("payload", messagePayload);
+
+        String payload = "";
+
+        switch (messageType) {
+            case CHAT:
+                payload = message.getJsonString();
+                break;
+            case CONNECT:
+                payload = connectMessage.getJsonString();
+                break;
+            case DISCONNECT:
+                payload = "";
+                break;
+        }
+
+        serializedMessage.put("payload", payload);
         return serializedMessage.toString();
     }
 
-    public void deserializeMessage(String message) throws JSONException{
-        JSONObject jsonMessage = new JSONObject(message);
+    public static BluetoothMessage fromJSONString(String json) throws JSONException {
+        JSONObject jsonMessage = new JSONObject(json);
         String type = jsonMessage.getString("type");
-        messageType = Type.valueOf(type);
-        messagePayload = jsonMessage.getJSONObject("payload");
+        Type messageType = Type.valueOf(type);
+        String payload = jsonMessage.getString("payload");
+
+        switch (messageType) {
+            case CHAT: {
+                // TODO: MessageSent parameter?
+                Message message = new Message(payload, true);
+                return new BluetoothMessage(message);
+            }
+
+            case CONNECT: {
+                ConnectMessage connectMessage = new ConnectMessage(payload);
+                return new BluetoothMessage(connectMessage);
+            }
+
+            case DISCONNECT:
+                break;
+        }
+
+        return null;
     }
 }

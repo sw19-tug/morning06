@@ -65,9 +65,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
                     synchronized (messageQueue)
                     {
-                        // TODO: Is this correct???
-                        final Message message = new Message(1, String.format(ON_CONNECTED_MESSAGE, adapter.getName()), true);
-                        messageQueue.add(new BluetoothMessage(message));
+                        messageQueue.add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
                     }
 
                     while (true) {
