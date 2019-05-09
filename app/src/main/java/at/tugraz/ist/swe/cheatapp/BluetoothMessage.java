@@ -27,7 +27,7 @@ public class BluetoothMessage {
         messagePayload.put("messageText", message.getMessageText());
     }
 
-    public BluetoothMessage(Type messageType, JSONObject messagePayload) throws JSONException{
+    public BluetoothMessage(Type messageType, JSONObject messagePayload) throws JSONException {
         this.messageType = messageType;
         this.messagePayload = messagePayload;
     }

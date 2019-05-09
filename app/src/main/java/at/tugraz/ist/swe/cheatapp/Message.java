@@ -71,7 +71,6 @@ public class Message {
     public String getJsonString() {
         JSONObject jsonMessage = new JSONObject();
         try {
-            jsonMessage.put("type", "chat message");
             jsonMessage.put("userId", this.userId);
             jsonMessage.put("messageText", messageText);
         } catch (JSONException exception) {

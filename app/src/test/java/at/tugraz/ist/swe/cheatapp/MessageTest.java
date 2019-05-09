@@ -20,7 +20,6 @@ public class MessageTest {
     public void testGetJsonString() throws JSONException {
         Message message = new Message(5, "Hello, this is a test message! :)", true);
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 5);
         jsonMessage.put("messageText", "Hello, this is a test message! :)");
         assertEquals(jsonMessage.toString(), message.getJsonString());
@@ -29,7 +28,6 @@ public class MessageTest {
     @Test
     public void testNewMessageFromJsonString() throws JSONException {
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 4);
         jsonMessage.put("messageText", "Ok, I will see! ;)");
 
