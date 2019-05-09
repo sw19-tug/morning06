@@ -17,7 +17,7 @@ public class BluetoothMessage {
     }
 
     public BluetoothMessage(ConnectMessage connectMessage) {
-        this.messageType = messageType;
+        this.messageType = Type.CONNECT;
         this.connectMessage = connectMessage;
     }
 

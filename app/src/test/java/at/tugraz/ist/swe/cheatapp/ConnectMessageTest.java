@@ -28,5 +28,4 @@ public class ConnectMessageTest {
         assertEquals("1.3.3.7", testMessage.getVersionName());
         assertEquals(jsonMessage.toString(), testMessage.getJsonString());
     }
-
 }

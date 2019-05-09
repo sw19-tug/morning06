@@ -32,122 +32,34 @@ public class MessageTest {
         jsonMessage.put("messageText", "Ok, I will see! ;)");
 
         Message testMessage = new Message(jsonMessage.toString(), false);
+        testMessage.setUserId(5);
+        testMessage.setMessageText("Test setter method!");
+        testMessage.setMessageSent(true);
 
-        assertEquals(4, testMessage.getUserId());
-        assertEquals("Ok, I will see! ;)", testMessage.getMessageText());
-        assertEquals(false, testMessage.getMessageSent());
-        assertEquals(jsonMessage.toString(), testMessage.getJsonString());
+        JSONObject jsonMessage2 = new JSONObject();
+        jsonMessage2.put("userId", 5);
+        jsonMessage2.put("messageText", "Test setter method!");
+
+        assertEquals(5, testMessage.getUserId());
+        assertEquals("Test setter method!", testMessage.getMessageText());
+        assertEquals(true, testMessage.getMessageSent());
+        assertEquals(jsonMessage2.toString(), testMessage.getJsonString());
     }
 
     @Test
     public void testBluetoothMessageClass() throws JSONException
     {
-        BluetoothMessage connectMessage = new BluetoothMessage();
-        BluetoothMessage disconnectMessage = new BluetoothMessage();
-        BluetoothMessage chatMessage = new BluetoothMessage();
-
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
         chatJson.put("messageText", "TEST TEXT");
 
-        JSONObject connectJson = new JSONObject();
-        connectJson.put("userId", 1);
-        connectJson.put("timeStamp", "04-04-2019-08-00-00");
+        Message chatMessage1 = new Message(1, "TEST TEXT", true);
+        assertEquals(chatJson.toString(), chatMessage1.getJsonString());
 
-        JSONObject disconnectJson = new JSONObject();
-        disconnectJson.put("userId", 1);
-        disconnectJson.put("timeStamp", "04-04-2019-08-00-00");
+        Message chatMessage2 = new Message(chatJson.toString(), true);
+        assertEquals(chatJson.toString(), chatMessage2.getJsonString());
 
-        connectMessage.setMessageType(BluetoothMessage.Type.CONNECT);
-        connectMessage.setMessagePayload(connectJson);
-
-        disconnectMessage.setMessageType(BluetoothMessage.Type.DISCONNECT);
-        disconnectMessage.setMessagePayload(disconnectJson);
-
-        chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
-        chatMessage.setMessagePayload(chatJson);
-
-        assertEquals(chatJson.toString(), chatMessage.getMessagePayload().toString());
-        assertEquals(BluetoothMessage.Type.CHAT, chatMessage.getMessageType());
-        assertEquals(connectJson.toString(), connectMessage.getMessagePayload().toString());
-        assertEquals(BluetoothMessage.Type.CONNECT, connectMessage.getMessageType());
-        assertEquals(disconnectJson.toString(), disconnectMessage.getMessagePayload().toString());
-        assertEquals(BluetoothMessage.Type.DISCONNECT, disconnectMessage.getMessageType());
-    }
-
-    @Test
-    public void testGetMessageObject() throws JSONException
-    {
-        BluetoothMessage chatMessage = new BluetoothMessage();
-        JSONObject chatJson = new JSONObject();
-        chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
-        chatJson.put("messageText", "TEST TEXT");
-
-        chatMessage.setMessagePayload(chatJson);
-        chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
-
-        Message testMessage = new Message(chatJson.toString(), false);
-
-        assertEquals(testMessage.getMessageSent(), chatMessage.getMessageObject().getMessageSent());
-        assertEquals(testMessage.getUserId(), chatMessage.getMessageObject().getUserId());
-        assertEquals(testMessage.getMessageText(), chatMessage.getMessageObject().getMessageText());
-    }
-
-    @Test
-    public void testConvertMessageToBluetoothMessage()  throws JSONException
-    {
-        Message testMessage = new Message(1,"Test Text", true);
-        BluetoothMessage testBluetoothMessage = new BluetoothMessage();
-        JSONObject chatJson = new JSONObject();
-
-        chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
-        chatJson.put("messageText", "Test Text");
-
-        testBluetoothMessage.setMessagePayload(chatJson);
-        testBluetoothMessage.setMessageType(BluetoothMessage.Type.CHAT);
-
-        BluetoothMessage convertedMessage = new BluetoothMessage(testMessage);
-
-        assertEquals(convertedMessage.getMessagePayload().toString(), testBluetoothMessage.getMessagePayload().toString());
-        assertEquals(convertedMessage.getMessageType(), testBluetoothMessage.getMessageType());
-    }
-
-    @Test
-    public void testSerializeMessage() throws JSONException {
-        BluetoothMessage chatMessage = new BluetoothMessage();
-
-        JSONObject chatJson = new JSONObject();
-        chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
-        chatJson.put("messageText", "TEST TEXT");
-        chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
-        chatMessage.setMessagePayload(chatJson);
-
-        JSONObject serializedMessage = new JSONObject();
-        serializedMessage.put("type", BluetoothMessage.Type.CHAT);
-        serializedMessage.put("payload", chatJson);
-
-        assertEquals(serializedMessage.toString(), chatMessage.serializeMessage());
-    }
-
-    @Test
-    public void testDeserializeMessage() throws JSONException{
-        BluetoothMessage chatMessage = new BluetoothMessage();
-
-        JSONObject chatJson = new JSONObject();
-        chatJson.put("userId", 1);
-        chatJson.put("timeStamp", "04-04-2019-08-00-00");
-        chatJson.put("messageText", "TEST TEXT");
-
-        JSONObject message = new JSONObject();
-        message.put("type", BluetoothMessage.Type.CHAT);
-        message.put("payload", chatJson);
-
-        chatMessage.deserializeMessage(message.toString());
-        assertEquals(BluetoothMessage.Type.CHAT, chatMessage.getMessageType());
-        assertEquals(chatJson.toString(), chatMessage.getMessagePayload().toString());
+        Message chatMessage3 = new Message(chatMessage2);
+        assertEquals(chatMessage2.getJsonString(), chatMessage3.getJsonString());
     }
 }

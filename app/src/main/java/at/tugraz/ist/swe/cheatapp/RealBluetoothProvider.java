@@ -67,14 +67,17 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     {
                         messageQueue.add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
                     }
-
+                    
                     while (true) {
                         if (inputReader.ready()) {
                             String receivedMessage = inputReader.readLine();
 
-                            final BluetoothMessage btMessage = new BluetoothMessage();
-                            btMessage.deserializeMessage(receivedMessage);
-                            onMessageReceived(btMessage.getMessageObject());
+                            final BluetoothMessage btMessage = BluetoothMessage.fromJSONString(receivedMessage);
+                            if(btMessage.getMessageType() == BluetoothMessage.Type.CHAT) {
+                                onMessageReceived(btMessage.getMessage());
+                            } else if(btMessage.getMessageType() == BluetoothMessage.Type.CONNECT) {
+
+                            }
 
                         } else {
                             BluetoothMessage message;
@@ -84,7 +87,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
                             }
 
                             if (message != null) {
-                                outputWriter.println(message.serializeMessage());
+                                outputWriter.println(message.toJSONString());
                                 outputWriter.flush();
                             }
                         }
@@ -125,13 +128,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
     @Override
     public void sendMessage(final Message message) {
         synchronized (messageQueue) {
-            try {
-                final BluetoothMessage btMessage = new BluetoothMessage(message);
-                messageQueue.add(btMessage);
-            }
-            catch (JSONException ex) {
-                ex.printStackTrace();
-            }
+            final BluetoothMessage btMessage = new BluetoothMessage(message);
+            messageQueue.add(btMessage);
         }
     }
 
