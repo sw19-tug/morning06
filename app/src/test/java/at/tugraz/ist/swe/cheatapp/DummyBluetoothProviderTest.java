@@ -237,8 +237,8 @@ public class DummyBluetoothProviderTest {
 
     @Test
     public void testGetUserId() {
-        this.bluetoothProvider.setConnectedUserId("C0:EE:FB:D8:74:6F");
+        this.bluetoothProvider.getConnectedDevice().setConnectedUserId("C0:EE:FB:D8:74:6F");
         long test_id = Long.parseUnsignedLong("212132660016239");
-        assertEquals(test_id, this.bluetoothProvider.getConnectedUserId());
+        assertEquals(test_id, this.bluetoothProvider.getConnectedDevice().getConnectedUserId());
     }
 }
