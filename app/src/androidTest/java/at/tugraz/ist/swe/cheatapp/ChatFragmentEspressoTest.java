@@ -8,9 +8,11 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,6 +24,7 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -182,6 +185,29 @@ public class ChatFragmentEspressoTest {
         provider.getThread().join();
 
         onView(withId(R.id.txt_chat_receivedMessage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testGetMessageInEntryTextOnLongClick() throws InterruptedException {
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
+
+        String testText = "Hello, please edit me!";
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        onView(withId(R.id.rvChat)).perform(
+            RecyclerViewActions.<RecyclerView.ViewHolder>actionOnItemAtPosition(1,longClick()));
+
+        onView(withId(R.id.txt_chat_entry)).check(matches(withText(testText)));
+
+
     }
 
 }
