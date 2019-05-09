@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class BluetoothProvider {
     protected List<BluetoothEventHandler> eventHandlerList;
-    protected long connectedUserId;
+    protected Device connectedDevice = null;
 
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
@@ -51,12 +51,7 @@ public abstract class BluetoothProvider {
         }
     }
 
-    public long getConnectedUserId() {
-        return connectedUserId;
-    }
-
-    public void setConnectedUserId(String connectedUserIdString) {
-        connectedUserIdString = connectedUserIdString.replace(":", "");
-        this.connectedUserId = Long.valueOf(connectedUserIdString, 16);
+    public synchronized Device getConnectedDevice() {
+        return this.connectedDevice;
     }
 }

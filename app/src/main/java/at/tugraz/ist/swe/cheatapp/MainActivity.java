@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
-        device = new DummyDevice("1", chatFragment);
+        device = new DummyDevice("1", "1", chatFragment);
         disconnectButton = findViewById(R.id.btn_chat_disconnect);
 
         disconnectButton.setOnClickListener(new View.OnClickListener() {

@@ -40,7 +40,7 @@ public class ConnectThread extends Thread {
                         if (this.device != null) {
                             System.out.println("ConnectThread: Connection as client requested");
                             try {
-                                this.socket = this.device.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
+                                this.socket = this.device.getAndroidDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
                                 if(this.socket != null)
                                 {
                                     this.socket.connect();

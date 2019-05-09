@@ -6,7 +6,6 @@ import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
-    private Device connectedDevice;
     private boolean connected;
     private String sendMessage;
     private Thread thread;
@@ -67,18 +66,18 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     public void enableDummyDevices(int count) {
         this.devices.clear();
-
         for (int i = 0; i < count; i++) {
-            this.devices.add(new DummyDevice(Integer.toString(i)));
+            this.devices.add(new DummyDevice(Integer.toString(i), Integer.toString(i)));
         }
+    }
+
+    public void addDummyDevice(String name, String id) {
+        this.devices.clear();
+        this.devices.add(new DummyDevice(name, id));
     }
 
     public synchronized boolean isConnected() {
         return connected;
-    }
-
-    public synchronized Device getConnectedDevice() {
-        return connectedDevice;
     }
 
     public List<BluetoothEventHandler> getEventHandlers() {
