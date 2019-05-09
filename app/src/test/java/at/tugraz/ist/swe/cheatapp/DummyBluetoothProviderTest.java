@@ -7,6 +7,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -38,7 +39,7 @@ public class DummyBluetoothProviderTest {
     public void testAddEventHandler() {
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(String message) {
+            public void onMessageReceived(Message message) {
 
             }
 
@@ -70,7 +71,7 @@ public class DummyBluetoothProviderTest {
     public void testRemoveEventHandler() {
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(String message) {
+            public void onMessageReceived(Message message) {
 
             }
 
@@ -106,7 +107,7 @@ public class DummyBluetoothProviderTest {
 
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(String message) {
+            public void onMessageReceived(Message message) {
 
             }
 
@@ -138,12 +139,12 @@ public class DummyBluetoothProviderTest {
     @Test
     public void testOnMessageReceivedCallback() throws InterruptedException {
         // hack for setting variable out of BluetoothEventHandler class
-        final String[] calledList = new String[1];
-        calledList[0] = "";
+        final Message[] calledList = new Message[1];
+        calledList[0] = null;
 
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(String message) {
+            public void onMessageReceived(Message message) {
                 calledList[0] = message;
             }
 
@@ -168,9 +169,10 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.getThread().join();
 
         // TODO: Maybe change the name of this method?
-        this.bluetoothProvider.setReceivedMessage("test");
+        this.bluetoothProvider.setReceivedMessage(new Message(0, "test", true));
 
-        assertEquals(calledList[0], "test");
+        assertNotNull(calledList[0]);
+        assertEquals(calledList[0].getMessageText(), "test");
     }
 
     @Test
@@ -181,7 +183,7 @@ public class DummyBluetoothProviderTest {
 
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(String message) {
+            public void onMessageReceived(Message message) {
             }
 
             @Override
