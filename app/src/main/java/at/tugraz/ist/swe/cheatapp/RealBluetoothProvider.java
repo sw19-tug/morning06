@@ -108,7 +108,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void connectToDevice(Device device) {
-        System.out.println("RealBluetoothProvider Request connection as client;");
+        System.out.println("RealBluetoothProvider Request connection as client");
         connectThread.requestConnection((RealDevice) device);
     }
 
@@ -133,5 +133,20 @@ public class RealBluetoothProvider extends BluetoothProvider {
     @Override
     protected void onDisconnected() {
 
+    }
+
+    @Override
+    public Device getDeviceByID(String deviceID) {
+        Set<BluetoothDevice> btDevices = adapter.getBondedDevices();
+
+        for(BluetoothDevice device : btDevices)
+        {
+            if(device.getName().equals(deviceID))
+            {
+                return new RealDevice(device);
+            }
+        }
+
+        return null;
     }
 }

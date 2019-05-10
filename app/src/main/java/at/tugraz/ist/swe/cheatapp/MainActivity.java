@@ -1,5 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean connectFragmentVisible;
     private Toolbar toolbar;
     private Button connectDisconnectButton;
+    private String lastConnectedDeviceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
+        SharedPreferences sharedPreferences =
+                this.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+        lastConnectedDeviceName = sharedPreferences.getString("conDev", null);
+
         showConnectFragment();
     }
 
@@ -94,16 +101,28 @@ public class MainActivity extends AppCompatActivity {
         return this.bluetoothProvider;
     }
 
-    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
-        runOnUiThread(new Runnable() {
+    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) throws InterruptedException {
+        // TODO validate if this is a good solution
+        Runnable runSetProvider = new Runnable() {
             @Override
             public void run() {
                 MainActivity.this.bluetoothProvider.unregisterHandler(bluetoothEventHandler);
                 MainActivity.this.bluetoothProvider = bluetoothProvider;
                 MainActivity.this.bluetoothProvider.registerHandler(bluetoothEventHandler);
                 connectFragment.updateValues();
+
+                synchronized (this)
+                {
+                    this.notify();
+                }
             }
-        });
+        };
+
+        synchronized (runSetProvider)
+        {
+            runOnUiThread(runSetProvider);
+            runSetProvider.wait();
+        }
     }
 
     public void showConnectFragment() {
@@ -135,9 +154,21 @@ public class MainActivity extends AppCompatActivity {
         return chatFragment;
     }
 
+    public ConnectFragment getConnectFragment() {
+        return connectFragment;
+    }
+
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
         transaction.commitAllowingStateLoss();
+    }
+
+    public String getLastConnectedDeviceName() {
+        return lastConnectedDeviceName;
+    }
+
+    public void clearLastConnectedDevice() {
+        this.lastConnectedDeviceName = null;
     }
 }

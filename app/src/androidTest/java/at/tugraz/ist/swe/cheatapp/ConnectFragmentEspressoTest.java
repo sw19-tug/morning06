@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,12 +41,16 @@ public class ConnectFragmentEspressoTest {
 
     @Before
     public void setUp() {
+        mainActivityTestRule.getActivity().showConnectFragment();
+    }
+
+    @After
+    public void cleanUp()
+    {
         SharedPreferences.Editor prefrencesEditor =
                 mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-
         prefrencesEditor.clear();
         prefrencesEditor.commit();
-        mainActivityTestRule.getActivity().showConnectFragment();
     }
 
     @Test
@@ -124,6 +129,7 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testChangeViewOnDisconnect() throws InterruptedException {
+        // TODO this test is doing nothing
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 

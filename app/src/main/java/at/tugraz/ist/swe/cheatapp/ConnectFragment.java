@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,7 +19,7 @@ public class ConnectFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private ListView listView;
-    private DeviceAdapter adapter;
+    private ArrayAdapter<String> adapter;
     private int selectedListIndex = -1;
 
     @Override
@@ -47,6 +46,22 @@ public class ConnectFragment extends Fragment {
                 selectedListIndex = position;
             }
         });
+
+        String lastConnectedDeviceName = activity.getLastConnectedDeviceName();
+        if(lastConnectedDeviceName != null)
+        {
+            tryConnectByDeviceName(lastConnectedDeviceName);
+        }
+    }
+
+    public void tryConnectByDeviceName(String deviceName)
+    {
+        Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceName);
+        if(connectDevice != null)
+        {
+            activity.clearLastConnectedDevice();
+            connectToDevice(connectDevice);
+        }
     }
 
     public void updateValues() {
@@ -54,7 +69,7 @@ public class ConnectFragment extends Fragment {
         List<String> deviceIDs = getDeviceIDStringList(deviceList);
 
         if (this.adapter == null) {
-            adapter = new DeviceAdapter(view.getContext(),
+            adapter = new ArrayAdapter<>(view.getContext(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
             listView.setAdapter(adapter);
         } else {
@@ -79,11 +94,16 @@ public class ConnectFragment extends Fragment {
             Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
         } else {
             Device connectDevice = activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex);
-            activity.getBluetoothProvider().connectToDevice(connectDevice);
-            SharedPreferences.Editor prefrencesEditor =
-                    activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-            prefrencesEditor.putString("conDev",connectDevice.getID());
-            prefrencesEditor.apply();
+            connectToDevice(connectDevice);
         }
+    }
+
+    private void connectToDevice(Device device)
+    {
+        activity.getBluetoothProvider().connectToDevice(device);
+        SharedPreferences.Editor preferencesEditor =
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.putString("conDev",device.getID());
+        preferencesEditor.apply();
     }
 }

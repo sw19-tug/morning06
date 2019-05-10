@@ -100,7 +100,7 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.rvChat)).check(matches(isDisplayed()));
     }
 
-    /*@Test
+    @Test
     public void chatHistoryScrollable() throws InterruptedException {
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
@@ -141,7 +141,7 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
         sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
-    }*/
+    }
 
     @Test
     public void testChatHistoryOnMessageSend() throws InterruptedException {

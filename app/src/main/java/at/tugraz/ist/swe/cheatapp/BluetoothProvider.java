@@ -12,6 +12,8 @@ public abstract class BluetoothProvider {
 
     public abstract List<Device> getPairedDevices();
 
+    public abstract Device getDeviceByID(String deviceID);
+
     public abstract void connectToDevice(Device device);
 
     public abstract void sendMessage(String message);

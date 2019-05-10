@@ -94,4 +94,16 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     public Thread getThread() {
         return this.thread;
     }
+
+    @Override
+    public Device getDeviceByID(String deviceID) {
+        for(Device device : devices)
+        {
+            if(device.getID().equals(deviceID))
+            {
+                return device;
+            }
+        }
+        return null;
+    }
 }
