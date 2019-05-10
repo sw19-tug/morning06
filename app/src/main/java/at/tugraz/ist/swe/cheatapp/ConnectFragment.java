@@ -84,7 +84,6 @@ public class ConnectFragment extends Fragment {
             activity.getBluetoothProvider().connectToDevice(connectDevice);
             SharedPreferences.Editor prefrencesEditor =
                     activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-
             prefrencesEditor.putString("conDev",connectDevice.getID());
             prefrencesEditor.apply();
         }

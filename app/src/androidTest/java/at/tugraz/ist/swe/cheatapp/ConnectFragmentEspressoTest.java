@@ -40,6 +40,11 @@ public class ConnectFragmentEspressoTest {
 
     @Before
     public void setUp() {
+        SharedPreferences.Editor prefrencesEditor =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+
+        prefrencesEditor.clear();
+        prefrencesEditor.commit();
         mainActivityTestRule.getActivity().showConnectFragment();
     }
 
