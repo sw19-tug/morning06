@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -226,5 +228,20 @@ public class DummyBluetoothProviderTest {
         bluetoothProvider.disconnect();
         this.bluetoothProvider.getThread().join();
         assertFalse(bluetoothProvider.isConnected());
+    }
+
+    @Test
+    public void testGetDeviceByID() {
+        this.bluetoothProvider.enableDummyDevices(1);
+        Device device = this.bluetoothProvider.getDeviceByID("0");
+
+        assertNotNull(device);
+        assertEquals(device.getID(), "0");
+    }
+
+    @Test
+    public void testGetDeviceByIDNoDevice() {
+        Device device = this.bluetoothProvider.getDeviceByID("0");
+        assertNull(device);
     }
 }
