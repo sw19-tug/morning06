@@ -1,5 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -45,8 +47,6 @@ public class ConnectFragmentEspressoTest {
     public void testButtonsVisible() {
         onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_connect_disconnect)).check(matches(withText(R.string.connect)));
-
-
     }
 
     @Test
@@ -155,8 +155,6 @@ public class ConnectFragmentEspressoTest {
         assertNull(provider.getConnectedDevice());
     }
 
-
-
     @Test
     public void testHandshakeMessageAfterConnect() throws InterruptedException {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
@@ -174,5 +172,24 @@ public class ConnectFragmentEspressoTest {
 
         assertEquals(messageList.get(messageList.size() - 1).getMessageText(),
                 String.format(ON_CONNECTED_MESSAGE, "0"));
+    }
+
+    @Test
+    public void testConnectedDeviceSavedInSharedPreferences() throws InterruptedException {
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        onData(allOf(is(instanceOf(String.class)), is("0")))
+                .perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        provider.getThread().join();
+
+        SharedPreferences sharedPreferences =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+        String lastConnectedDevice = sharedPreferences.getString("conDev", "Fail");
+
+        assertEquals("0", lastConnectedDevice);
     }
 }
