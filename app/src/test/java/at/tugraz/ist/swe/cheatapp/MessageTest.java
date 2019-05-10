@@ -4,8 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import java.lang.reflect.Type;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -46,8 +44,7 @@ public class MessageTest {
     }
 
     @Test
-    public void testBluetoothMessageClass() throws JSONException
-    {
+    public void testBluetoothMessageClass() throws JSONException {
         BluetoothMessage connectMessage = new BluetoothMessage();
         BluetoothMessage disconnectMessage = new BluetoothMessage();
         BluetoothMessage chatMessage = new BluetoothMessage();
@@ -83,8 +80,7 @@ public class MessageTest {
     }
 
     @Test
-    public void testGetMessageObject() throws JSONException
-    {
+    public void testGetMessageObject() throws JSONException {
         BluetoothMessage chatMessage = new BluetoothMessage();
         JSONObject chatJson = new JSONObject();
         chatJson.put("userId", 1);
@@ -102,9 +98,8 @@ public class MessageTest {
     }
 
     @Test
-    public void testConvertMessageToBluetoothMessage()  throws JSONException
-    {
-        Message testMessage = new Message(1,"Test Text", true);
+    public void testConvertMessageToBluetoothMessage() throws JSONException {
+        Message testMessage = new Message(1, "Test Text", true);
         BluetoothMessage testBluetoothMessage = new BluetoothMessage();
         JSONObject chatJson = new JSONObject();
 
@@ -140,7 +135,7 @@ public class MessageTest {
     }
 
     @Test
-    public void testDeserializeMessage() throws JSONException{
+    public void testDeserializeMessage() throws JSONException {
         BluetoothMessage chatMessage = new BluetoothMessage();
 
         JSONObject chatJson = new JSONObject();

@@ -45,9 +45,13 @@ public class Message {
         return userId;
     }
 
-    public long getTimestamp() { return timestamp;}
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-    public void setTimestamp(long timestamp) { this.timestamp = timestamp;}
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public void setUserId(int userId) {
         this.userId = userId;
