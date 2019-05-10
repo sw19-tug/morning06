@@ -185,7 +185,7 @@ public class ConnectFragmentEspressoTest {
                 .perform(click());
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
-
+        Thread.sleep(100);
         SharedPreferences sharedPreferences =
                 mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         String lastConnectedDevice = sharedPreferences.getString("conDev", "Fail");

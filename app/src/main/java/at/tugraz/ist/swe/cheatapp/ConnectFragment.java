@@ -1,5 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -78,7 +80,13 @@ public class ConnectFragment extends Fragment {
         if (selectedListIndex < 0) {
             Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
         } else {
-            activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
+            Device connectDevice = activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex);
+            activity.getBluetoothProvider().connectToDevice(connectDevice);
+            SharedPreferences.Editor prefrencesEditor =
+                    activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+
+            prefrencesEditor.putString("conDev",connectDevice.getID());
+            prefrencesEditor.apply();
         }
     }
 }
