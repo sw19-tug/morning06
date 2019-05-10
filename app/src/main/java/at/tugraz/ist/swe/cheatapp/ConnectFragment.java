@@ -20,7 +20,7 @@ public class ConnectFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private ListView listView;
-    private ArrayAdapter<String> adapter;
+    private DeviceAdapter adapter;
     private int selectedListIndex = -1;
 
     @Override
@@ -36,7 +36,6 @@ public class ConnectFragment extends Fragment {
 
         listView = view.findViewById(R.id.lv_con_devices);
 
-
         this.updateValues();
 
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -48,7 +47,6 @@ public class ConnectFragment extends Fragment {
                 selectedListIndex = position;
             }
         });
-
     }
 
     public void updateValues() {
@@ -56,7 +54,7 @@ public class ConnectFragment extends Fragment {
         List<String> deviceIDs = getDeviceIDStringList(deviceList);
 
         if (this.adapter == null) {
-            adapter = new ArrayAdapter<>(view.getContext(),
+            adapter = new DeviceAdapter(view.getContext(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
             listView.setAdapter(adapter);
         } else {
