@@ -65,7 +65,7 @@ public class BluetoothMessage {
         switch (messageType) {
             case CHAT: {
                 // TODO: MessageSent parameter?
-                Message message = new Message(payload, true);
+                Message message = new Message(payload, false);
                 return new BluetoothMessage(message);
             }
 
