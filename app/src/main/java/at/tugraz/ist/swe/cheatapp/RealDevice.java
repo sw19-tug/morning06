@@ -19,12 +19,12 @@ public class RealDevice implements Device {
     }
 
     @Override
-    public String getMessage() {
+    public Message getMessage() {
         return null;
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(final Message message) {
 
     }
 }

@@ -4,6 +4,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,14 +21,14 @@ import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class RealBluetoothProvider extends BluetoothProvider {
 
-    private final Queue<String> sentMessageQueue;
+    private final Queue<BluetoothMessage> messageQueue;
     private final ConnectThread connectThread;
     private BluetoothAdapter adapter;
     private Thread communicationThread;
 
     public RealBluetoothProvider() throws BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
-        sentMessageQueue = new LinkedList<>();
+        messageQueue = new LinkedList<>();
 
         if (adapter == null) {
             throw new BluetoothException("No bluetooth adapter available");
@@ -55,28 +58,40 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     }
 
                     socket = RealBluetoothProvider.this.connectThread.getSocket();
-                    RealBluetoothProvider.this.onConnected();
 
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());
 
-                    synchronized (sentMessageQueue) {
-                        sentMessageQueue.add(String.format(ON_CONNECTED_MESSAGE, adapter.getName()));
+                    synchronized (messageQueue)
+                    {
+                        messageQueue.add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
                     }
 
                     while (true) {
                         if (inputReader.ready()) {
                             String receivedMessage = inputReader.readLine();
-                            onMessageReceived(receivedMessage);
-                        } else {
-                            String sentMessage;
+                            final BluetoothMessage btMessage = BluetoothMessage.fromJSONString(receivedMessage);
 
-                            synchronized (sentMessageQueue) {
-                                sentMessage = sentMessageQueue.poll();
+                            switch (btMessage.getMessageType()) {
+                                case CHAT:
+                                    onMessageReceived(btMessage.getMessage());
+                                    break;
+                                case CONNECT:
+                                    onConnected();
+                                    break;
+                                case DISCONNECT:
+                                    break;
+
+                            }
+                        } else {
+                            BluetoothMessage message;
+
+                            synchronized (messageQueue) {
+                                message = messageQueue.poll();
                             }
 
-                            if (sentMessage != null) {
-                                outputWriter.println(sentMessage);
+                            if (message != null) {
+                                outputWriter.println(message.toJSONString());
                                 outputWriter.flush();
                             }
                         }
@@ -86,6 +101,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     onError(e.getMessage());
                 } catch (IOException e) {
                     onDisconnected();
+                } catch (JSONException e) {
+                    onError(e.getMessage());
                 }
             }
 
@@ -113,9 +130,10 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    public void sendMessage(String message) {
-        synchronized (sentMessageQueue) {
-            sentMessageQueue.add(message);
+    public void sendMessage(final Message message) {
+        synchronized (messageQueue) {
+            final BluetoothMessage btMessage = new BluetoothMessage(message);
+            messageQueue.add(btMessage);
         }
     }
 
@@ -125,7 +143,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    protected void onMessageReceived(String message) {
+    protected void onMessageReceived(final Message message) {
         System.out.format("RealBluetoothProvider Message received %s%n", message);
         super.onMessageReceived(message);
     }

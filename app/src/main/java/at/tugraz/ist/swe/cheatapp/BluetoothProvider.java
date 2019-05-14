@@ -14,7 +14,7 @@ public abstract class BluetoothProvider {
 
     public abstract void connectToDevice(Device device);
 
-    public abstract void sendMessage(String message);
+    public abstract void sendMessage(Message message);
 
     public abstract void disconnect();
 
@@ -38,7 +38,7 @@ public abstract class BluetoothProvider {
         }
     }
 
-    protected void onMessageReceived(String message) {
+    protected void onMessageReceived(final Message message) {
         for (BluetoothEventHandler handler : eventHandlerList) {
             handler.onMessageReceived(message);
         }

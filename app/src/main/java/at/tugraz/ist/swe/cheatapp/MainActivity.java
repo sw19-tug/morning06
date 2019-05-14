@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothEventHandler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(String message) {
+            public void onMessageReceived(final Message message) {
                 chatFragment.onMessageReceived(message);
             }
 
@@ -59,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
             public void onConnected() {
                 try {
                     showChatFragment();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, getString(R.string.connected), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
                 } catch (InterruptedException e) {
                     onError(e.getMessage());
                     onDisconnected();

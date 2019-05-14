@@ -3,7 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 public class DummyDevice implements Device {
     String id;
     ChatFragment chatFragment;
-    private String message;
+    private Message message;
 
     public DummyDevice(String id) {
         this.id = id;
@@ -15,11 +15,11 @@ public class DummyDevice implements Device {
         return this.id;
     }
 
-    public String getMessage() {
+    public Message getMessage() {
         return this.message;
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(final Message message) {
         chatFragment.onMessageReceived(message);
         this.message = message;
     }

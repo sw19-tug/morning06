@@ -88,13 +88,14 @@ public class ChatFragment extends Fragment {
 
     private void onSendButtonClicked() {
         String textToSend = textEntry.getText().toString();
-        activity.getBluetoothProvider().sendMessage(textToSend);
-        messageRepository.insertMessage(new Message(1, textToSend, true));
+        final Message message = new Message(1, textToSend, true);
+        activity.getBluetoothProvider().sendMessage(message);
+        messageRepository.insertMessage(message);
         textEntry.getText().clear();
     }
 
-    public void onMessageReceived(String messageText) {
-        messageRepository.insertMessage(new Message(1, messageText, false));
+    public void onMessageReceived(final Message message) {
+        messageRepository.insertMessage(message);
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {

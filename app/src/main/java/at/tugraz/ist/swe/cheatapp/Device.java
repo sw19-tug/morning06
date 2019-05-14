@@ -3,7 +3,8 @@ package at.tugraz.ist.swe.cheatapp;
 public interface Device {
     String getID();
 
-    String getMessage();
+    // TODO: Is this still necessary
+    Message getMessage();
 
-    void sendMessage(String message);
+    void sendMessage(Message message);
 }
