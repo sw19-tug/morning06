@@ -58,7 +58,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     }
 
                     socket = RealBluetoothProvider.this.connectThread.getSocket();
-                    RealBluetoothProvider.this.onConnected();
 
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());
@@ -71,14 +70,19 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     while (true) {
                         if (inputReader.ready()) {
                             String receivedMessage = inputReader.readLine();
-
                             final BluetoothMessage btMessage = BluetoothMessage.fromJSONString(receivedMessage);
-                            if(btMessage.getMessageType() == BluetoothMessage.Type.CHAT) {
-                                onMessageReceived(btMessage.getMessage());
-                            } else if(btMessage.getMessageType() == BluetoothMessage.Type.CONNECT) {
+
+                            switch (btMessage.getMessageType()) {
+                                case CHAT:
+                                    onMessageReceived(btMessage.getMessage());
+                                    break;
+                                case CONNECT:
+                                    onConnected();
+                                    break;
+                                case DISCONNECT:
+                                    break;
 
                             }
-
                         } else {
                             BluetoothMessage message;
 

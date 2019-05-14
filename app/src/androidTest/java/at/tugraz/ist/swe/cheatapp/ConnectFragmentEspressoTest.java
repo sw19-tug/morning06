@@ -19,12 +19,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -169,10 +171,8 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
-        MessageAdapter messageAdapter = mainActivityTestRule.getActivity().getChatFragment().getMessageAdapter();
-        List<Message> messageList = messageAdapter.getMessageList();
-
-        assertEquals(messageList.get(messageList.size() - 1).getMessageText(),
-                String.format(ON_CONNECTED_MESSAGE, "0"));
+        onView(withText(R.string.connected))
+                .inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
     }
 }

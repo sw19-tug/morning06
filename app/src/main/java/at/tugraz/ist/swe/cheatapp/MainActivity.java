@@ -59,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
             public void onConnected() {
                 try {
                     showChatFragment();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, getString(R.string.connected), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
                 } catch (InterruptedException e) {
                     onError(e.getMessage());
                     onDisconnected();
