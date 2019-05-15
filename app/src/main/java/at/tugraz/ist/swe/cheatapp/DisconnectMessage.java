@@ -10,10 +10,11 @@ public class DisconnectMessage {
     }
 
     public DisconnectMessage(String jsonConnectMessageString) throws JSONException {
-        JSONObject jsonConnectMessage = new JSONObject(jsonConnectMessageString);
+        JSONObject jsonDisconnectMessage = new JSONObject(jsonConnectMessageString);
     }
 
     public String getJsonString() {
-        return "";
+        JSONObject jsonDisconnectMessage = new JSONObject();
+        return jsonDisconnectMessage.toString();
     }
 }
