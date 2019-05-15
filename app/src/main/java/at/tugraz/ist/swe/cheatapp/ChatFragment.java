@@ -100,6 +100,13 @@ public class ChatFragment extends Fragment {
     public void onMessageEdit(Message message)
     {
         textEntry.setText(message.getMessageText());
+
+        //get message from repo (userid and message id)
+        //get text from textentry
+        //set message.text = textentry.text
+        //update repo
+        //update view
+
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {

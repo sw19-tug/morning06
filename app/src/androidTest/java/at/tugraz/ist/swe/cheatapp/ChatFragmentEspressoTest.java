@@ -203,10 +203,38 @@ public class ChatFragmentEspressoTest {
         provider.getThread().join();
 
         onView(withId(R.id.rvChat)).perform(
-            RecyclerViewActions.<RecyclerView.ViewHolder>actionOnItemAtPosition(1,longClick()));
+                RecyclerViewActions.<RecyclerView.ViewHolder>actionOnItemAtPosition(1,longClick()));
 
         onView(withId(R.id.txt_chat_entry)).check(matches(withText(testText)));
 
+
+    }
+
+    @Test
+    public void testEditMessage() throws InterruptedException {
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
+
+        String testText = "Hello, please edit me!";
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        onView(withId(R.id.rvChat)).perform(
+                RecyclerViewActions.<RecyclerView.ViewHolder>actionOnItemAtPosition(1,longClick()));
+
+        String editText = "I'm edited!";
+        //set tot ""
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        onView(withId(R.id.rvChat)).check(matches(withText(editText)));
 
     }
 
