@@ -150,18 +150,14 @@ public class ChatFragmentEspressoTest {
         provider.enableDummyDevices(1);
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
-
         String testText = "Hello, I am a test message. ;-)";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
-
-        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(0);
+        int listLenght = messageRepository.getRawMessagesByUserId(1).size();
+        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(listLenght-1);
         assertEquals(testText, receiveMessage.getMessageText());
     }
 
