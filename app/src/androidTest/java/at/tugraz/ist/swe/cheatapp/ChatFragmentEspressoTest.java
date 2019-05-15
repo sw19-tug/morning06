@@ -20,7 +20,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -29,9 +28,14 @@ public class ChatFragmentEspressoTest {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
     private MessageRepository messageRepository;
+    private DummyBluetoothProvider provider;
 
     @Before
     public void setUp() throws InterruptedException {
+        provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        provider.connectToDevice(provider.getPairedDevices().get(0));
         mainActivityTestRule.getActivity().showChatFragment();
     }
 
@@ -53,12 +57,12 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
     }
 
-/*
+
     @Test
     public void testDisconnectButtonVisible() {
         onView(withId(R.id.btn_chat_disconnect)).check(matches(isDisplayed()));
     }
-*/
+
     @Test
     public void clearTextField() {
         String testText = "This text is redundant because it will be cleared anyway ;-)";
@@ -86,8 +90,9 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.rvChat)).check(matches(isDisplayed()));
     }
 
-    /*
+
     @Test
+    // TODO this test does not check anything
     public void chatHistoryScrollable() throws InterruptedException {
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
@@ -125,13 +130,10 @@ public class ChatFragmentEspressoTest {
         mainActivityTestRule.getActivity().setDevice(device);
 
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
-        sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
-        sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
-        sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
-    } */
+    }
 
     @Test
     public void testChatHistoryOnMessageSend() {
@@ -145,7 +147,7 @@ public class ChatFragmentEspressoTest {
 
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
-        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(0);
+        Message receiveMessage = messageRepository.getRawMessagesByUserId(0).get(0);
         assertEquals(testText, receiveMessage.getMessageText());
     }
 

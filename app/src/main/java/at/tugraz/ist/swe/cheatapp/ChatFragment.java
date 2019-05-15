@@ -24,6 +24,7 @@ public class ChatFragment extends Fragment {
     private MessageAdapter messageAdapter;
     private MessageRepository messageRepository;
     private boolean chatFragmentReady = false;
+    private long connectedDeviceId;
 
 
     @Override
@@ -50,7 +51,7 @@ public class ChatFragment extends Fragment {
         messageRepository = new MessageRepository(this.getContext());
 
         final List<Message> messageList = new ArrayList<>();
-        long connectedDeviceId = activity.getBluetoothProvider().getConnectedDevice().getDeviceId();
+        connectedDeviceId = activity.getBluetoothProvider().getConnectedDevice().getDeviceId();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
             @Override
             public void onChanged(@Nullable List<Message> messages) {
@@ -92,7 +93,7 @@ public class ChatFragment extends Fragment {
     }
 
     public void onMessageReceived(String messageText) {
-        messageRepository.insertMessage(new Message(1, messageText, false));
+        messageRepository.insertMessage(new Message(connectedDeviceId, messageText, false));
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {

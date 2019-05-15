@@ -55,6 +55,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     }
 
                     socket = RealBluetoothProvider.this.connectThread.getSocket();
+                    connectedDevice = new RealDevice(socket.getRemoteDevice());
                     RealBluetoothProvider.this.onConnected();
 
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -111,8 +112,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
     public void connectToDevice(Device device) {
         System.out.println("RealBluetoothProvider Request connection as client;");
         connectThread.requestConnection((RealDevice) device);
-        // TODO what if connection does not work?
-        this.connectedDevice = device;
     }
 
     @Override

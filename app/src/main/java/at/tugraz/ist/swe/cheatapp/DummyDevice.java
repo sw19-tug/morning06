@@ -10,7 +10,6 @@ public class DummyDevice extends Device {
         this.chatFragment = null;
     }
 
-    // This constructor is only for testing and can be removed if bluetooth communication works
     public DummyDevice(String name, String id, ChatFragment chatFragment) {
         this.deviceName = name;
         this.deviceId = idStringToLong(id);
