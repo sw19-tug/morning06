@@ -28,6 +28,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     private BluetoothAdapter adapter;
     private Thread communicationThread;
     private RealDevice device;
+    private boolean running = true;
 
     public RealBluetoothProvider() throws BluetoothException {
         initialize();
@@ -44,19 +45,10 @@ public class RealBluetoothProvider extends BluetoothProvider {
         Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable ex) {
+                ex.printStackTrace();
                 onError(ex.getMessage());
             }
         };
-
-        if (communicationThread != null) {
-            communicationThread.interrupt();
-            try {
-                communicationThread.join();
-            } catch (InterruptedException ex) {
-                // TODO: Do we need to do something here???
-                ex.printStackTrace();
-            }
-        }
 
         System.out.println("RealBluetoothProvider Start Communication Thread");
 
@@ -106,34 +98,40 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     {
                         messageQueue.add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
                     }
+                    boolean runLoop = true;
 
-                    while (!isInterrupted()) {
-                        if (inputReader.ready()) {
-                            String receivedMessage = inputReader.readLine();
-                            final BluetoothMessage btMessage = BluetoothMessage.fromJSONString(receivedMessage);
+                    while (runLoop) {
+                        synchronized (RealBluetoothProvider.this) {
+                            if (inputReader.ready()) {
+                                String receivedMessage = inputReader.readLine();
+                                final BluetoothMessage btMessage = BluetoothMessage.fromJSONString(receivedMessage);
 
-                            switch (btMessage.getMessageType()) {
-                                case CHAT:
-                                    onMessageReceived(btMessage.getMessage());
-                                    break;
-                                case CONNECT:
-                                    onConnected();
-                                    break;
-                                case DISCONNECT:
-                                    break;
+                                switch (btMessage.getMessageType()) {
+                                    case CHAT:
+                                        onMessageReceived(btMessage.getMessage());
+                                        break;
+                                    case CONNECT:
+                                        onConnected();
+                                        break;
+                                    case DISCONNECT:
+                                        onDisconnected();
+                                        break;
 
+                                }
+                            } else {
+                                BluetoothMessage message;
+
+                                synchronized (RealBluetoothProvider.this) {
+                                    message = messageQueue.poll();
+                                }
+
+                                if (message != null) {
+                                    outputWriter.println(message.toJSONString());
+                                    outputWriter.flush();
+                                }
                             }
-                        } else {
-                            BluetoothMessage message;
 
-                            synchronized (RealBluetoothProvider.this) {
-                                message = messageQueue.poll();
-                            }
-
-                            if (message != null) {
-                                outputWriter.println(message.toJSONString());
-                                outputWriter.flush();
-                            }
+                            runLoop = !messageQueue.isEmpty() || RealBluetoothProvider.this.running;
                         }
                         Thread.sleep(100);
                     }
@@ -141,10 +139,13 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
 
                 } catch (IOException ex) {
+                    ex.printStackTrace();
                     throw new RuntimeException(ex);
                 } catch (InterruptedException ex) {
+                    ex.printStackTrace();
                     throw new RuntimeException(ex);
                 } catch (JSONException ex) {
+                    ex.printStackTrace();
                     throw new RuntimeException(ex);
                 }
             }
@@ -152,6 +153,24 @@ public class RealBluetoothProvider extends BluetoothProvider {
         };
         communicationThread.setUncaughtExceptionHandler(exceptionHandler);
         communicationThread.start();
+    }
+
+    public void closeConnection() {
+        if (communicationThread == null)
+            return;
+
+        synchronized (this) {
+            running = false;
+        }
+
+        try {
+            communicationThread.join();
+        } catch (InterruptedException ex) {
+            // TODO: Do we need to do something here???
+            ex.printStackTrace();
+        }
+
+        this.device = null;
     }
 
     @Override
@@ -182,7 +201,14 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void disconnect() {
+        final BluetoothMessage btMessage = new BluetoothMessage(new DisconnectMessage());
 
+        synchronized (this) {
+            messageQueue.add(btMessage);
+        }
+
+        closeConnection();
+        onDisconnected();
     }
 
     @Override
@@ -193,6 +219,13 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     protected void onDisconnected() {
+        try {
+            initialize();
+        } catch (BluetoothException ex) {
+            ex.printStackTrace();
+            onError(ex.getMessage());
+        }
 
+        super.onDisconnected();
     }
 }
