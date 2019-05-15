@@ -48,6 +48,16 @@ public class RealBluetoothProvider extends BluetoothProvider {
             }
         };
 
+        if (communicationThread != null) {
+            communicationThread.interrupt();
+            try {
+                communicationThread.join();
+            } catch (InterruptedException ex) {
+                // TODO: Do we need to do something here???
+                ex.printStackTrace();
+            }
+        }
+
         System.out.println("RealBluetoothProvider Start Communication Thread");
 
         communicationThread = new Thread() {
@@ -83,6 +93,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
                             }
                         }
                     }
+
+                    serverSocket.close();
 
                     // TODO: Maybe put this part into own method
                     ////////////////////////////////////////////////////////////////////////////////////
