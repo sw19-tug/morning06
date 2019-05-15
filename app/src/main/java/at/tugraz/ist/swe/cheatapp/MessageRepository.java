@@ -27,6 +27,16 @@ public class MessageRepository {
         }.execute();
     }
 
+    public AsyncTask<Void, Void, Void> updateMessage(final Message message){
+        return new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                cheatAppDatabase.messageDao().updateMessage(message);
+                return null;
+            }
+        }.execute();
+    }
+
     public List<Message> getRawMessagesByUserId(int userId) {                   //For testing purposes
         return cheatAppDatabase.messageDao().getRawMessagesByUserId(userId);
     }

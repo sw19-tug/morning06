@@ -43,6 +43,21 @@
             android:layout_alignParentBottom="true"
             />
 
+        <Button
+            android:id="@+id/btn_edit_send"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:visibility="invisible"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/edit_button_layout"
+            android:paddingLeft="11dp"
+            android:drawableStart="@drawable/ic_input_extract_action_send"
+            android:textColor="@android:color/background_light"
+            android:layout_alignParentBottom="true"
+            />
+
         <EditText
             android:id="@+id/txt_chat_entry"
             android:layout_width="50dp"
