@@ -42,6 +42,9 @@ public class ChatFragmentEspressoTest {
     @Before
     public void setUp() throws InterruptedException {
         mainActivityTestRule.getActivity().showChatFragment();
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
     }
 
     @Test
@@ -167,10 +170,6 @@ public class ChatFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
 
         String testText = "Hello, I is there a timestamp?";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
