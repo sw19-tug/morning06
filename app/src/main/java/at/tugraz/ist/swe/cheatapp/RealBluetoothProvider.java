@@ -21,12 +21,16 @@ import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class RealBluetoothProvider extends BluetoothProvider {
 
-    private final Queue<BluetoothMessage> messageQueue;
-    private final ConnectThread connectThread;
+    private Queue<BluetoothMessage> messageQueue;
+    private ConnectThread connectThread;
     private BluetoothAdapter adapter;
     private Thread communicationThread;
 
     public RealBluetoothProvider() throws BluetoothException {
+        initialize();
+    }
+
+    public void initialize() throws BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
         messageQueue = new LinkedList<>();
 
@@ -41,13 +45,13 @@ public class RealBluetoothProvider extends BluetoothProvider {
             }
         };
 
-        this.connectThread = new ConnectThread(adapter);
-        this.connectThread.setUncaughtExceptionHandler(exceptionHandler);
-        this.connectThread.start();
+        connectThread = new ConnectThread(adapter);
+        connectThread.setUncaughtExceptionHandler(exceptionHandler);
+        connectThread.start();
 
         System.out.println("RealBluetoothProvider Start Communication Thread");
 
-        this.communicationThread = new Thread(new Runnable() {
+        communicationThread = new Thread(new Runnable() {
             BluetoothSocket socket;
 
             @Override
