@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.Format;
@@ -17,9 +16,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
     Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private List<Message> messageList;
+    private ChatFragment chatFragament;
 
-    public MessageAdapter(List<Message> messageList) {
+    public MessageAdapter(List<Message> messageList, ChatFragment chatFragment) {
         this.messageList = messageList;
+        this.chatFragament = chatFragment;
     }
 
     @Override
@@ -82,8 +83,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             messageText.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
-                    System.out.println(messageText.getText());
+                   chatFragament.onMessageEdit(messageText.getText().toString());
                     return true;
                 }
 

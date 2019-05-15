@@ -68,7 +68,7 @@ public class ChatFragment extends Fragment {
         });
 
         messageRecycler = view.findViewById(R.id.rvChat);
-        messageAdapter = new MessageAdapter(messageList);
+        messageAdapter = new MessageAdapter(messageList, this);
         messageRecycler.setAdapter(messageAdapter);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -95,6 +95,11 @@ public class ChatFragment extends Fragment {
 
     public void onMessageReceived(String messageText) {
         messageRepository.insertMessage(new Message(1, messageText, false));
+    }
+
+    public void onMessageEdit(String message)
+    {
+        textEntry.setText(message);
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {
