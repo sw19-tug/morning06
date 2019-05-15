@@ -97,9 +97,9 @@ public class ChatFragment extends Fragment {
         messageRepository.insertMessage(new Message(1, messageText, false));
     }
 
-    public void onMessageEdit(String message)
+    public void onMessageEdit(Message message)
     {
-        textEntry.setText(message);
+        textEntry.setText(message.getMessageText());
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {

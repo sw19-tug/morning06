@@ -80,21 +80,23 @@ public class MessageAdapter extends RecyclerView.Adapter {
             messageText = itemView.findViewById(R.id.txt_message_body);
             timeText = itemView.findViewById(R.id.txt_message_time);
 
-            messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                   chatFragament.onMessageEdit(messageText.getText().toString());
-                    return true;
-                }
 
-            });
 
 
         }
 
-        void bind(Message message) {
+        void bind(final Message message) {
             messageText.setText(message.getMessageText());
             timeText.setText(dateFormat.format(message.getTimestamp()));
+
+            messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    chatFragament.onMessageEdit(message);
+                    return true;
+                }
+
+            });
         }
     }
 
