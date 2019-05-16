@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +38,9 @@ public class RealBluetoothProvider extends BluetoothProvider {
     public void initialize() throws BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
         messageQueue = new LinkedList<>();
+        device = null;
+        running = true;
+
 
         if (adapter == null) {
             throw new BluetoothException("No bluetooth adapter available");
@@ -60,9 +64,11 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     BluetoothSocket socket = null;
                     final BluetoothServerSocket serverSocket = adapter.listenUsingRfcommWithServiceRecord(BLUETOOTH_SERVICE_RECORD, BLUETOOTH_UUID);
 
+                    boolean runLoop = true;
+
                     // TODO: Maybe put this part into own method
                     ////////////////////////////////////////////////////////////////////////////////////
-                    while (!isInterrupted() && socket == null) {
+                    while (runLoop && socket == null) {
 
                         try {
                             socket = serverSocket.accept(200);
@@ -76,12 +82,16 @@ public class RealBluetoothProvider extends BluetoothProvider {
                                     try {
                                         socket = dev.getDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
                                         if (socket != null) {
+                                            Log.d("RealBluetoothProvider", "before connect");
                                             socket.connect();
                                         }
                                     } catch (IOException ex) {
+                                        ex.printStackTrace();
                                         throw new RuntimeException(ex.getMessage());
                                     }
                                 }
+
+                                runLoop = RealBluetoothProvider.this.running;
                             }
                         }
                     }
@@ -98,7 +108,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     {
                         messageQueue.add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
                     }
-                    boolean runLoop = true;
+                    boolean disconnected = false;
 
                     while (runLoop) {
                         synchronized (RealBluetoothProvider.this) {
@@ -114,16 +124,14 @@ public class RealBluetoothProvider extends BluetoothProvider {
                                         onConnected();
                                         break;
                                     case DISCONNECT:
-                                        onDisconnected();
+                                        disconnected = true;
                                         break;
 
                                 }
                             } else {
                                 BluetoothMessage message;
+                                message = messageQueue.poll();
 
-                                synchronized (RealBluetoothProvider.this) {
-                                    message = messageQueue.poll();
-                                }
 
                                 if (message != null) {
                                     outputWriter.println(message.toJSONString());
@@ -131,12 +139,16 @@ public class RealBluetoothProvider extends BluetoothProvider {
                                 }
                             }
 
-                            runLoop = !messageQueue.isEmpty() || RealBluetoothProvider.this.running;
+                            runLoop = (!messageQueue.isEmpty() || RealBluetoothProvider.this.running) && !disconnected;
                         }
                         Thread.sleep(100);
                     }
 
+                    inputReader.close();
+                    outputWriter.close();
+                    socket.close();
 
+                    onDisconnected();
 
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -170,7 +182,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
             ex.printStackTrace();
         }
 
-        this.device = null;
     }
 
     @Override
@@ -208,7 +219,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
         }
 
         closeConnection();
-        onDisconnected();
     }
 
     @Override
