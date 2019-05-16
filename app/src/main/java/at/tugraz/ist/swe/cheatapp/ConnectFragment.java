@@ -35,6 +35,8 @@ public class ConnectFragment extends Fragment {
 
         listView = view.findViewById(R.id.lv_con_devices);
 
+        this.updateValues();
+
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setSelector(R.color.colorHighlight);
 

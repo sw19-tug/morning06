@@ -54,4 +54,6 @@ public abstract class BluetoothProvider {
     public synchronized Device getConnectedDevice() {
         return this.connectedDevice;
     }
+
+    public abstract boolean isBluetoothEnabled();
 }
