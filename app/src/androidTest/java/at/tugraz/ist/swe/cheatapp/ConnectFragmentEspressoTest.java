@@ -13,6 +13,8 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -174,5 +176,29 @@ public class ConnectFragmentEspressoTest {
         onView(withText(R.string.connected))
                 .inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testRefreshOnSwipe() {
+        onView(withId(R.id.la_refresh)).check(matches(isDisplayed()));
+
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
+                .atPosition(0).check(matches(withText("0")));
+        int count = mainActivityTestRule.getActivity().getListView().getAdapter().getItemCount();
+        assertEquals(count, 1);
+
+        provider.enableDummyDevices(2);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        onView(withId(R.id.lv_con_devices)).perform(swipeDown());
+
+        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
+                .atPosition(0).check(matches(withText("0")));
+        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
+                .atPosition(0).check(matches(withText("1")));
     }
 }
