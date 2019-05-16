@@ -2,8 +2,6 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.Menu;
-import android.view.MenuInflater;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -52,21 +50,6 @@ public class ConnectFragmentEspressoTest {
     @Test
     public void testListVisible() {
         onView(withId(R.id.lv_con_devices)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testMenuVisible() {
-        onData(is(instanceOf(MenuInflater.class))).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testMenuDropdownItems() {
-        Menu appMenu;
-        MenuInflater inflater = mainActivityTestRule.getActivity().getMenuInflater();
-        inflater.inflate(R.menu.menu, appMenu);
-        assertTrue(appMenu.hasVisibleItems());
-        onData(is(instanceOf(MenuInflater.class))).perform(click());
-        onView(withId(R.id.menu_set_nickname)).check(matches(isDisplayed()));
     }
 
     @Test
