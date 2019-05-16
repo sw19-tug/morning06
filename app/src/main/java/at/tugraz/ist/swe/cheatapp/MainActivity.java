@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             bluetoothProvider = new RealBluetoothProvider();
             if(!bluetoothProvider.isBluetoothEnabled())
             {
-                Toast.makeText(this, Constants.BLUETOOTH_DISABLED, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.bluetooth_disabled, Toast.LENGTH_LONG).show();
             }
         } catch (BluetoothException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();

@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
-
 public class RealBluetoothProvider extends BluetoothProvider {
 
     private final Queue<BluetoothMessage> messageQueue;
@@ -31,7 +29,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         messageQueue = new LinkedList<>();
 
         if (adapter == null) {
-            throw new BluetoothException(Constants.NO_BLUETOOTH);
+            throw new BluetoothException("Hardware has no bluetooth support");
         }
 
         Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
