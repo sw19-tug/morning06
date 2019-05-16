@@ -76,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDisconnected() {
                 MainActivity.this.showConnectFragment();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, getString(R.string.disconnected), Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
 
             @Override
@@ -122,8 +130,10 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 connectFragmentVisible = true;
                 connectDisconnectButton.setText(getString(R.string.connect));
+                connectFragment.updateValues();
             }
         });
+
     }
 
     public void showChatFragment() throws InterruptedException {

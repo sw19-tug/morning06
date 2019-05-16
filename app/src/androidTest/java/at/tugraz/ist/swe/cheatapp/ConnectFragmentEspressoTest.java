@@ -13,6 +13,7 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -35,20 +36,24 @@ import static org.hamcrest.Matchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class ConnectFragmentEspressoTest {
+    DummyBluetoothProvider provider;
+
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setUp() {
         mainActivityTestRule.getActivity().showConnectFragment();
+        provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
     }
 
     @Test
     public void testButtonsVisible() {
         onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_connect_disconnect)).check(matches(withText(R.string.connect)));
-
-
     }
 
     @Test
@@ -58,11 +63,6 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testSelectListElementAndConnect() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
@@ -75,11 +75,6 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testConnectWithoutSelection() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
 
         assertFalse(provider.isConnected());
@@ -88,11 +83,6 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testConnectWithSelection() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
@@ -105,11 +95,6 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testChangeViewOnConnect() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
         onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
@@ -121,11 +106,6 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testChangeViewOnDisconnect() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
@@ -139,11 +119,6 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testDisconnect() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
 
@@ -155,12 +130,27 @@ public class ConnectFragmentEspressoTest {
 
         assertFalse(provider.isConnected());
         assertNull(provider.getConnectedDevice());
+
+        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
+                .atPosition(0).check(matches(withText("0")));
     }
 
 
 
     @Test
     public void testHandshakeMessageAfterConnect() throws InterruptedException {
+        onData(allOf(is(instanceOf(String.class)), is("0")))
+                .perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        provider.getThread().join();
+
+        onView(withText(R.string.connected))
+                .inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testHandshakeMessageAfterDisconnect() throws InterruptedException {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
@@ -168,10 +158,14 @@ public class ConnectFragmentEspressoTest {
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
+
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
-        onView(withText(R.string.connected))
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        provider.getThread().join();
+
+        onView(withText(R.string.disconnected))
                 .inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }

@@ -10,6 +10,7 @@ public class BluetoothMessage {
     private Type messageType;
     private Message message = null;
     private ConnectMessage connectMessage = null;
+    private DisconnectMessage disconnectMessage = null;
 
     public BluetoothMessage(Message message) {
         messageType = Type.CHAT;
@@ -19,6 +20,11 @@ public class BluetoothMessage {
     public BluetoothMessage(ConnectMessage connectMessage) {
         this.messageType = Type.CONNECT;
         this.connectMessage = connectMessage;
+    }
+
+    public BluetoothMessage(DisconnectMessage disconnectMessage) {
+        this.messageType = Type.DISCONNECT;
+        this.disconnectMessage = disconnectMessage;
     }
 
     public  Type getMessageType() {
@@ -75,7 +81,8 @@ public class BluetoothMessage {
             }
 
             case DISCONNECT:
-                break;
+                DisconnectMessage disconnectMessage = new DisconnectMessage();
+                return new BluetoothMessage(disconnectMessage);
         }
 
         return null;
