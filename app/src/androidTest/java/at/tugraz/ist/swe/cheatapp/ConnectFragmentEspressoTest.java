@@ -184,7 +184,7 @@ public class ConnectFragmentEspressoTest {
 
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,false);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
         Thread.sleep(500);
         int count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
         assertEquals(count, 1);
@@ -193,6 +193,7 @@ public class ConnectFragmentEspressoTest {
         mainActivityTestRule.getActivity().setBluetoothProvider(provider, false);
 
         onView(withId(R.id.lv_con_devices)).perform(swipeDown());
+        Thread.sleep(500);
         count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
 
        assertEquals(count,2);
