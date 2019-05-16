@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectFragment extends Fragment {
+    SwipeRefreshLayout swipeRefreshLayout;
     private MainActivity activity;
     private View view;
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private int selectedListIndex = -1;
-    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class ConnectFragment extends Fragment {
             }
         });
 
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swp_pull_to_refresh);
+        swipeRefreshLayout = view.findViewById(R.id.swp_pull_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -54,7 +53,6 @@ public class ConnectFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
 
 
     }
@@ -84,7 +82,7 @@ public class ConnectFragment extends Fragment {
         return idList;
     }
 
-    public void onConnectClicked(){
+    public void onConnectClicked() {
         if (selectedListIndex < 0) {
             Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
         } else {

@@ -43,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (connectFragmentVisible) {
                     connectFragment.onConnectClicked();
-                }
-                else {
+                } else {
                     MainActivity.this.bluetoothProvider.disconnect();
                 }
             }
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         bluetoothProvider.registerHandler(bluetoothEventHandler);
 
         // Attaching the layout to the toolbar object
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.bluetoothProvider.unregisterHandler(bluetoothEventHandler);
                 MainActivity.this.bluetoothProvider = bluetoothProvider;
                 MainActivity.this.bluetoothProvider.registerHandler(bluetoothEventHandler);
-                if(update)
+                if (update)
                     connectFragment.updateValues();
             }
         });
@@ -150,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.placeholder_frame, fragment);
         transaction.commitAllowingStateLoss();
     }
+
     public ListView getListView() {
         return connectFragment.getListView();
     }

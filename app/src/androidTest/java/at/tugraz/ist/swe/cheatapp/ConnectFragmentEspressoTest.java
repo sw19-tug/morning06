@@ -8,27 +8,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -63,7 +59,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -80,7 +76,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
 
@@ -93,7 +89,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -110,7 +106,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -126,7 +122,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -144,7 +140,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -160,13 +156,12 @@ public class ConnectFragmentEspressoTest {
     }
 
 
-
     @Test
     public void testHandshakeMessageAfterConnect() throws InterruptedException {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -184,7 +179,7 @@ public class ConnectFragmentEspressoTest {
 
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
         Thread.sleep(500);
         int count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
         assertEquals(count, 1);
@@ -196,6 +191,6 @@ public class ConnectFragmentEspressoTest {
         Thread.sleep(500);
         count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
 
-       assertEquals(count,2);
+        assertEquals(count, 2);
     }
 }
