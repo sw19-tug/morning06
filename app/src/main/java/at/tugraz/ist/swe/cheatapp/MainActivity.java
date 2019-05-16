@@ -26,12 +26,16 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             bluetoothProvider = new RealBluetoothProvider();
+            if(!bluetoothProvider.isBluetoothEnabled())
+            {
+                Toast.makeText(this, Constants.BLUETOOTH_DISABLED, Toast.LENGTH_LONG).show();
+            }
         } catch (BluetoothException e) {
-            // TODO Refactor
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             bluetoothProvider = new DummyBluetoothProvider();
             ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
         setContentView(R.layout.activity_main);
 
         connectFragment = new ConnectFragment();

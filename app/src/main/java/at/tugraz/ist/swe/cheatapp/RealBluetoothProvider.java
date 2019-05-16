@@ -31,7 +31,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         messageQueue = new LinkedList<>();
 
         if (adapter == null) {
-            throw new BluetoothException("No bluetooth adapter available");
+            throw new BluetoothException(Constants.NO_BLUETOOTH);
         }
 
         Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
@@ -153,5 +153,15 @@ public class RealBluetoothProvider extends BluetoothProvider {
     @Override
     protected void onDisconnected() {
 
+    }
+
+    @Override
+    public boolean isBluetoothEnabled() {
+        if(adapter.isEnabled())
+        {
+            return true;
+        }
+
+        return false;
     }
 }
