@@ -2,13 +2,13 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -17,12 +17,12 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
@@ -52,6 +52,21 @@ public class ConnectFragmentEspressoTest {
     @Test
     public void testListVisible() {
         onView(withId(R.id.lv_con_devices)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testMenuVisible() {
+        onData(is(instanceOf(MenuInflater.class))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testMenuDropdownItems() {
+        Menu appMenu;
+        MenuInflater inflater = mainActivityTestRule.getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu, appMenu);
+        assertTrue(appMenu.hasVisibleItems());
+        onData(is(instanceOf(MenuInflater.class))).perform(click());
+        onView(withId(R.id.menu_set_nickname)).check(matches(isDisplayed()));
     }
 
     @Test
