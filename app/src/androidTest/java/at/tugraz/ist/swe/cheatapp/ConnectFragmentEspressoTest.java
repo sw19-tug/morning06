@@ -192,4 +192,13 @@ public class ConnectFragmentEspressoTest {
 
         assertEquals(count, 2);
     }
+
+    @Test
+    public void testBluetoothStatusToast() {
+        onView(withText(R.string.toast_text)).
+                inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView())))).
+                check(matches(isDisplayed()));
+    }
+
+
 }
