@@ -13,13 +13,12 @@ public class Message {
     @PrimaryKey(autoGenerate = true)
     private int messageId;
 
-    private int userId;
+    private long userId;
     private long timestamp;
-
     private String messageText;
     private boolean messageSent;
 
-    public Message(int userId, String messageText, boolean messageSent) {
+    public Message(long userId, String messageText, boolean messageSent) {
         this.userId = userId;
         this.messageText = messageText;
         this.messageSent = messageSent;
@@ -28,7 +27,7 @@ public class Message {
 
     public Message(String jsonMessageString, boolean messageSent) throws JSONException {
         JSONObject jsonMessage = new JSONObject(jsonMessageString);
-        this.userId = jsonMessage.getInt("userId");
+        this.userId = jsonMessage.getLong("userId");
         this.messageText = jsonMessage.getString("messageText");
         this.messageSent = messageSent;
         this.timestamp = jsonMessage.getLong("timeStamp");
@@ -49,7 +48,7 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
@@ -61,7 +60,7 @@ public class Message {
         this.timestamp = timestamp;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

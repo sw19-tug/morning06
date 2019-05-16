@@ -27,11 +27,11 @@ public class MessageRepository {
         }.execute();
     }
 
-    public List<Message> getRawMessagesByUserId(int userId) {                   //For testing purposes
+    public List<Message> getRawMessagesByUserId(long userId) {                   //For testing purposes
         return cheatAppDatabase.messageDao().getRawMessagesByUserId(userId);
     }
 
-    public LiveData<List<Message>> getMessagesByUserId(int userId) {
+    public LiveData<List<Message>> getMessagesByUserId(long userId) {
         return cheatAppDatabase.messageDao().getMessagesByUserId(userId);
     }
 }

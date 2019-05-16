@@ -6,7 +6,6 @@ import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
-    private Device connectedDevice;
     private boolean connected;
     private Thread thread;
 
@@ -28,8 +27,8 @@ public class DummyBluetoothProvider extends BluetoothProvider {
             public void run() {
                 DummyBluetoothProvider.super.onConnected();
                 // TODO: User-ID???
-                final Message message = new Message(0,
-                        String.format(ON_CONNECTED_MESSAGE, connectedDevice.getID()),
+                final Message message = new Message(connectedDevice.getDeviceId(),
+                        String.format(ON_CONNECTED_MESSAGE, connectedDevice.getDeviceName()),
                         true);
 //                DummyBluetoothProvider.super.onMessageReceived(String.format
 //                        (ON_CONNECTED_MESSAGE, connectedDevice.getID()));
@@ -75,18 +74,18 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     public void enableDummyDevices(int count) {
         this.devices.clear();
-
-        for (int i = 0; i < count; i++) {
-            this.devices.add(new DummyDevice(Integer.toString(i)));
+        for (int i = 1; i <= count; i++) {
+            this.devices.add(new DummyDevice(Integer.toString(i), Integer.toString(i)));
         }
+    }
+
+    public void addDummyDevice(String name, String id) {
+        this.devices.clear();
+        this.devices.add(new DummyDevice(name, id));
     }
 
     public synchronized boolean isConnected() {
         return connected;
-    }
-
-    public synchronized Device getConnectedDevice() {
-        return connectedDevice;
     }
 
     public List<BluetoothEventHandler> getEventHandlers() {

@@ -29,7 +29,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasBackground;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -38,9 +37,14 @@ public class ChatFragmentEspressoTest {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
     private MessageRepository messageRepository;
+    private DummyBluetoothProvider provider;
 
     @Before
     public void setUp() throws InterruptedException {
+        provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        provider.connectToDevice(provider.getPairedDevices().get(0));
         mainActivityTestRule.getActivity().showChatFragment();
     }
 
@@ -79,7 +83,9 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void saveTextIntoDummyDevice() throws InterruptedException {
-        String testText = "I'm a dummy test!";
+        String testText = "Hello World";
+        ChatFragment chatFragment = mainActivityTestRule.getActivity().getChatFragment();
+        DummyDevice device = new DummyDevice("1", "1", chatFragment);
 
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
@@ -100,7 +106,9 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.rvChat)).check(matches(isDisplayed()));
     }
 
+
     @Test
+    // TODO this test does not check anything
     public void chatHistoryScrollable() throws InterruptedException {
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
@@ -135,11 +143,8 @@ public class ChatFragmentEspressoTest {
         messageRepository.insertMessage(new Message(1, ":)", true));
 
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
-        sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
-        sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
-        sleep(1000);
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
     }
 

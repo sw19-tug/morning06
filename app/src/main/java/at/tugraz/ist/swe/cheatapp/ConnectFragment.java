@@ -68,7 +68,7 @@ public class ConnectFragment extends Fragment {
     private List<String> getDeviceIDStringList(List<Device> deviceList) {
         List<String> idList = new ArrayList<>();
         for (Device device : deviceList) {
-            idList.add(device.getID());
+            idList.add(device.getDeviceName());
         }
 
         return idList;

@@ -1,10 +1,18 @@
 package at.tugraz.ist.swe.cheatapp;
 
-public interface Device {
-    String getID();
+public abstract class Device {
+    protected String deviceName;
+    protected long deviceId; // MAC address used as unique identifier
 
-    // TODO: Is this still necessary
-    Message getMessage();
+    public String getDeviceName() {
+        return this.deviceName;
+    }
+    public long getDeviceId() {
+        return this.deviceId;
+    }
 
-    void sendMessage(Message message);
+    public static long idStringToLong(String idString) {
+        idString = idString.replace(":", "");
+        return Long.valueOf(idString, 16);
+    }
 }

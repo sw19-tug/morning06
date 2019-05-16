@@ -219,7 +219,8 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.connectToDevice(devices.get(0));
         this.bluetoothProvider.getThread().join();
 
-        assertEquals(bluetoothProvider.getConnectedDevice().getID(), "0");
+        assertEquals(bluetoothProvider.getConnectedDevice().getDeviceId(), 1);
+        assertEquals(bluetoothProvider.getConnectedDevice().getDeviceName(), "1");
         assertTrue(bluetoothProvider.isConnected());
     }
 
@@ -228,5 +229,17 @@ public class DummyBluetoothProviderTest {
         bluetoothProvider.disconnect();
         this.bluetoothProvider.getThread().join();
         assertFalse(bluetoothProvider.isConnected());
+    }
+
+    @Test
+    public void testGetUserId() throws InterruptedException {
+        this.bluetoothProvider.addDummyDevice("dummy", "C0:EE:FB:D8:74:6F");
+        List<Device> devices = this.bluetoothProvider.getPairedDevices();
+        this.bluetoothProvider.connectToDevice(devices.get(0));
+        this.bluetoothProvider.getThread().join();
+
+        long test_id = Long.valueOf("212132660016239");
+        assertEquals(test_id, this.bluetoothProvider.getConnectedDevice().getDeviceId());
+        assertEquals("dummy", this.bluetoothProvider.getConnectedDevice().getDeviceName());
     }
 }

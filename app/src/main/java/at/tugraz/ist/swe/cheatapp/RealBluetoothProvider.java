@@ -58,6 +58,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     }
 
                     socket = RealBluetoothProvider.this.connectThread.getSocket();
+                    connectedDevice = new RealDevice(socket.getRemoteDevice());
+                    RealBluetoothProvider.this.onConnected();
 
                     BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());

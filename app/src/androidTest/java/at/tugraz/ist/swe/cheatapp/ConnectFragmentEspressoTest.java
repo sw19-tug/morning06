@@ -47,8 +47,6 @@ public class ConnectFragmentEspressoTest {
     public void testButtonsVisible() {
         onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_connect_disconnect)).check(matches(withText(R.string.connect)));
-
-
     }
 
     @Test
@@ -63,14 +61,15 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onData(allOf(is(instanceOf(String.class)), is("0")))
+        onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
 
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
-        assertEquals(provider.getConnectedDevice().getID(), "0");
+        assertEquals(provider.getConnectedDevice().getDeviceId(), 1);
+        assertEquals(provider.getConnectedDevice().getDeviceName(), "1");
     }
 
     @Test
@@ -93,14 +92,14 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onData(allOf(is(instanceOf(String.class)), is("0")))
-                .perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1"))).perform(click());
 
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
-        assertEquals(provider.getConnectedDevice().getID(), "0");
+        assertEquals(provider.getConnectedDevice().getDeviceId(), 1);
+        assertEquals(provider.getConnectedDevice().getDeviceName(), "1");
     }
 
     @Test
@@ -110,7 +109,7 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onData(allOf(is(instanceOf(String.class)), is("0")))
+        onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
         onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
@@ -126,7 +125,7 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onData(allOf(is(instanceOf(String.class)), is("0")))
+        onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
@@ -144,7 +143,7 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onData(allOf(is(instanceOf(String.class)), is("0")))
+        onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
 
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
@@ -166,7 +165,7 @@ public class ConnectFragmentEspressoTest {
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider);
 
-        onData(allOf(is(instanceOf(String.class)), is("0")))
+        onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();

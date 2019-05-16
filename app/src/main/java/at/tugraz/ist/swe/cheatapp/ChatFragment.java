@@ -24,6 +24,7 @@ public class ChatFragment extends Fragment {
     private MessageAdapter messageAdapter;
     private MessageRepository messageRepository;
     private boolean chatFragmentReady = false;
+    private long connectedDeviceId;
 
 
     @Override
@@ -50,15 +51,19 @@ public class ChatFragment extends Fragment {
         messageRepository = new MessageRepository(this.getContext());
 
         final List<Message> messageList = new ArrayList<>();
-        messageRepository.getMessagesByUserId(1).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
+
+        // TODO sometimes nullptr exception, race condition?
+        connectedDeviceId = activity.getBluetoothProvider().getConnectedDevice().getDeviceId();
+        messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
             @Override
             public void onChanged(@Nullable List<Message> messages) {
                 messageList.clear();
                 for (Message msg : messages) {
-                    // System.out.println("-----------------------");
-                    // System.out.println(msg.getUserId());
-                    // System.out.println(msg.getMessageText());
-                    // System.out.println(msg.getMessageSent());
+                    /*
+                    System.out.println("-----------REMOTE------------");
+                    System.out.println(msg.getUserId());
+                    System.out.println(msg.getMessageText());
+                    System.out.println(msg.getMessageSent()); */
                     messageList.add(msg);
                 }
                 messageAdapter.notifyDataSetChanged();
@@ -88,14 +93,17 @@ public class ChatFragment extends Fragment {
 
     private void onSendButtonClicked() {
         String textToSend = textEntry.getText().toString();
-        final Message message = new Message(1, textToSend, true);
+        final Message message = new Message(connectedDeviceId, textToSend, true);
         activity.getBluetoothProvider().sendMessage(message);
         messageRepository.insertMessage(message);
         textEntry.getText().clear();
+        System.out.println("Send: " + message.getJsonString());
     }
 
     public void onMessageReceived(final Message message) {
+        message.setUserId(connectedDeviceId);
         messageRepository.insertMessage(message);
+        System.out.println("Receive: " + message.getJsonString());
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {
