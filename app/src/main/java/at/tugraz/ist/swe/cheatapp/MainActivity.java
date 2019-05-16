@@ -122,8 +122,10 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 connectFragmentVisible = true;
                 connectDisconnectButton.setText(getString(R.string.connect));
+                connectFragment.updateValues();
             }
         });
+
     }
 
     public void showChatFragment() throws InterruptedException {

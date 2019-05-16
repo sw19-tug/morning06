@@ -50,19 +50,16 @@ public class ConnectFragment extends Fragment {
     }
 
     public void updateValues() {
+        if (activity == null) {
+            return;
+        }
+
         final List<Device> deviceList = activity.getBluetoothProvider().getPairedDevices();
         List<String> deviceIDs = getDeviceIDStringList(deviceList);
 
-        if (this.adapter == null) {
-            adapter = new ArrayAdapter<>(view.getContext(),
-                    android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
-            listView.setAdapter(adapter);
-        } else {
-            adapter.clear();
-            adapter.addAll(deviceIDs);
-            adapter.notifyDataSetChanged();
-        }
-
+        adapter = new ArrayAdapter<>(view.getContext(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, deviceIDs);
+        listView.setAdapter(adapter);
     }
 
     private List<String> getDeviceIDStringList(List<Device> deviceList) {
