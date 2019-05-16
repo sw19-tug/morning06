@@ -4,4 +4,8 @@
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
     <string name="connected">Connected</string>
+    <string name="menu_set_nickname">Set Nickname</string>
+    <string name="set_nickname_dialog_title">Set Nickname</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

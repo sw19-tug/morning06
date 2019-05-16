@@ -107,7 +107,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     onError(e.getMessage());
                 }
             }
-
         });
         this.communicationThread.start();
     }
