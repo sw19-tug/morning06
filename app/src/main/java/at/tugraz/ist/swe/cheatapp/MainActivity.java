@@ -76,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDisconnected() {
                 MainActivity.this.showConnectFragment();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, getString(R.string.disconnected), Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
 
             @Override
