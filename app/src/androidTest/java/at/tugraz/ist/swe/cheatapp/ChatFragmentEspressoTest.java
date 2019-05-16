@@ -36,7 +36,7 @@ public class ChatFragmentEspressoTest {
     public void setUp() throws InterruptedException {
         provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
         provider.connectToDevice(provider.getPairedDevices().get(0));
         mainActivityTestRule.getActivity().showChatFragment();
     }
