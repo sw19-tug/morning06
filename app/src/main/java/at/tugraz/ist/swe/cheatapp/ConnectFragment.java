@@ -2,12 +2,12 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectFragment extends Fragment {
+    SwipeRefreshLayout swipeRefreshLayout;
     private MainActivity activity;
     private View view;
     private ListView listView;
@@ -34,9 +35,6 @@ public class ConnectFragment extends Fragment {
 
         listView = view.findViewById(R.id.lv_con_devices);
 
-
-        this.updateValues();
-
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setSelector(R.color.colorHighlight);
 
@@ -46,6 +44,16 @@ public class ConnectFragment extends Fragment {
                 selectedListIndex = position;
             }
         });
+
+        swipeRefreshLayout = view.findViewById(R.id.swp_pull_to_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateValues();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
 
     }
 
@@ -74,11 +82,15 @@ public class ConnectFragment extends Fragment {
         return idList;
     }
 
-    public void onConnectClicked(){
+    public void onConnectClicked() {
         if (selectedListIndex < 0) {
             Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
         } else {
             activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
         }
+    }
+
+    public ListView getListView() {
+        return listView;
     }
 }
