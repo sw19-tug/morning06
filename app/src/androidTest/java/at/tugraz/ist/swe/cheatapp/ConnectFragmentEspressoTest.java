@@ -8,26 +8,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -36,10 +31,9 @@ import static org.hamcrest.Matchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class ConnectFragmentEspressoTest {
-    DummyBluetoothProvider provider;
-
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    DummyBluetoothProvider provider;
 
     @Before
     public void setUp() {
@@ -134,7 +128,6 @@ public class ConnectFragmentEspressoTest {
         onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
                 .atPosition(0).check(matches(withText("0")));
     }
-
 
 
     @Test
