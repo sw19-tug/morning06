@@ -13,6 +13,7 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -155,6 +156,9 @@ public class ConnectFragmentEspressoTest {
 
         assertFalse(provider.isConnected());
         assertNull(provider.getConnectedDevice());
+
+        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
+                .atPosition(0).check(matches(withText("0")));
     }
 
 
