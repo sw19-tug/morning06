@@ -83,7 +83,7 @@ public class ChatFragmentEspressoTest {
 
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -148,7 +148,7 @@ public class ChatFragmentEspressoTest {
 
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
@@ -170,7 +170,7 @@ public class ChatFragmentEspressoTest {
     public void timestampVisibleOnSend() throws InterruptedException {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();

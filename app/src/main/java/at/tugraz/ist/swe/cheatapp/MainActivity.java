@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -102,14 +103,15 @@ public class MainActivity extends AppCompatActivity {
         return this.bluetoothProvider;
     }
 
-    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider) {
+    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider, final boolean update) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 MainActivity.this.bluetoothProvider.unregisterHandler(bluetoothEventHandler);
                 MainActivity.this.bluetoothProvider = bluetoothProvider;
                 MainActivity.this.bluetoothProvider.registerHandler(bluetoothEventHandler);
-                connectFragment.updateValues();
+                if(update)
+                    connectFragment.updateValues();
             }
         });
     }
@@ -148,4 +150,8 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.placeholder_frame, fragment);
         transaction.commitAllowingStateLoss();
     }
+    public ListView getListView() {
+        return connectFragment.getListView();
+    }
+
 }

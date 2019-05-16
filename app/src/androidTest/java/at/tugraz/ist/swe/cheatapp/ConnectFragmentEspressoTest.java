@@ -63,7 +63,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -80,7 +80,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
 
@@ -93,7 +93,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -110,7 +110,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -126,7 +126,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -144,7 +144,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -166,7 +166,7 @@ public class ConnectFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
 
         onData(allOf(is(instanceOf(String.class)), is("0")))
                 .perform(click());
@@ -179,26 +179,22 @@ public class ConnectFragmentEspressoTest {
     }
 
     @Test
-    public void testRefreshOnSwipe() {
-        onView(withId(R.id.la_refresh)).check(matches(isDisplayed()));
+    public void testRefreshOnSwipe() throws InterruptedException {
+        onView(withId(R.id.swp_pull_to_refresh)).check(matches(isDisplayed()));
 
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
-
-        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
-                .atPosition(0).check(matches(withText("0")));
-        int count = mainActivityTestRule.getActivity().getListView().getAdapter().getItemCount();
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider,false);
+        Thread.sleep(500);
+        int count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
         assertEquals(count, 1);
 
         provider.enableDummyDevices(2);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider, false);
 
         onView(withId(R.id.lv_con_devices)).perform(swipeDown());
+        count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
 
-        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
-                .atPosition(0).check(matches(withText("0")));
-        onData(instanceOf(String.class)).inAdapterView(withId(R.id.lv_con_devices))
-                .atPosition(0).check(matches(withText("1")));
+       assertEquals(count,2);
     }
 }

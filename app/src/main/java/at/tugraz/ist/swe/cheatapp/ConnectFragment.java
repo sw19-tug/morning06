@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class ConnectFragment extends Fragment {
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private int selectedListIndex = -1;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,9 +36,6 @@ public class ConnectFragment extends Fragment {
 
         listView = view.findViewById(R.id.lv_con_devices);
 
-
-        this.updateValues();
-
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setSelector(R.color.colorHighlight);
 
@@ -46,6 +45,17 @@ public class ConnectFragment extends Fragment {
                 selectedListIndex = position;
             }
         });
+
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swp_pull_to_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateValues();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
 
     }
 
@@ -80,5 +90,9 @@ public class ConnectFragment extends Fragment {
         } else {
             activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
         }
+    }
+
+    public ListView getListView() {
+        return listView;
     }
 }
