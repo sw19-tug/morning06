@@ -46,8 +46,7 @@ public class BluetoothThread extends Thread {
             createBluetoothSocket();
             initializeConnection();
             handleMessages();
-            shutdownCommunication();
-            provider.onDisconnected();
+
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -59,13 +58,24 @@ public class BluetoothThread extends Thread {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
+        finally {
+            shutdownCommunication();
+            provider.onDisconnected();
+        }
 
     }
 
-    private void shutdownCommunication() throws IOException {
-        inputReader.close();
-        outputWriter.close();
-        socket.close();
+    private void shutdownCommunication() {
+
+        try {
+            inputReader.close();
+            outputWriter.close();
+            socket.close();
+        } catch (IOException ignore) {
+            Log.d("BluetoothThread",
+                    "Got IOException while shutting down communication, continuing as if nothing happened");
+        }
+
     }
 
     private void handleMessages() throws IOException, JSONException, InterruptedException {
@@ -146,8 +156,6 @@ public class BluetoothThread extends Thread {
 
                         loop = running;
                     }
-
-
                 }
             }
         }
