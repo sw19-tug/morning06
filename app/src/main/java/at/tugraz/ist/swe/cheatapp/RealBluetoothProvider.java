@@ -19,6 +19,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     public void initialize() throws BluetoothException {
+        // TODO: Should the bluetooth adapter be a member of BluetoothThread?
         adapter = BluetoothAdapter.getDefaultAdapter();
         device = null;
 
@@ -57,9 +58,9 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public synchronized void connectToDevice(Device device) {
-        // TODO -> Synchronized??
+        // TODO: Should this be a member of bluetooth thread?
         Log.d("RealBluetoothProvider", "Requesting connection as client");
-        setDevice((RealDevice) device);
+        this.device = (RealDevice) device;
 
     }
 
@@ -107,12 +108,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
         }
     }
 
-    public RealDevice getDevice() {
+    public synchronized RealDevice getDevice() {
         return device;
-    }
-
-    public void setDevice(RealDevice device) {
-        this.device = device;
     }
 
     public BluetoothAdapter getAdapter() {

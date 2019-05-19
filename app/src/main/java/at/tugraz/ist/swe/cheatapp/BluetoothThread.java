@@ -79,10 +79,9 @@ public class BluetoothThread extends Thread {
     }
 
     private void handleMessages() throws IOException, JSONException, InterruptedException {
-        boolean disconnected = false;
-        boolean runLoop = true;
+        boolean loop = true;
 
-        while (runLoop) {
+        while (loop) {
             synchronized (this) {
                 if (inputReader.ready()) {
                     String receivedMessage = inputReader.readLine();
@@ -100,7 +99,7 @@ public class BluetoothThread extends Thread {
                     }
                 }
 
-                runLoop = !messageQueue.isEmpty() || running;
+                loop = !messageQueue.isEmpty() || running;
             }
             Thread.sleep(100);
         }
