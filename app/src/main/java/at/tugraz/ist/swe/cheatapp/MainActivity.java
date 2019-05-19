@@ -194,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
 
                 builder.setView(userInput);
 
-
                 builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         SharedPreferences.Editor preferencesEditor = getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
