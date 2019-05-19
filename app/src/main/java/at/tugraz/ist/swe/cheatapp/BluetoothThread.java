@@ -10,15 +10,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_SERVICE_RECORD;
 import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_UUID;
 
 public class BluetoothThread extends Thread {
     private RealBluetoothProvider provider;
+    private Queue<BluetoothMessage> messageQueue;
+    private boolean running;
+
 
     public BluetoothThread(final RealBluetoothProvider provider) {
         this.provider = provider;
+        this.messageQueue = new LinkedList<>();
+        this.running = true;
+    }
+
+    public synchronized void sendBluetoothMessage(final BluetoothMessage bluetoothMessage) {
+        messageQueue.add(bluetoothMessage);
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     @Override
@@ -38,7 +53,7 @@ public class BluetoothThread extends Thread {
                     System.out.println("CommunicationThread: Connected as server.");
                 } catch (IOException timeout) {
                     // Timeout
-                    synchronized (provider) {
+                    synchronized (this) {
                         RealDevice dev = provider.getDevice();
                         if (dev != null) {
                             System.out.println("CommunicationThread: Connection as client requested");
@@ -52,9 +67,11 @@ public class BluetoothThread extends Thread {
                                 ex.printStackTrace();
                                 throw new RuntimeException(ex.getMessage());
                             }
+
+                            runLoop = running;
                         }
 
-                        runLoop = provider.isRunning();
+
                     }
                 }
             }
@@ -67,13 +84,13 @@ public class BluetoothThread extends Thread {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter outputWriter = new PrintWriter(socket.getOutputStream());
 
-            synchronized (provider) {
-                provider.getMessageQueue().add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
+            synchronized (this) {
+                messageQueue.add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
             }
             boolean disconnected = false;
 
             while (runLoop) {
-                synchronized (provider) {
+                synchronized (this) {
                     if (inputReader.ready()) {
                         String receivedMessage = inputReader.readLine();
                         final BluetoothMessage btMessage = BluetoothMessage.fromJSONString(receivedMessage);
@@ -92,7 +109,7 @@ public class BluetoothThread extends Thread {
                         }
                     } else {
                         BluetoothMessage message;
-                        message = provider.getMessageQueue().poll();
+                        message = messageQueue.poll();
 
 
                         if (message != null) {
@@ -101,7 +118,7 @@ public class BluetoothThread extends Thread {
                         }
                     }
 
-                    runLoop = (!provider.getMessageQueue().isEmpty() || provider.isRunning()) && !disconnected;
+                    runLoop = !messageQueue.isEmpty() || running && !disconnected;
                 }
                 Thread.sleep(100);
             }

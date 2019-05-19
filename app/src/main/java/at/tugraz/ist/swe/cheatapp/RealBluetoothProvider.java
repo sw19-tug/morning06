@@ -22,13 +22,10 @@ import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_SERVICE_RECORD;
 import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_UUID;
 
 public class RealBluetoothProvider extends BluetoothProvider {
-
-    private Queue<BluetoothMessage> messageQueue;
     private BluetoothAdapter adapter;
     private BluetoothThread bluetoothThread;
 
     private RealDevice device;
-    private boolean running = true;
 
     public RealBluetoothProvider() throws BluetoothException {
         initialize();
@@ -36,9 +33,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     public void initialize() throws BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
-        messageQueue = new LinkedList<>();
         device = null;
-        running = true;
 
 
         if (adapter == null) {
@@ -53,7 +48,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
             }
         };
 
-        System.out.println("RealBluetoothProvider Start Communication Thread");
+        Log.d("RealBluetoothProvider", "Starting bluetooth thread");
 
         bluetoothThread = new BluetoothThread(this);
         bluetoothThread.setUncaughtExceptionHandler(exceptionHandler);
@@ -64,9 +59,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         if (bluetoothThread == null)
             return;
 
-        synchronized (this) {
-            running = false;
-        }
+        bluetoothThread.setRunning(false);
 
         try {
             bluetoothThread.join();
@@ -91,30 +84,26 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public synchronized void connectToDevice(Device device) {
-        System.out.println("RealBluetoothProvider Request connection as client;");
+        // TODO -> Synchronized??
+        Log.d("RealBluetoothProvider", "Requesting connection as client");
         setDevice((RealDevice) device);
     }
 
     @Override
-    public synchronized void sendMessage(final Message message) {
+    public void sendMessage(final Message message) {
         final BluetoothMessage btMessage = new BluetoothMessage(message);
-        messageQueue.add(btMessage);
+        bluetoothThread.sendBluetoothMessage(btMessage);
     }
 
     @Override
     public void disconnect() {
         final BluetoothMessage btMessage = new BluetoothMessage(new DisconnectMessage());
-
-        synchronized (this) {
-            messageQueue.add(btMessage);
-        }
-
+        bluetoothThread.sendBluetoothMessage(btMessage);
         closeConnection();
     }
 
     @Override
     protected void onMessageReceived(final Message message) {
-        System.out.format("RealBluetoothProvider Message received %s%n", message);
         super.onMessageReceived(message);
     }
 
@@ -138,15 +127,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         this.device = device;
     }
 
-    public boolean isRunning() {
-        return running;
-    }
-
     public BluetoothAdapter getAdapter() {
         return adapter;
-    }
-
-    public Queue<BluetoothMessage> getMessageQueue() {
-        return messageQueue;
     }
 }
