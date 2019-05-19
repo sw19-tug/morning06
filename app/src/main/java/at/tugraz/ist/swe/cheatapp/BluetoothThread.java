@@ -57,8 +57,7 @@ public class BluetoothThread extends Thread {
         } catch (JSONException ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
-        }
-        finally {
+        } finally {
             shutdownCommunication();
             provider.onDisconnected();
         }

@@ -73,7 +73,7 @@ public class ConnectFragment extends Fragment {
 
     public void onConnectClicked(){
         if (selectedListIndex < 0) {
-            Toast.makeText(view.getContext(), "No device selected.", Toast.LENGTH_LONG).show();
+            activity.showToast(activity.getString(R.string.no_device_selected));
         } else {
             activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
         }

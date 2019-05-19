@@ -158,7 +158,7 @@ public class ConnectFragmentEspressoTest {
 
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
-
+        
         onView(withText(R.string.disconnected))
                 .inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));

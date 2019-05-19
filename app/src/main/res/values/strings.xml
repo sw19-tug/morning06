@@ -5,4 +5,5 @@
     <string name="disconnect">Disconnect</string>
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
+    <string name="no_device_selected">No device selected</string>
 </resources>

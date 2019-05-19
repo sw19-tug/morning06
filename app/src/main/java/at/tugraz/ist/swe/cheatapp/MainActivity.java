@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean connectFragmentVisible;
     private Toolbar toolbar;
     private Button connectDisconnectButton;
+    private Toast currentToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             // TODO Refactor
             bluetoothProvider = new DummyBluetoothProvider();
             ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            showToast(e.getMessage());
         }
         setContentView(R.layout.activity_main);
 
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MainActivity.this, getString(R.string.connected), Toast.LENGTH_LONG).show();
+                            showToast(getString(R.string.connected));
                         }
                     });
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, getString(R.string.disconnected), Toast.LENGTH_LONG).show();
+                        showToast(getString(R.string.disconnected));
                     }
                 });
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(final String errorMsg) {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                        showToast(errorMsg);
                     }
                 });
             }
@@ -157,5 +158,14 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
         transaction.commitAllowingStateLoss();
+    }
+
+    public void showToast(String text) {
+        if (currentToast != null) {
+            currentToast.cancel();
+        }
+
+        currentToast = Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT);
+        currentToast.show();
     }
 }
