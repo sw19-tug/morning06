@@ -2,24 +2,11 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import org.json.JSONException;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
-
-import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_SERVICE_RECORD;
-import static at.tugraz.ist.swe.cheatapp.Constants.BLUETOOTH_UUID;
 
 public class RealBluetoothProvider extends BluetoothProvider {
     private BluetoothAdapter adapter;
@@ -55,20 +42,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
         bluetoothThread.start();
     }
 
-    public void closeConnection() {
-        if (bluetoothThread == null)
-            return;
-
-        bluetoothThread.setRunning(false);
-
-        try {
-            bluetoothThread.join();
-        } catch (InterruptedException ex) {
-            // TODO: Do we need to do something here???
-            ex.printStackTrace();
-        }
-    }
-
     @Override
     public List<Device> getPairedDevices() {
         Set<BluetoothDevice> btDevices = adapter.getBondedDevices();
@@ -87,6 +60,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         // TODO -> Synchronized??
         Log.d("RealBluetoothProvider", "Requesting connection as client");
         setDevice((RealDevice) device);
+
     }
 
     @Override
@@ -99,7 +73,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     public void disconnect() {
         final BluetoothMessage btMessage = new BluetoothMessage(new DisconnectMessage());
         bluetoothThread.sendBluetoothMessage(btMessage);
-        closeConnection();
+        bluetoothThread.setRunning(false);
     }
 
     @Override
@@ -117,6 +91,20 @@ public class RealBluetoothProvider extends BluetoothProvider {
         }
 
         super.onDisconnected();
+    }
+
+    public void handleBluetoothMessage(final BluetoothMessage bluetoothMessage) {
+        switch (bluetoothMessage.getMessageType()) {
+            case CHAT:
+                onMessageReceived(bluetoothMessage.getMessage());
+                break;
+            case CONNECT:
+                onConnected();
+                break;
+            case DISCONNECT:
+                bluetoothThread.setRunning(false);
+                break;
+        }
     }
 
     public RealDevice getDevice() {

@@ -86,20 +86,9 @@ public class BluetoothThread extends Thread {
             synchronized (this) {
                 if (inputReader.ready()) {
                     String receivedMessage = inputReader.readLine();
-                    final BluetoothMessage btMessage = BluetoothMessage.fromJSONString(receivedMessage);
+                    final BluetoothMessage bluetoothMessage = BluetoothMessage.fromJSONString(receivedMessage);
 
-                    switch (btMessage.getMessageType()) {
-                        case CHAT:
-                            provider.onMessageReceived(btMessage.getMessage());
-                            break;
-                        case CONNECT:
-                            provider.onConnected();
-                            break;
-                        case DISCONNECT:
-                            disconnected = true;
-                            break;
-
-                    }
+                    provider.handleBluetoothMessage(bluetoothMessage);
                 } else {
                     BluetoothMessage message;
                     message = messageQueue.poll();
@@ -111,7 +100,7 @@ public class BluetoothThread extends Thread {
                     }
                 }
 
-                runLoop = !messageQueue.isEmpty() || running && !disconnected;
+                runLoop = !messageQueue.isEmpty() || running;
             }
             Thread.sleep(100);
         }
@@ -122,7 +111,8 @@ public class BluetoothThread extends Thread {
         outputWriter = new PrintWriter(socket.getOutputStream());
 
         synchronized (this) {
-            messageQueue.add(new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)));
+            final BluetoothMessage connectMessage = new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME));
+            messageQueue.add(connectMessage);
         }
     }
 
