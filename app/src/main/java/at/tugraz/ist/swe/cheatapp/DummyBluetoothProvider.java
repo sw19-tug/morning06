@@ -9,6 +9,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     private boolean connected;
     private Thread thread;
     private boolean bluetoothEnabled;
+    private Device connectedDevice;
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
@@ -18,6 +19,11 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     @Override
     public List<Device> getPairedDevices() {
         return this.devices;
+    }
+
+    @Override
+    public Device getConnectedDevice() {
+        return connectedDevice;
     }
 
     @Override

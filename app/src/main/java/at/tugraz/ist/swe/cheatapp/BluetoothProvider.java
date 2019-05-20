@@ -5,7 +5,6 @@ import java.util.List;
 
 public abstract class BluetoothProvider {
     protected List<BluetoothEventHandler> eventHandlerList;
-    protected Device connectedDevice;
 
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
@@ -51,9 +50,7 @@ public abstract class BluetoothProvider {
         }
     }
 
-    public synchronized Device getConnectedDevice() {
-        return this.connectedDevice;
-    }
+    public abstract Device getConnectedDevice();
 
     public abstract boolean isBluetoothEnabled();
 }

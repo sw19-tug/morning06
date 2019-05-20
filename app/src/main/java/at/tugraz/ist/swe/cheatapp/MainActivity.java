@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean connectFragmentVisible;
     private Toolbar toolbar;
     private Button connectDisconnectButton;
+    private Toast currentToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.bluetooth_disabled, Toast.LENGTH_LONG).show();
             }
         } catch (BluetoothException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            showToast(e.getMessage());
             bluetoothProvider = new DummyBluetoothProvider();
             ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
         }
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MainActivity.this, getString(R.string.connected), Toast.LENGTH_LONG).show();
+                            showToast(getString(R.string.connected));
                         }
                     });
 
@@ -80,13 +81,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDisconnected() {
                 MainActivity.this.showConnectFragment();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(getString(R.string.disconnected));
+                    }
+                });
+
             }
 
             @Override
             public void onError(final String errorMsg) {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                        showToast(errorMsg);
                     }
                 });
             }
@@ -127,8 +136,10 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 connectFragmentVisible = true;
                 connectDisconnectButton.setText(getString(R.string.connect));
+                connectFragment.updateValues();
             }
         });
+
     }
 
     public void showChatFragment() throws InterruptedException {
@@ -158,4 +169,13 @@ public class MainActivity extends AppCompatActivity {
         return connectFragment.getListView();
     }
 
+
+    public void showToast(String text) {
+        if (currentToast != null) {
+            currentToast.cancel();
+        }
+
+        currentToast = Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT);
+        currentToast.show();
+    }
 }
