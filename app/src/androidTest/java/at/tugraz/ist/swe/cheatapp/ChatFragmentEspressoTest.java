@@ -30,19 +30,27 @@ public class ChatFragmentEspressoTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
     private MessageRepository messageRepository;
     private DummyBluetoothProvider provider;
+    private MainActivity mainActivity;
 
     @Before
     public void setUp() throws InterruptedException {
+        mainActivity = mainActivityTestRule.getActivity();
         provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        mainActivity.setBluetoothProvider(provider,true);
         provider.connectToDevice(provider.getPairedDevices().get(0));
-        mainActivityTestRule.getActivity().showChatFragment();
+        mainActivity.showChatFragment();
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
+        messageRepository = MessageRepository.createInMemoryRepository(context);
+
+        mainActivity.getChatFragment().setMessageRepository(messageRepository);
+
+
+//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+//        db.deleteDatabase(context);
     }
 
     @Test
@@ -81,13 +89,6 @@ public class ChatFragmentEspressoTest {
     @Test
     public void saveTextIntoDummyDevice() throws InterruptedException {
         String testText = "Hello World";
-        ChatFragment chatFragment = mainActivityTestRule.getActivity().getChatFragment();
-        DummyDevice device = new DummyDevice("1", "1", chatFragment);
-
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
@@ -108,10 +109,10 @@ public class ChatFragmentEspressoTest {
     // TODO this test does not check anything
     public void chatHistoryScrollable() throws InterruptedException {
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
+//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+//        db.deleteDatabase(context);
 
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
         messageRepository.insertMessage(new Message(1, "Hi, how are you?", true));
         messageRepository.insertMessage(new Message(1, "I'm fine. Thanks.", false));
@@ -157,7 +158,7 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
         // TODO solve race condition
         int listLength = 0;
         while(listLength == 0)
@@ -187,9 +188,8 @@ public class ChatFragmentEspressoTest {
     @Test
     public void testIfMessageTextIsSanitized() throws InterruptedException {
 
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
+//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+//        db.deleteDatabase(context);
 
         String testString = "        Sanitize me please!!!!                      ";
         String sanitizedString = Utils.sanitizeMessage(testString);
@@ -197,7 +197,7 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
         Message receivedMessage = messageRepository.getRawMessagesByUserId(1).get(0);
 
         assertEquals(receivedMessage.getMessageText(), sanitizedString);
@@ -207,13 +207,13 @@ public class ChatFragmentEspressoTest {
     public void testIfEmptyMessageIsSendable() throws InterruptedException {
 
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
+//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+//        db.deleteDatabase(context);
         String testString = "         ";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
 
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
         assertTrue(messageRepository.getRawMessagesByUserId(1).isEmpty());
     }

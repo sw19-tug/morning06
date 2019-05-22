@@ -39,7 +39,7 @@ public class DatabaseIntegrationTest {
     public void setUp() {
         context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         deleteDatabase(context);
-        messageRepository = new MessageRepository(context);
+        messageRepository = MessageRepository.createInMemoryRepository(context);
     }
 
     @Test
