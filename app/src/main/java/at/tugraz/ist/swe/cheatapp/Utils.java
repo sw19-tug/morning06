@@ -2,10 +2,10 @@ package at.tugraz.ist.swe.cheatapp;
 
 
 public class Utils {
-    public static String sanitizeMessage(String messageText){
-        if(messageText.trim().length() > 0)
-            return messageText.trim();
-
-        return null;
+    public static String sanitizeMessage(String messageText) {
+        String trimmed = messageText.trim();
+        if (trimmed.isEmpty())
+            return null;
+        return trimmed;
     }
 }
