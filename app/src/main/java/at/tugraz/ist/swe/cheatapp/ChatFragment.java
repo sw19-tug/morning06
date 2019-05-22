@@ -131,4 +131,7 @@ public class ChatFragment extends Fragment {
     public MessageAdapter getMessageAdapter() {
         return messageAdapter;
     }
+
+    public EditText getTextEntry (){return textEntry;}
 }
+

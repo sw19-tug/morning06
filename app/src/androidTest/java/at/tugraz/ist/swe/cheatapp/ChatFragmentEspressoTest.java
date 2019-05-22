@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -239,20 +240,24 @@ public class ChatFragmentEspressoTest {
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
         messageRepository.insertMessage(new Message(1, testText, true));
-        //onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
-        //onView(withId(R.id.btn_chat_send)).perform(click());
-        provider.getThread().join();
-
-        onView(withId(R.id.rvChat)).perform(
-                RecyclerViewActions.<RecyclerView.ViewHolder>actionOnItem(withChild(withText(testText)),longClick()));
-
-        String editText = "I'm edited!";
-        //set tot ""
-        onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.txt_chat_entry)).perform(typeText("hallo"), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.rvChat)).check(matches(withText(editText)));
+        String editText = "I'm edited!";
+
+        onView(withText(testText)).perform(longClick());
+
+        EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
+        textEntry.setText("");
+
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
+        onView(withId(R.id.btn_edit_send)).perform(click());
+        provider.getThread().join();
+
+
+        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(0);
+        assertEquals(editText, receiveMessage.getMessageText());
 
     }
 
