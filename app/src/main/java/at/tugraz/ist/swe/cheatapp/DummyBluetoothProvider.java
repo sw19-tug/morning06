@@ -12,7 +12,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
-        this.bluetoothEnabled = false;
+        this.bluetoothEnabled = true;
         this.connected = false;
 
         enableDummyDevices(1);
