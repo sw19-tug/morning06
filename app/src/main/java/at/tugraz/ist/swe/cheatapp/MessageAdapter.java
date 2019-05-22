@@ -1,7 +1,6 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +14,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
-
-    private List<Message> messageList;
     Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private List<Message> messageList;
+    private ChatFragment chatFragament;
 
-    public MessageAdapter(List<Message> messageList) {
+    public MessageAdapter(List<Message> messageList, ChatFragment chatFragment) {
         this.messageList = messageList;
+        this.chatFragament = chatFragment;
     }
 
     @Override
@@ -67,19 +67,36 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public List<Message> getMessageList() {
+        return messageList;
+    }
+
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
 
-        SentMessageHolder(View itemView) {
+        SentMessageHolder(final View itemView) {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.txt_message_body);
             timeText = itemView.findViewById(R.id.txt_message_time);
+
+
+
+
         }
 
-        void bind(Message message) {
+        void bind(final Message message) {
             messageText.setText(message.getMessageText());
             timeText.setText(dateFormat.format(message.getTimestamp()));
+
+            messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    chatFragament.onMessageEdit(message);
+                    return true;
+                }
+
+            });
         }
     }
 
@@ -97,9 +114,5 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
         }
-    }
-
-    public List<Message> getMessageList() {
-        return messageList;
     }
 }

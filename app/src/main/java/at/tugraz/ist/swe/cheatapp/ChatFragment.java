@@ -19,6 +19,7 @@ public class ChatFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private Button sendButton;
+    private Button editButton;
     private EditText textEntry;
     private RecyclerView messageRecycler;
     private MessageAdapter messageAdapter;
@@ -39,6 +40,7 @@ public class ChatFragment extends Fragment {
 
         textEntry = view.findViewById(R.id.txt_chat_entry);
         sendButton = view.findViewById(R.id.btn_chat_send);
+        editButton = view.findViewById(R.id.btn_edit_send);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +70,7 @@ public class ChatFragment extends Fragment {
         });
 
         messageRecycler = view.findViewById(R.id.rvChat);
-        messageAdapter = new MessageAdapter(messageList);
+        messageAdapter = new MessageAdapter(messageList, this);
         messageRecycler.setAdapter(messageAdapter);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -97,6 +99,28 @@ public class ChatFragment extends Fragment {
         messageRepository.insertMessage(new Message(1, messageText, false));
     }
 
+    public void onMessageEdit(final Message message)
+    {
+        textEntry.setText(message.getMessageText());
+        sendButton.setVisibility(view.INVISIBLE);
+        editButton.setVisibility(view.VISIBLE);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                message.setMessageText(textEntry.getText().toString());
+                messageRepository.updateMessage(message);
+                textEntry.getText().clear();
+                sendButton.setVisibility(view.VISIBLE);
+                editButton.setVisibility(view.INVISIBLE);
+            }
+        });
+        // wait for user to enter edit text
+        // change messagetext to edited text
+        //messageRepository.updateMessage(message);
+        //update view
+
+    }
+
     public synchronized void waitForFragmentReady() throws InterruptedException {
         if(!this.chatFragmentReady)
         {
@@ -107,4 +131,7 @@ public class ChatFragment extends Fragment {
     public MessageAdapter getMessageAdapter() {
         return messageAdapter;
     }
+
+    public EditText getTextEntry (){return textEntry;}
 }
+
