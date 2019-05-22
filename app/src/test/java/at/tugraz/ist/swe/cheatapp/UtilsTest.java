@@ -31,7 +31,7 @@ public class UtilsTest {
         String output = Utils.sanitizeMessage(input);
 
         assertNotNull(output);
-        assertEquals("abcd", "output");
+        assertEquals("abcd", output);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class UtilsTest {
         String output = Utils.sanitizeMessage(input);
 
         assertNotNull(output);
-        assertEquals("abcd", "output");
+        assertEquals("abcd", output);
     }
 
     @Test
@@ -49,6 +49,6 @@ public class UtilsTest {
         String output = Utils.sanitizeMessage(input);
 
         assertNotNull(output);
-        assertEquals("abcd", "output");
+        assertEquals("abcd", output);
     }
 }
