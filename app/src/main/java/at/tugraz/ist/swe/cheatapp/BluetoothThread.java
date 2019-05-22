@@ -24,6 +24,7 @@ public class BluetoothThread extends Thread {
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
     private RealDevice connectedDevice;
+    private BluetoothServerSocket serverSocket;
 
 
     public BluetoothThread(final RealBluetoothProvider provider) {
@@ -34,6 +35,7 @@ public class BluetoothThread extends Thread {
         this.inputReader = null;
         this.outputWriter = null;
         this.connectedDevice = null;
+        this.serverSocket = null;
     }
 
     public synchronized void sendBluetoothMessage(final BluetoothMessage bluetoothMessage) {
@@ -78,15 +80,29 @@ public class BluetoothThread extends Thread {
         try {
             if(inputReader != null)
                 inputReader.close();
-            if(outputWriter != null)
-                outputWriter.close();
+        } catch (IOException ignore) {
+            Log.d("BluetoothThread",
+                    "Got IOException while closing Input Reader, continuing as if nothing happened");
+        }
+
+        if(outputWriter != null)
+            outputWriter.close();
+
+        try {
             if(socket != null)
                 socket.close();
         } catch (IOException ignore) {
             Log.d("BluetoothThread",
-                    "Got IOException while shutting down communication, continuing as if nothing happened");
+                    "Got IOException while closing Input Reader, continuing as if nothing happened");
         }
 
+        try {
+            if(serverSocket != null)
+                serverSocket.close();
+        } catch (IOException ignore) {
+            Log.d("BluetoothThread",
+                    "Got IOException while closing Input Reader, continuing as if nothing happened");
+        }
     }
 
     private void handleMessages() throws Exception {
@@ -152,8 +168,7 @@ public class BluetoothThread extends Thread {
     }
 
     private void createBluetoothSocket() throws IOException {
-        final BluetoothServerSocket serverSocket = provider.getAdapter().listenUsingRfcommWithServiceRecord(BLUETOOTH_SERVICE_RECORD, BLUETOOTH_UUID);
-
+        serverSocket = provider.getAdapter().listenUsingRfcommWithServiceRecord(BLUETOOTH_SERVICE_RECORD, BLUETOOTH_UUID);
         boolean loop = true;
 
         while (loop && socket == null) {
@@ -179,6 +194,7 @@ public class BluetoothThread extends Thread {
         }
 
         serverSocket.close();
+        serverSocket = null;
     }
 
     public synchronized void connectToDevice(Device device) {
