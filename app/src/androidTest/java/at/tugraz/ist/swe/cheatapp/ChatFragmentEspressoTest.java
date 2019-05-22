@@ -23,6 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentEspressoTest {
@@ -180,5 +181,40 @@ public class ChatFragmentEspressoTest {
         provider.getThread().join();
 
         onView(withId(R.id.txt_chat_receivedMessage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testIfMessageTextIsSanitized() throws InterruptedException {
+
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
+
+        String testString = "        Sanitize me please!!!!                      ";
+        String sanitizedString = Utils.sanitizeMessage(testString);
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+        Message receivedMessage = messageRepository.getRawMessagesByUserId(1).get(0);
+
+        assertEquals(receivedMessage.getMessageText(), sanitizedString);
+    }
+
+    @Test
+    public void testIfEmptyMessageIsSendable() throws InterruptedException {
+
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
+        String testString = "         ";
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+
+        assertTrue(messageRepository.getRawMessagesByUserId(1).isEmpty());
     }
 }
