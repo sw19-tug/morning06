@@ -1,8 +1,11 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,12 +41,21 @@ public class ConnectFragmentEspressoTest {
     DummyBluetoothProvider provider;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         mainActivityTestRule.getActivity().showConnectFragment();
         provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
+    }
+
+    @After
+    public void cleanUp()
+    {
+        SharedPreferences.Editor prefrencesEditor =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        prefrencesEditor.clear();
+        prefrencesEditor.commit();
     }
 
     @Test
@@ -185,5 +197,19 @@ public class ConnectFragmentEspressoTest {
         count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
 
         assertEquals(count, 2);
+    }
+
+    @Test
+    public void testConnectedDeviceSavedInSharedPreferences() throws InterruptedException {
+        onData(allOf(is(instanceOf(String.class)), is("1")))
+                .perform(click());
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        provider.getThread().join();
+        Thread.sleep(100);
+        SharedPreferences sharedPreferences =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+        long lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
+
+        assertEquals(1, lastConnectedDeviceID);
     }
 }

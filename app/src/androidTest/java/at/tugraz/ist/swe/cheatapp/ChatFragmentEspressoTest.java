@@ -39,6 +39,9 @@ public class ChatFragmentEspressoTest {
         mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
         provider.connectToDevice(provider.getPairedDevices().get(0));
         mainActivityTestRule.getActivity().showChatFragment();
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
     }
 
     @Test
@@ -148,18 +151,20 @@ public class ChatFragmentEspressoTest {
         provider.enableDummyDevices(1);
         mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
-
         String testText = "Hello, I am a test message. ;-)";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
-
-        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(0);
+        // TODO solve race condition
+        int listLength = 0;
+        while(listLength == 0)
+        {
+            listLength = messageRepository.getRawMessagesByUserId(1).size();
+            Thread.sleep(100);
+        }
+        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(listLength-1);
         assertEquals(testText, receiveMessage.getMessageText());
     }
 
@@ -169,10 +174,6 @@ public class ChatFragmentEspressoTest {
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
         mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
 
         String testText = "Hello, I is there a timestamp?";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());

@@ -47,10 +47,12 @@ public class BluetoothThread extends Thread {
     @Override
     public void run() {
         try {
+            Log.d("BluetoothThread", "Create Socket");
             createBluetoothSocket();
+            Log.d("BluetoothThread", "Init Connection");
             initializeConnection();
+            Log.d("BluetoothThread", "Handle Message");
             handleMessages();
-
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -61,19 +63,25 @@ public class BluetoothThread extends Thread {
         } catch (JSONException ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
         } finally {
+            Log.d("BluetoothThread", "Shutdown");
             shutdownCommunication();
             provider.onDisconnected();
         }
-
     }
 
     private void shutdownCommunication() {
 
         try {
-            inputReader.close();
-            outputWriter.close();
-            socket.close();
+            if(inputReader != null)
+                inputReader.close();
+            if(outputWriter != null)
+                outputWriter.close();
+            if(socket != null)
+                socket.close();
         } catch (IOException ignore) {
             Log.d("BluetoothThread",
                     "Got IOException while shutting down communication, continuing as if nothing happened");
@@ -81,8 +89,10 @@ public class BluetoothThread extends Thread {
 
     }
 
-    private void handleMessages() throws IOException, JSONException, InterruptedException {
+    private void handleMessages() throws Exception {
         boolean loop = true;
+        boolean handshake_okay = false;
+        int timeout_counter = Constants.LOOPS_UNTIL_TIMEOUT;
 
         while (loop) {
             BluetoothMessage bluetoothMessage = null;
@@ -111,9 +121,22 @@ public class BluetoothThread extends Thread {
             // Message handling must not be done when holding the lock, otherwise we potentially
             // get a deadlock
             if (bluetoothMessage != null) {
+                if(bluetoothMessage.getMessageType() == BluetoothMessage.Type.CONNECT)
+                {
+                    handshake_okay = true;
+                }
                 provider.handleBluetoothMessage(bluetoothMessage);
             }
             Thread.sleep(100);
+
+            if(!handshake_okay && timeout_counter == 0)
+            {
+                throw new Exception("Connection timeout! Handshake failed.");
+            }
+            else
+            {
+                timeout_counter--;
+            }
         }
     }
 
@@ -142,20 +165,14 @@ public class BluetoothThread extends Thread {
                 // Timeout
                 synchronized (this) {
                     if (connectedDevice != null) {
-                        Log.d("BluetoothThread", "Connection as client requested");
-                        try {
-                            socket = connectedDevice.getAndroidDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
-                            if (socket != null) {
-                                socket.connect();
-                                Log.d("BluetoothThread", "Connected as client");
+                        Log.d("BluetoothThread", String.format("Connection as client requested for device %s", connectedDevice.getDeviceName()));
 
-                            }
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                            throw new RuntimeException(ex.getMessage());
+                        socket = connectedDevice.getAndroidDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
+
+                        if (socket != null) {
+                            socket.connect();
+                             Log.d("BluetoothThread", "Try connection as client");
                         }
-
-                        loop = running;
                     }
                 }
             }

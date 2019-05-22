@@ -11,6 +11,7 @@ import java.util.Set;
 public class RealBluetoothProvider extends BluetoothProvider {
     private BluetoothAdapter adapter;
     private BluetoothThread bluetoothThread;
+    private Thread.UncaughtExceptionHandler exceptionHandler;
 
     public RealBluetoothProvider() throws BluetoothException {
         initialize();
@@ -20,12 +21,11 @@ public class RealBluetoothProvider extends BluetoothProvider {
         // TODO: Should the bluetooth adapter be a member of BluetoothThread?
         adapter = BluetoothAdapter.getDefaultAdapter();
 
-
         if (adapter == null) {
             throw new BluetoothException("Hardware has no bluetooth support");
         }
 
-        Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
+        exceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable ex) {
                 ex.printStackTrace();
@@ -35,9 +35,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
         Log.d("RealBluetoothProvider", "Starting bluetooth thread");
 
-        bluetoothThread = new BluetoothThread(this);
-        bluetoothThread.setUncaughtExceptionHandler(exceptionHandler);
-        bluetoothThread.start();
+        initBluetoothThread();
     }
 
     @Override
@@ -55,8 +53,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void connectToDevice(Device device) {
+        connectedDevice = device;
         bluetoothThread.connectToDevice(device);
-
     }
 
     @Override
@@ -85,7 +83,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
             ex.printStackTrace();
             onError(ex.getMessage());
         }
-
+        connectedDevice = null;
         super.onDisconnected();
     }
 
@@ -120,5 +118,27 @@ public class RealBluetoothProvider extends BluetoothProvider {
         }
 
         return false;
+    }
+
+    @Override
+    public Device getDeviceByID(long deviceID) {
+        Set<BluetoothDevice> btDevices = adapter.getBondedDevices();
+
+        for(BluetoothDevice device : btDevices)
+        {
+            if(Device.idStringToLong(device.getAddress()) == deviceID)
+            {
+                return new RealDevice(device);
+            }
+        }
+
+        return null;
+    }
+
+    private void initBluetoothThread()
+    {
+        bluetoothThread = new BluetoothThread(this);
+        bluetoothThread.setUncaughtExceptionHandler(exceptionHandler);
+        bluetoothThread.start();
     }
 }

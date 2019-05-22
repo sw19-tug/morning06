@@ -5,12 +5,15 @@ import java.util.List;
 
 public abstract class BluetoothProvider {
     protected List<BluetoothEventHandler> eventHandlerList;
+    protected Device connectedDevice;
 
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
     }
 
     public abstract List<Device> getPairedDevices();
+
+    public abstract Device getDeviceByID(long deviceID);
 
     public abstract void connectToDevice(Device device);
 
@@ -50,7 +53,9 @@ public abstract class BluetoothProvider {
         }
     }
 
-    public abstract Device getConnectedDevice();
+    public Device getConnectedDevice() {
+        return connectedDevice;
+    }
 
     public abstract boolean isBluetoothEnabled();
 }

@@ -1,5 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,26 @@ public class ConnectFragment extends Fragment {
         });
 
 
+        long lastConnectedDeviceID = activity.getLastConnectedDeviceID();
+        SharedPreferences.Editor preferencesEditor =
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.remove("lastConDev");
+        preferencesEditor.apply();
+
+        if(lastConnectedDeviceID != 0)
+        {
+            tryConnectByDeviceName(lastConnectedDeviceID);
+        }
+    }
+
+    public void tryConnectByDeviceName(long deviceName)
+    {
+        Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceName);
+        if(connectDevice != null)
+        {
+            activity.clearLastConnectedDevice();
+            connectToDevice(connectDevice);
+        }
     }
 
     public void updateValues() {
@@ -85,11 +106,18 @@ public class ConnectFragment extends Fragment {
         if (selectedListIndex < 0) {
             activity.showToast(activity.getString(R.string.no_device_selected));
         } else {
-            activity.getBluetoothProvider().connectToDevice(activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex));
+            Device connectDevice = activity.getBluetoothProvider().getPairedDevices().get(selectedListIndex);
+            selectedListIndex = -1;
+            connectToDevice(connectDevice);
         }
     }
 
     public ListView getListView() {
         return listView;
+    }
+
+    private void connectToDevice(Device device)
+    {
+        activity.getBluetoothProvider().connectToDevice(device);
     }
 }

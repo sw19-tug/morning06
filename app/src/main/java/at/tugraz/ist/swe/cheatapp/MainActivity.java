@@ -1,5 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Button connectDisconnectButton;
     private Toast currentToast;
+    private long lastConnectedDeviceID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
         // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
+        SharedPreferences sharedPreferences =
+                this.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+        lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
+
         showConnectFragment();
     }
 
@@ -115,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
         return this.bluetoothProvider;
     }
 
-    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider, final boolean update) {
-        runOnUiThread(new Runnable() {
+    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider, final boolean update) throws InterruptedException {
+        Runnable runSetProvider = new Runnable() {
             @Override
             public void run() {
                 MainActivity.this.bluetoothProvider.unregisterHandler(bluetoothEventHandler);
@@ -124,8 +131,19 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.bluetoothProvider.registerHandler(bluetoothEventHandler);
                 if (update)
                     connectFragment.updateValues();
+
+                synchronized (this)
+                {
+                    this.notify();
+                }
             }
-        });
+        };
+
+        synchronized (runSetProvider)
+        {
+            runOnUiThread(runSetProvider);
+            runSetProvider.wait();
+        }
     }
 
     public void showConnectFragment() {
@@ -159,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
         return chatFragment;
     }
 
+    public ConnectFragment getConnectFragment() {
+        return connectFragment;
+    }
+
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
@@ -177,5 +199,13 @@ public class MainActivity extends AppCompatActivity {
 
         currentToast = Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT);
         currentToast.show();
+    }
+
+    public long getLastConnectedDeviceID() {
+        return lastConnectedDeviceID;
+    }
+
+    public void clearLastConnectedDevice() {
+        this.lastConnectedDeviceID = 0;
     }
 }

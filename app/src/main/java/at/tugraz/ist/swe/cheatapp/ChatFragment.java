@@ -1,6 +1,8 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.arch.lifecycle.Observer;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,8 +54,13 @@ public class ChatFragment extends Fragment {
 
         final List<Message> messageList = new ArrayList<>();
 
-        // TODO sometimes nullptr exception, race condition?
-        connectedDeviceId = activity.getBluetoothProvider().getConnectedDevice().getDeviceId();
+        Device connectedDevice = null;
+        while(connectedDevice == null)
+        {
+            connectedDevice = activity.getBluetoothProvider().getConnectedDevice();
+            Thread.yield();
+        }
+        connectedDeviceId = connectedDevice.getDeviceId();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
             @Override
             public void onChanged(@Nullable List<Message> messages) {
@@ -76,6 +83,11 @@ public class ChatFragment extends Fragment {
         messageAdapter = new MessageAdapter(messageList);
         messageRecycler.setAdapter(messageAdapter);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
+        SharedPreferences.Editor preferencesEditor =
+                 activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.putLong("lastConDev",connectedDevice.getDeviceId());
+        preferencesEditor.apply();
 
         synchronized (this) {
             this.chatFragmentReady = true;
