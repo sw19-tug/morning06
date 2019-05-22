@@ -35,14 +35,14 @@ public class ChatFragmentEspressoTest {
 
     @Before
     public void setUp() throws InterruptedException {
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
         provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
         mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
         provider.connectToDevice(provider.getPairedDevices().get(0));
         mainActivityTestRule.getActivity().showChatFragment();
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
     }
 
     @Test
@@ -81,12 +81,6 @@ public class ChatFragmentEspressoTest {
     @Test
     public void saveTextIntoDummyDevice() throws InterruptedException {
         String testText = "Hello World";
-        ChatFragment chatFragment = mainActivityTestRule.getActivity().getChatFragment();
-        DummyDevice device = new DummyDevice("1", "1", chatFragment);
-
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -106,11 +100,7 @@ public class ChatFragmentEspressoTest {
 
     @Test
     // TODO this test does not check anything
-    public void chatHistoryScrollable() throws InterruptedException {
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
-
+    public void chatHistoryScrollable() {
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
         messageRepository.insertMessage(new Message(1, "Hi, how are you?", true));
@@ -147,11 +137,6 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void testChatHistoryOnMessageSend() throws InterruptedException {
-
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
         String testText = "Hello, I am a test message. ;-)";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -169,13 +154,9 @@ public class ChatFragmentEspressoTest {
         assertEquals(testText, receiveMessage.getMessageText());
     }
 
-
+    /*
     @Test
     public void timestampVisibleOnSend() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
         String testText = "Hello, I is there a timestamp?";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -186,11 +167,6 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void testIfMessageTextIsSanitized() throws InterruptedException {
-
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
-
         String testString = "        Sanitize me please!!!!                      ";
         String sanitizedString = Utils.sanitizeMessage(testString);
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
@@ -201,14 +177,10 @@ public class ChatFragmentEspressoTest {
         Message receivedMessage = messageRepository.getRawMessagesByUserId(1).get(0);
 
         assertEquals(receivedMessage.getMessageText(), sanitizedString);
-    }
+    } */
 
     @Test
-    public void testIfEmptyMessageIsSendable() throws InterruptedException {
-
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
+    public void testIfEmptyMessageIsSendable() {
         String testString = "         ";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());

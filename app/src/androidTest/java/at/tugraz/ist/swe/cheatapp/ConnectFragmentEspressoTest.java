@@ -83,7 +83,7 @@ public class ConnectFragmentEspressoTest {
     }
 
     @Test
-    public void testConnectWithoutSelection() throws InterruptedException {
+    public void testConnectWithoutSelection() {
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
 
         assertFalse(provider.isConnected());

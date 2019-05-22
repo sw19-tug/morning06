@@ -7,4 +7,8 @@
     <string name="bluetooth_disabled">Please enable bluetooth!</string>
     <string name="disconnected">Disconnected</string>
     <string name="no_device_selected">No device selected</string>
+    <string name="menu_set_nickname">Set Nickname</string>
+    <string name="set_nickname_dialog_title">Set Nickname</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>
