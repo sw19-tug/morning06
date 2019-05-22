@@ -181,5 +181,4 @@ public class ChatFragmentEspressoTest {
 
         onView(withId(R.id.txt_chat_receivedMessage)).check(matches(isDisplayed()));
     }
-
 }
