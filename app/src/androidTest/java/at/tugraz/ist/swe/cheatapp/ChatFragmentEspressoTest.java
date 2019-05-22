@@ -109,7 +109,7 @@ public class ChatFragmentEspressoTest {
 
     @Test
     // TODO this test does not check anything
-    public void chatHistoryScrollable() throws InterruptedException {
+    public void chatHistoryScrollable() {
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
         db.deleteDatabase(context);

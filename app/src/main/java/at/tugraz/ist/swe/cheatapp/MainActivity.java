@@ -9,15 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (connectFragmentVisible) {
                     connectFragment.onConnectClicked();
-                }
-                else {
+                } else {
                     MainActivity.this.bluetoothProvider.disconnect();
                 }
             }
@@ -173,38 +170,38 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Selected Menu Item menu_set_nickname");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                builder.setTitle(R.string.set_nickname_dialog_title);
-                final EditText userInput = new EditText(this);
-                SharedPreferences sharedPreferences = this.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences =
+                        this.getSharedPreferences("CheatAppSharedPreferences",
+                                Context.MODE_PRIVATE);
                 String currentNickname = sharedPreferences.getString("nickname", null);
 
+                builder.setTitle(R.string.set_nickname_dialog_title);
+                final EditText userInput = new EditText(this);
+                userInput.setFilters(new InputFilter[] { new InputFilter.LengthFilter(25) });
+                userInput.setSingleLine(true);
                 userInput.setText(currentNickname);
+
                 if (currentNickname != null) {
                     userInput.setSelection(currentNickname.length());
                 }
-
-                /*LayoutInflater inflater = this.getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.alert_label_editor, null);
-                dialogBuilder.setView(dialogView);
-
-                EditText editText = (EditText) dialogView.findViewById(R.id.label_field);
-                editText.setText("test label");
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.show();*/
-
+                builder.setIcon(android.R.drawable.ic_menu_edit);
                 builder.setView(userInput);
 
                 builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        SharedPreferences.Editor preferencesEditor = getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-                        preferencesEditor.putString("nickname", userInput.getText().toString());
+                        SharedPreferences.Editor preferencesEditor =
+                                getSharedPreferences("CheatAppSharedPreferences",
+                                        Context.MODE_PRIVATE).edit();
+                        preferencesEditor.putString("nickname", userInput.getText().toString().replaceAll("\n", ""));
                         preferencesEditor.apply();
-                        Log.d("MainActivity", "User clicked Save button");
+                        Log.d("MainActivity",
+                                "Set Nickname Dialog: User clicked Save button");
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.d("MainActivity", "User clicked Cancel button");
+                        Log.d("MainActivity",
+                                "Set Nickname Dialog: User clicked Cancel button");
                     }
                 });
 

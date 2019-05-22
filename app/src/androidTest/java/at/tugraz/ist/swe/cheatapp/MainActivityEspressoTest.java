@@ -3,12 +3,10 @@ package at.tugraz.ist.swe.cheatapp;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -18,12 +16,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static java.lang.Math.random;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.junit.Assert.assertTrue;
-
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -44,15 +37,32 @@ public class MainActivityEspressoTest {
     @Test
     public void testSetNicknameDialogVisible() {
         openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity().getApplicationContext());
-        onView(withText(R.string.menu_set_nickname)).perform(click());
-        onView(withText("Set Nickname")).check(matches(isDisplayed()));
+        onView(withText(R.string.menu_set_nickname)).check(matches(isDisplayed()));
+        onView(withText(R.string.menu_set_nickname)).perform(click()); // TODO: This only works on a physical Android 9 device with Animations disabled
         onView(withId(android.R.id.button1)).check(matches(isDisplayed())); // positive button (save)
         onView(withId(android.R.id.button2)).check(matches(isDisplayed())); // negative button (cancel)
     }
 
     @Test
     public void testSetNicknameDialogSave() {
-        String testNickname = "Test Nickname " + random(); // random number to check if nickname is really updated
+        for(int i = 0; i <= 1; i++) {
+            String testNickname = "Nickname " + i;
+            openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity().getApplicationContext());
+            onView(withText(R.string.menu_set_nickname)).perform(click());
+            onView(withClassName(endsWith("EditText"))).perform(replaceText(testNickname));
+            onView(withId(android.R.id.button1)).perform(click());
+
+            openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity().getApplicationContext());
+            onView(withText(R.string.menu_set_nickname)).perform(click());
+            onView(withText(testNickname)).check(matches(isDisplayed()));
+            onView(withId(android.R.id.button2)).perform(click());
+        }
+    }
+
+    @Test
+    public void testNicknameTruncation() {
+        String testNickname = "Too looooooong Nickname!!!";
+        String truncatedNickname = "Too looooooong Nickname!!";
         openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity().getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).perform(click());
         onView(withClassName(endsWith("EditText"))).perform(replaceText(testNickname));
@@ -60,7 +70,8 @@ public class MainActivityEspressoTest {
 
         openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity().getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).perform(click());
-        onView(withText(testNickname)).check(matches(isDisplayed()));
+        onView(withText(truncatedNickname)).check(matches(isDisplayed()));
+        onView(withId(android.R.id.button2)).perform(click());
     }
 
     @Test
