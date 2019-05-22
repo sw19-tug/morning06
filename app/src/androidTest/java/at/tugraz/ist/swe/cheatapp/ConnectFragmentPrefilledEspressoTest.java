@@ -45,36 +45,37 @@ public class ConnectFragmentPrefilledEspressoTest {
         }
     };
 
+    private MainActivity activity;
+    private DummyBluetoothProvider provider;
+
     @Before
     public void setUp() {
+        activity = mainActivityTestRule.getActivity();
+        provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
+
         SharedPreferences.Editor prefrencesEditor =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
         prefrencesEditor.clear();
         prefrencesEditor.putLong("lastConDev",1);
         prefrencesEditor.commit();
-        mainActivityTestRule.getActivity().showConnectFragment();
+        activity.showConnectFragment();
     }
 
     @After
     public void cleanUp()
     {
         SharedPreferences.Editor prefrencesEditor =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
         prefrencesEditor.clear();
         prefrencesEditor.commit();
     }
 
     @Test
     public void testReconnectWithSavedDevice() throws InterruptedException {
-
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
-        ConnectFragment fragment = mainActivityTestRule.getActivity().getConnectFragment();
+        ConnectFragment fragment = activity.getConnectFragment();
 
         SharedPreferences sharedPreferences =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         long lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
 
         fragment.tryConnectByDeviceName(lastConnectedDeviceID);

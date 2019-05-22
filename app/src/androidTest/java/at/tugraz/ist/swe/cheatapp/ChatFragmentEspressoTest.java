@@ -1,11 +1,12 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+import android.content.SharedPreferences;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,18 +39,28 @@ public class ChatFragmentEspressoTest {
     };
 
     private DummyBluetoothProvider provider;
-    private MainActivity mainActivity;
+    private MainActivity activity;
     private MessageRepository messageRepository;
 
     @Before
     public void setUp() throws InterruptedException {
-        mainActivity = mainActivityTestRule.getActivity();
-        provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivity.setBluetoothProvider(provider,true);
+        activity = mainActivityTestRule.getActivity();
+//        provider = new DummyBluetoothProvider();
+//        provider.enableDummyDevices(1);
+//        activity.setBluetoothProvider(provider,true);
+        provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
         provider.connectToDevice(provider.getPairedDevices().get(0));
-        mainActivity.showChatFragment();
-        messageRepository = mainActivity.getChatFragment().getMessageRepository();
+        activity.showChatFragment();
+        messageRepository = activity.getChatFragment().getMessageRepository();
+    }
+
+    @After
+    public void cleanUp()
+    {
+        SharedPreferences.Editor prefrencesEditor =
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        prefrencesEditor.clear();
+        prefrencesEditor.commit();
     }
 
     @Test
@@ -141,11 +152,6 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void testChatHistoryOnMessageSend() throws InterruptedException {
-
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
         String testText = "Hello, I am a test message. ;-)";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -165,10 +171,6 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void timestampVisibleOnSend() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
         String testText = "Hello, I is there a timestamp?";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());

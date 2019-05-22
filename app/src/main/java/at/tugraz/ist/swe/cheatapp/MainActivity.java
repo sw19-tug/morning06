@@ -29,23 +29,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         try {
+            // TODO: Make this nicer.
+            if (Utils.isTesting()) {
+                bluetoothProvider = new DummyBluetoothProvider();
+            } else {
+                bluetoothProvider = new RealBluetoothProvider();
+            }
 
-//            if (Utils.isTesting()) {
-//                bluetoothProvider = new DummyBluetoothProvider();
-//                ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
-//            } else {
-//                bluetoothProvider = new RealBluetoothProvider();
-//            }
-
-            bluetoothProvider = new RealBluetoothProvider();
-            if(!bluetoothProvider.isBluetoothEnabled())
+            if (!bluetoothProvider.isBluetoothEnabled())
             {
                 Toast.makeText(this, R.string.bluetooth_disabled, Toast.LENGTH_LONG).show();
             }
         } catch (BluetoothException e) {
             showToast(e.getMessage());
             bluetoothProvider = new DummyBluetoothProvider();
-            ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
         }
 
         setContentView(R.layout.activity_main);

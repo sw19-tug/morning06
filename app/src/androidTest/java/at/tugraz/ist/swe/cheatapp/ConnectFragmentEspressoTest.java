@@ -44,24 +44,24 @@ public class ConnectFragmentEspressoTest {
             Utils.setTesting(true);
         }
     };
-    DummyBluetoothProvider provider;
+
+    private MainActivity activity;
+    private DummyBluetoothProvider provider;
 
     @Before
-    public void setUp() throws InterruptedException {
-        mainActivityTestRule.getActivity().showConnectFragment();
-        provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
+    public void setUp() {
+        activity = mainActivityTestRule.getActivity();
+        activity.showConnectFragment();
+        provider = (DummyBluetoothProvider) mainActivityTestRule.getActivity().getBluetoothProvider();
     }
 
     @After
     public void cleanUp()
     {
-        SharedPreferences.Editor prefrencesEditor =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        prefrencesEditor.clear();
-        prefrencesEditor.commit();
+        SharedPreferences.Editor preferencesEditor =
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.clear();
+        preferencesEditor.commit();
     }
 
     @Test
@@ -165,11 +165,6 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testHandshakeMessageAfterDisconnect() throws InterruptedException {
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
 
@@ -188,13 +183,12 @@ public class ConnectFragmentEspressoTest {
     public void testRefreshOnSwipe() throws InterruptedException {
         onView(withId(R.id.swp_pull_to_refresh)).check(matches(isDisplayed()));
 
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
         Thread.sleep(500);
         int count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
         assertEquals(count, 1);
 
+
+        // TODO
         provider.enableDummyDevices(2);
         mainActivityTestRule.getActivity().setBluetoothProvider(provider, false);
 
