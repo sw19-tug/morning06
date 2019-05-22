@@ -47,15 +47,20 @@ public class ConnectFragmentEspressoTest {
         provider.enableDummyDevices(1);
 
         mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
+
+        SharedPreferences.Editor preferencesEditor =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.remove("lastConDev");
+        preferencesEditor.commit();
     }
 
     @After
     public void cleanUp()
     {
-        SharedPreferences.Editor prefrencesEditor =
+        SharedPreferences.Editor preferencesEditor =
                 mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        prefrencesEditor.clear();
-        prefrencesEditor.commit();
+        preferencesEditor.remove("lastConDev");
+        preferencesEditor.commit();
     }
 
     @Test
@@ -147,10 +152,14 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testHandshakeMessageAfterConnect() throws InterruptedException {
+        // Wait for toasts to disappear
+        Thread.sleep(5000);
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
+
+        Thread.sleep(1000);
 
         onView(withText(R.string.connected))
                 .inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView()))))
@@ -159,6 +168,7 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testHandshakeMessageAfterDisconnect() throws InterruptedException {
+        Thread.sleep(5000);
         DummyBluetoothProvider provider = new DummyBluetoothProvider();
         provider.enableDummyDevices(1);
 
@@ -172,6 +182,8 @@ public class ConnectFragmentEspressoTest {
 
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
         provider.getThread().join();
+
+        Thread.sleep(1000);
 
         onView(withText(R.string.disconnected))
                 .inRoot(withDecorView(not(is(mainActivityTestRule.getActivity().getWindow().getDecorView()))))

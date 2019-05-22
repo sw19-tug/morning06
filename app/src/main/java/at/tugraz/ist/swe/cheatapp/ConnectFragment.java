@@ -76,16 +76,11 @@ public class ConnectFragment extends Fragment {
         }
     }
 
-    public void tryReconnectByDeviceId(long deviceId)
+    private void showSnackbar(String message)
     {
         Snackbar snackbar = Snackbar
-                .make(this.view, "Try to reconnect...", Snackbar.LENGTH_LONG);
-        TextView mainTextView = (TextView) (snackbar.getView()).findViewById(android.support.design.R.id.snackbar_text);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            mainTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        else
-            mainTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-        mainTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+            .make(this.view, message, Snackbar.LENGTH_LONG);
+        TextView mainTextView = (snackbar.getView()).findViewById(android.support.design.R.id.snackbar_text);
 
         mainTextView.setTextColor(Color.WHITE);
 
@@ -95,6 +90,11 @@ public class ConnectFragment extends Fragment {
         view.setLayoutParams(params);
         view.setBackgroundColor(Color.GRAY);
         snackbar.show();
+    }
+
+    public void tryReconnectByDeviceId(long deviceId)
+    {
+        showSnackbar("Try to reconnect...");
 
         Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceId);
         if(connectDevice != null)
