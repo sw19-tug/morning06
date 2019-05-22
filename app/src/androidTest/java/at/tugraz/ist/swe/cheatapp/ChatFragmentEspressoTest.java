@@ -29,11 +29,17 @@ import static org.junit.Assert.assertTrue;
 public class ChatFragmentEspressoTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
+        @Override
+        protected void beforeActivityLaunched() {
+            super.beforeActivityLaunched();
+            Utils.setTesting(true);
+        }
+    };
 
-    private MessageRepository messageRepository;
     private DummyBluetoothProvider provider;
     private MainActivity mainActivity;
+    private MessageRepository messageRepository;
 
     @Before
     public void setUp() throws InterruptedException {
@@ -43,14 +49,7 @@ public class ChatFragmentEspressoTest {
         mainActivity.setBluetoothProvider(provider,true);
         provider.connectToDevice(provider.getPairedDevices().get(0));
         mainActivity.showChatFragment();
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        messageRepository = MessageRepository.createInMemoryRepository(context);
-
-        mainActivity.getChatFragment().setMessageRepository(messageRepository);
-
-
-//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-//        db.deleteDatabase(context);
+        messageRepository = mainActivity.getChatFragment().getMessageRepository();
     }
 
     @Test
@@ -107,13 +106,7 @@ public class ChatFragmentEspressoTest {
 
     @Test
     // TODO this test does not check anything
-    public void chatHistoryScrollable() throws InterruptedException {
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-//        db.deleteDatabase(context);
-
-//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
-
+    public void chatHistoryScrollable() {
         messageRepository.insertMessage(new Message(1, "Hi, how are you?", true));
         messageRepository.insertMessage(new Message(1, "I'm fine. Thanks.", false));
         messageRepository.insertMessage(new Message(1, "What are you doing?", true));
@@ -158,7 +151,6 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
         // TODO solve race condition
         int listLength = 0;
         while(listLength == 0)
@@ -187,33 +179,21 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void testIfMessageTextIsSanitized() throws InterruptedException {
-
-//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-//        db.deleteDatabase(context);
-
         String testString = "        Sanitize me please!!!!                      ";
         String sanitizedString = Utils.sanitizeMessage(testString);
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
         Message receivedMessage = messageRepository.getRawMessagesByUserId(1).get(0);
-
-        assertEquals(receivedMessage.getMessageText(), sanitizedString);
+        assertEquals(sanitizedString, receivedMessage.getMessageText());
     }
 
     @Test
-    public void testIfEmptyMessageIsSendable() throws InterruptedException {
-
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-//        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-//        db.deleteDatabase(context);
+    public void testIfEmptyMessageIsSendable() {
         String testString = "         ";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
-
-//        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
         assertTrue(messageRepository.getRawMessagesByUserId(1).isEmpty());
     }

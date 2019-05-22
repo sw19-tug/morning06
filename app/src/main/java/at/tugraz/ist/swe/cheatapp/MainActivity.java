@@ -29,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         try {
+
+//            if (Utils.isTesting()) {
+//                bluetoothProvider = new DummyBluetoothProvider();
+//                ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
+//            } else {
+//                bluetoothProvider = new RealBluetoothProvider();
+//            }
+
             bluetoothProvider = new RealBluetoothProvider();
             if(!bluetoothProvider.isBluetoothEnabled())
             {

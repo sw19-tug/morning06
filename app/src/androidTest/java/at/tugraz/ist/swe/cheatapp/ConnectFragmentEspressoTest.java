@@ -37,7 +37,13 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class ConnectFragmentEspressoTest {
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
+        @Override
+        protected void beforeActivityLaunched() {
+            super.beforeActivityLaunched();
+            Utils.setTesting(true);
+        }
+    };
     DummyBluetoothProvider provider;
 
     @Before
@@ -83,7 +89,7 @@ public class ConnectFragmentEspressoTest {
     }
 
     @Test
-    public void testConnectWithoutSelection() throws InterruptedException {
+    public void testConnectWithoutSelection() {
         onView(withId(R.id.btn_connect_disconnect)).perform(click());
 
         assertFalse(provider.isConnected());

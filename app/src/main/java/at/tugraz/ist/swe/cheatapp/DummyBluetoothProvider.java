@@ -28,13 +28,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
             @Override
             public void run() {
                 DummyBluetoothProvider.super.onConnected();
-                // TODO: User-ID???
-                final Message message = new Message(connectedDevice.getDeviceId(),
-                        String.format(ON_CONNECTED_MESSAGE, connectedDevice.getDeviceName()),
-                        true);
-//                DummyBluetoothProvider.super.onMessageReceived(String.format
-//                        (ON_CONNECTED_MESSAGE, connectedDevice.getID()));
-                DummyBluetoothProvider.super.onMessageReceived(message);
             }
         });
         thread.start();

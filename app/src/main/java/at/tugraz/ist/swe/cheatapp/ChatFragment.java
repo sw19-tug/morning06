@@ -50,7 +50,11 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        messageRepository = MessageRepository.createRepository(this.getContext());
+        if (!Utils.isTesting()) {
+            messageRepository = MessageRepository.createRepository(this.getContext());
+        } else {
+            messageRepository = MessageRepository.createInMemoryRepository(this.getContext());
+        }
 
 
         Device connectedDevice = null;
@@ -132,31 +136,7 @@ public class ChatFragment extends Fragment {
         return messageAdapter;
     }
 
-    public void setMessageRepository(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
-
-        final List<Message> messageList = new ArrayList<>();
-        messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
-            @Override
-            public void onChanged(@Nullable List<Message> messages) {
-                messageList.clear();
-                for (Message msg : messages) {
-                    /*
-                    System.out.println("-----------REMOTE------------");
-                    System.out.println(msg.getUserId());
-                    System.out.println(msg.getMessageText());
-                    System.out.println(msg.getMessageSent()); */
-                    messageList.add(msg);
-                }
-                messageAdapter.notifyDataSetChanged();
-                if(messageAdapter.getItemCount() > 1)
-                    messageRecycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
-            }
-        });
-
-        messageRecycler = view.findViewById(R.id.rvChat);
-        messageAdapter = new MessageAdapter(messageList);
-        messageRecycler.setAdapter(messageAdapter);
-        messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
+    public MessageRepository getMessageRepository() {
+        return messageRepository;
     }
 }
