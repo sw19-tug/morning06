@@ -11,17 +11,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
@@ -71,7 +66,7 @@ public class ConnectFragmentPrefilledEspressoTest {
                 mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         long lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
 
-        fragment.tryConnectByDeviceName(lastConnectedDeviceID);
+        fragment.tryReconnectByDeviceId(lastConnectedDeviceID);
         provider.getThread().join();
 
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));

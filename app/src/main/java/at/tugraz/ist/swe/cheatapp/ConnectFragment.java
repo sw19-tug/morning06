@@ -3,6 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -66,13 +67,18 @@ public class ConnectFragment extends Fragment {
 
         if(lastConnectedDeviceID != 0)
         {
-            tryConnectByDeviceName(lastConnectedDeviceID);
+            tryReconnectByDeviceId(lastConnectedDeviceID);
         }
     }
 
-    public void tryConnectByDeviceName(long deviceName)
+    public void tryReconnectByDeviceId(long deviceId)
     {
-        Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceName);
+
+        Snackbar snackbar = Snackbar
+                .make(this.view, "Try to reconnect...", Snackbar.LENGTH_LONG);
+        snackbar.show();
+
+        Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceId);
         if(connectDevice != null)
         {
             activity.clearLastConnectedDevice();
