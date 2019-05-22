@@ -2,16 +2,21 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +78,22 @@ public class ConnectFragment extends Fragment {
 
     public void tryReconnectByDeviceId(long deviceId)
     {
-
         Snackbar snackbar = Snackbar
                 .make(this.view, "Try to reconnect...", Snackbar.LENGTH_LONG);
+        TextView mainTextView = (TextView) (snackbar.getView()).findViewById(android.support.design.R.id.snackbar_text);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            mainTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        else
+            mainTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        mainTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        mainTextView.setTextColor(Color.WHITE);
+
+        View view = snackbar.getView();
+        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+        params.gravity = Gravity.TOP;
+        view.setLayoutParams(params);
+        view.setBackgroundColor(Color.GRAY);
         snackbar.show();
 
         Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceId);
