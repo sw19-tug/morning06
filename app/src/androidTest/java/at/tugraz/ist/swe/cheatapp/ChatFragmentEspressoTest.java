@@ -211,7 +211,6 @@ public class ChatFragmentEspressoTest {
         String testString = "         ";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
-        provider.getThread().join();
 
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 

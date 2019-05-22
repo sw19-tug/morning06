@@ -92,12 +92,14 @@ public class ChatFragment extends Fragment {
     }
 
     private void onSendButtonClicked() {
-        String textToSend = textEntry.getText().toString();
-        final Message message = new Message(connectedDeviceId, textToSend, true);
-        activity.getBluetoothProvider().sendMessage(message);
-        messageRepository.insertMessage(message);
-        textEntry.getText().clear();
-        System.out.println("Send: " + message.getJsonString());
+        String sanitizedMessageText = Utils.sanitizeMessage(textEntry.getText().toString());
+
+        if (sanitizedMessageText != null) {
+            final Message message = new Message(connectedDeviceId, sanitizedMessageText, true);
+            activity.getBluetoothProvider().sendMessage(message);
+            messageRepository.insertMessage(message);
+            textEntry.getText().clear();
+        }
     }
 
     public void onMessageReceived(final Message message) {
