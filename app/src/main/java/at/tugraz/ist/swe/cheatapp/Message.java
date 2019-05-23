@@ -1,10 +1,13 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.UUID;
 
 @Entity
 public class Message {
@@ -18,11 +21,26 @@ public class Message {
     private String messageText;
     private boolean messageSent;
 
+    private String messageUUID;
+    private boolean messageEdited;
+
+    @Ignore
     public Message(int userId, String messageText, boolean messageSent) {
         this.userId = userId;
         this.messageText = messageText;
         this.messageSent = messageSent;
         this.timestamp = System.currentTimeMillis();
+        this.messageUUID = UUID.randomUUID().toString();
+        this.messageEdited = false;
+    }
+
+    public Message(int userId, String messageText, boolean messageSent, boolean messageEdited) {
+        this.userId = userId;
+        this.messageText = messageText;
+        this.messageSent = messageSent;
+        this.timestamp = System.currentTimeMillis();
+        this.messageUUID = UUID.randomUUID().toString();
+        this.messageEdited = messageEdited;
     }
 
     public Message(String jsonMessageString, boolean messageSent) throws JSONException {
@@ -31,6 +49,8 @@ public class Message {
         this.messageText = jsonMessage.getString("messageText");
         this.messageSent = messageSent;
         this.timestamp = jsonMessage.getLong("timeStamp");
+        this.messageUUID = jsonMessage.getString("messageUUID");
+        this.messageEdited = jsonMessage.getBoolean("messageEdited");
     }
 
     public int getMessageId() {
@@ -69,12 +89,30 @@ public class Message {
         this.messageSent = messageSent;
     }
 
+    public String getMessageUUID() {
+        return messageUUID;
+    }
+
+    public void setMessageUUID(String messageUUID) {
+        this.messageUUID = messageUUID;
+    }
+
+    public boolean getMessageEdited() {
+        return messageEdited;
+    }
+
+    public void setMessageEdited(boolean messageEdited) {
+        this.messageEdited = messageEdited;
+    }
+
     public String getJsonString() throws JSONException {
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", this.userId);
         jsonMessage.put("timeStamp", this.timestamp);
         jsonMessage.put("messageText", messageText);
+        jsonMessage.put("messageUUID", messageUUID);
+        jsonMessage.put("messageEdited", messageEdited);
         return jsonMessage.toString();
     }
 }
