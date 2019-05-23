@@ -117,4 +117,24 @@ public class DatabaseIntegrationTest {
         assertEquals("′^°£%©±", message2.getMessageText());
     }
 
+    @Test
+    public void testMessageEditing() throws InterruptedException, ExecutionException {
+        int userId = 32;
+        String originalMessageText = "I will be edited, hopefully!";
+        String editedMessageText = "Now I'm edited!";
+        Message originalMessage = new Message(userId, originalMessageText, true, true);
+        Message editedMessage = new Message(originalMessage);
+        editedMessage.setMessageId(originalMessage.getMessageId());
+        editedMessage.setMessageText(editedMessageText);
+        editedMessage.setTimestamp(System.currentTimeMillis());
+
+        messageRepository.insertMessage(originalMessage).get();
+        assertEquals(messageRepository.getMessageByMessageUUID(), originalMessage);
+
+        messageRepository.updateMessage(editedMessage);
+        assertEquals(messageRepository.getMessageByMessageUUID(), editedMessage);
+
+        List<Message> allMessages = messageRepository.getRawMessagesByUserId(userId);
+        assertEquals(allMessages.size(), 1);
+    }
 }

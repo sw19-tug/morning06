@@ -3,7 +3,6 @@ package at.tugraz.ist.swe.cheatapp;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +56,8 @@ public class Message {
         this.timestamp = other.timestamp;
         this.messageText = other.messageText;
         this.messageSent = other.messageSent;
+        this.messageUUID = other.messageUUID;
+        this.messageEdited = other.messageEdited;
     }
 
     public int getMessageId() {
