@@ -122,19 +122,33 @@ public class DatabaseIntegrationTest {
         int userId = 32;
         String originalMessageText = "I will be edited, hopefully!";
         String editedMessageText = "Now I'm edited!";
-        Message originalMessage = new Message(userId, originalMessageText, true, true);
-        Message editedMessage = new Message(originalMessage);
-        editedMessage.setMessageId(originalMessage.getMessageId());
-        editedMessage.setMessageText(editedMessageText);
-        editedMessage.setTimestamp(System.currentTimeMillis());
+        Message originalMessage = new Message(userId, originalMessageText, true, false);
 
         messageRepository.insertMessage(originalMessage).get();
-        assertEquals(messageRepository.getMessageByMessageUUID(), originalMessage);
+        Message originalMessageDTO = messageRepository.getMessageByMessageUUID(originalMessage.getMessageUUID());
+        assertMessageEqual(originalMessageDTO, originalMessage);
 
-        messageRepository.updateMessage(editedMessage);
-        assertEquals(messageRepository.getMessageByMessageUUID(), editedMessage);
+        originalMessageDTO.setMessageText(editedMessageText);
+        originalMessageDTO.setMessageEdited(true);
+        originalMessageDTO.setTimestamp(System.currentTimeMillis());
+
+        messageRepository.updateMessage(originalMessageDTO).get();
+
+        Message editedMessageDTO = messageRepository.getMessageByMessageUUID(originalMessage.getMessageUUID());
+        assertMessageEqual(originalMessageDTO, editedMessageDTO);
 
         List<Message> allMessages = messageRepository.getRawMessagesByUserId(userId);
         assertEquals(allMessages.size(), 1);
+    }
+
+    private void assertMessageEqual(Message original, Message copy)
+    {
+        assertEquals(original.getMessageText(), copy.getMessageText());
+        assertEquals(original.getMessageUUID(), copy.getMessageUUID());
+        assertEquals(original.getTimestamp(), copy.getTimestamp());
+        assertEquals(original.getMessageSent(), copy.getMessageSent());
+        assertEquals(original.getMessageEdited(), copy.getMessageEdited());
+        assertEquals(original.getUserId(), copy.getUserId());
+        assertEquals(original.getJsonString(), copy.getJsonString());
     }
 }

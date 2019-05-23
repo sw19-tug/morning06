@@ -20,6 +20,9 @@ public interface MessageDao {
     @Query("SELECT * FROM Message WHERE userId=:userId ORDER BY messageId asc")
     LiveData<List<Message>> getMessagesByUserId(int userId);
 
+    @Query("SELECT * FROM Message WHERE messageUUID=:uuid LIMIT 1")
+    Message getMessageByMessageUUID(String uuid);
+
     @Update
     void updateMessage(Message message);
 }

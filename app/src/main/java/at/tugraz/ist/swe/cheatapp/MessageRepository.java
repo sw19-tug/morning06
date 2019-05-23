@@ -37,6 +37,11 @@ public class MessageRepository {
         }.execute();
     }
 
+
+    public Message getMessageByMessageUUID(String uuid) {
+        return cheatAppDatabase.messageDao().getMessageByMessageUUID(uuid);
+    }
+
     public List<Message> getRawMessagesByUserId(int userId) {                   //For testing purposes
         return cheatAppDatabase.messageDao().getRawMessagesByUserId(userId);
     }
