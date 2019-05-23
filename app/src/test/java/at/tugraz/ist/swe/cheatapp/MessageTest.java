@@ -21,21 +21,23 @@ public class MessageTest {
     public void testGetJsonString() throws JSONException {
         Message message = new Message(5, "Hello, this is a test message! :)", true);
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 5);
         jsonMessage.put("messageText", "Hello, this is a test message! :)");
         jsonMessage.put("timeStamp", message.getTimestamp());
+        jsonMessage.put("messageUUID", message.getMessageUUID());
+        jsonMessage.put("messageEdited", message.getMessageEdited());
         assertEquals(jsonMessage.toString(), message.getJsonString());
     }
 
     @Test
     public void testNewMessageFromJsonString() throws JSONException {
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("type", "chat message");
         jsonMessage.put("userId", 4);
         jsonMessage.put("messageText", "Ok, I will see! ;)");
         long systemTime = System.currentTimeMillis();
         jsonMessage.put("timeStamp", systemTime);
+        jsonMessage.put("messageUUID", UUID.randomUUID());
+        jsonMessage.put("messageEdited", false);
 
         Message testMessage = new Message(jsonMessage.toString(), false);
 
@@ -91,6 +93,8 @@ public class MessageTest {
         chatJson.put("userId", 1);
         chatJson.put("timeStamp", System.currentTimeMillis());
         chatJson.put("messageText", "TEST TEXT");
+        chatJson.put("messageUUID", UUID.randomUUID());
+        chatJson.put("messageEdited", false);
 
         chatMessage.setMessagePayload(chatJson);
         chatMessage.setMessageType(BluetoothMessage.Type.CHAT);
