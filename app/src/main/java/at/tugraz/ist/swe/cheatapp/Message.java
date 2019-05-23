@@ -3,6 +3,7 @@ package at.tugraz.ist.swe.cheatapp;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,17 +16,15 @@ public class Message {
     @PrimaryKey(autoGenerate = true)
     private int messageId;
 
-    private int userId;
+    private long userId;
     private long timestamp;
-
     private String messageText;
     private boolean messageSent;
-
     private String messageUUID;
     private boolean messageEdited;
 
     @Ignore
-    public Message(int userId, String messageText, boolean messageSent) {
+    public Message(long userId, String messageText, boolean messageSent) {
         this.userId = userId;
         this.messageText = messageText;
         this.messageSent = messageSent;
@@ -34,7 +33,7 @@ public class Message {
         this.messageEdited = false;
     }
 
-    public Message(int userId, String messageText, boolean messageSent, boolean messageEdited) {
+    public Message(long userId, String messageText, boolean messageSent, boolean messageEdited) {
         this.userId = userId;
         this.messageText = messageText;
         this.messageSent = messageSent;
@@ -45,12 +44,19 @@ public class Message {
 
     public Message(String jsonMessageString, boolean messageSent) throws JSONException {
         JSONObject jsonMessage = new JSONObject(jsonMessageString);
-        this.userId = jsonMessage.getInt("userId");
+        this.userId = jsonMessage.getLong("userId");
         this.messageText = jsonMessage.getString("messageText");
         this.messageSent = messageSent;
         this.timestamp = jsonMessage.getLong("timeStamp");
         this.messageUUID = jsonMessage.getString("messageUUID");
         this.messageEdited = jsonMessage.getBoolean("messageEdited");
+    }
+
+    public Message(final Message other) {
+        this.userId = other.userId;
+        this.timestamp = other.timestamp;
+        this.messageText = other.messageText;
+        this.messageSent = other.messageSent;
     }
 
     public int getMessageId() {
@@ -61,15 +67,19 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public long getTimestamp() { return timestamp;}
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-    public void setTimestamp(long timestamp) { this.timestamp = timestamp;}
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -105,14 +115,19 @@ public class Message {
         this.messageEdited = messageEdited;
     }
 
-    public String getJsonString() throws JSONException {
+    public String getJsonString() {
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("type", "chat message");
-        jsonMessage.put("userId", this.userId);
-        jsonMessage.put("timeStamp", this.timestamp);
-        jsonMessage.put("messageText", messageText);
-        jsonMessage.put("messageUUID", messageUUID);
-        jsonMessage.put("messageEdited", messageEdited);
+        try {
+            jsonMessage.put("userId", this.userId);
+            jsonMessage.put("timeStamp", this.timestamp);
+            jsonMessage.put("messageText", messageText);
+            jsonMessage.put("messageUUID", messageUUID);
+            jsonMessage.put("messageEdited", messageEdited);
+        } catch (JSONException exception) {
+            exception.printStackTrace();
+            return null;
+        }
+
         return jsonMessage.toString();
     }
 }

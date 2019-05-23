@@ -117,5 +117,4 @@ public class DatabaseIntegrationTest {
         assertEquals("′^°£%©±", message2.getMessageText());
     }
 
-
 }
