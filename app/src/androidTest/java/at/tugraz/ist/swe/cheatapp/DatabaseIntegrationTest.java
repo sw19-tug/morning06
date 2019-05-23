@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -49,7 +50,7 @@ public class DatabaseIntegrationTest {
 
     @Test
     public void testInsertAndLoadOneMessage() throws InterruptedException, ExecutionException {
-        messageRepository.insertMessage(new Message(0, "First Message!", true)).get();
+        messageRepository.insertMessage(new Message(0, "First Message!", true, false)).get();
 
         List<Message> allMessages = messageRepository.getRawMessagesByUserId(0);
         Message message = allMessages.get(0);
@@ -59,13 +60,15 @@ public class DatabaseIntegrationTest {
         assertEquals(0, message.getUserId());
         assertEquals(true, message.getMessageSent());
         assertEquals(1, message.getMessageId());
+        assertEquals(false, message.getMessageEdited());
+        assertNotNull(message.getMessageUUID());
     }
 
     @Test
     public void testInsertAndLoadMultipleMessages() throws InterruptedException, ExecutionException {
-        messageRepository.insertMessage(new Message(1, "First Message!", true)).get();
-        messageRepository.insertMessage(new Message(1, "Response to first Message!", false)).get();
-        messageRepository.insertMessage(new Message(1, "Second Message!", true)).get();
+        messageRepository.insertMessage(new Message(1, "First Message!", true, false)).get();
+        messageRepository.insertMessage(new Message(1, "Response to first Message!", false, false)).get();
+        messageRepository.insertMessage(new Message(1, "Second Message!", true, false)).get();
 
         List<Message> allMessages = messageRepository.getRawMessagesByUserId(1);
         Message message1 = allMessages.get(0);
@@ -77,26 +80,32 @@ public class DatabaseIntegrationTest {
         assertEquals("First Message!", message1.getMessageText());
         assertEquals(1, message1.getUserId());
         assertEquals(true, message1.getMessageSent());
+        assertEquals(false, message1.getMessageEdited());
+        assertNotNull(message1.getMessageUUID());
         assertTrue(message1.getMessageId() < message2.getMessageId()
                 && message1.getMessageId() < message3.getMessageId());
 
         assertEquals("Response to first Message!", message2.getMessageText());
         assertEquals(1, message2.getUserId());
         assertEquals(false, message2.getMessageSent());
+        assertEquals(false, message2.getMessageEdited());
+        assertNotNull(message2.getMessageUUID());
         assertTrue(message2.getMessageId() > message1.getMessageId()
                 && message2.getMessageId() < message3.getMessageId());
 
         assertEquals("Second Message!", message3.getMessageText());
         assertEquals(1, message3.getUserId());
         assertEquals(true, message3.getMessageSent());
+        assertEquals(false, message3.getMessageEdited());
+        assertNotNull(message3.getMessageUUID());
         assertTrue(message3.getMessageId() > message1.getMessageId()
                 && message3.getMessageId() > message2.getMessageId());
     }
 
     @Test
     public void testSpecialCharacters() throws InterruptedException, ExecutionException {
-        messageRepository.insertMessage(new Message(2, "\uD83D\uDE85\uD83D\uDCBE\uD83C\uDDE6\uD83C\uDDF9", true)).get();
-        messageRepository.insertMessage(new Message(2, "′^°£%©±", true)).get();
+        messageRepository.insertMessage(new Message(2, "\uD83D\uDE85\uD83D\uDCBE\uD83C\uDDE6\uD83C\uDDF9", true, false)).get();
+        messageRepository.insertMessage(new Message(2, "′^°£%©±", true, false)).get();
 
         List<Message> allMessages = messageRepository.getRawMessagesByUserId(2);
         Message message1 = allMessages.get(0);
@@ -107,4 +116,6 @@ public class DatabaseIntegrationTest {
         assertEquals("\uD83D\uDE85\uD83D\uDCBE\uD83C\uDDE6\uD83C\uDDF9", message1.getMessageText());
         assertEquals("′^°£%©±", message2.getMessageText());
     }
+
+
 }
