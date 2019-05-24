@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -42,6 +43,11 @@ public class ConnectFragmentEspressoTest {
         protected void beforeActivityLaunched() {
             super.beforeActivityLaunched();
             Utils.setTesting(true);
+
+            Context ctx = InstrumentationRegistry.getTargetContext();
+            SharedPreferences.Editor editor = ctx.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+            editor.clear();
+            editor.commit();
         }
     };
 
@@ -53,15 +59,6 @@ public class ConnectFragmentEspressoTest {
         activity = mainActivityTestRule.getActivity();
         activity.showConnectFragment();
         provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
-    }
-
-    @After
-    public void cleanUp()
-    {
-        SharedPreferences.Editor preferencesEditor =
-                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        preferencesEditor.clear();
-        preferencesEditor.commit();
     }
 
     @Test

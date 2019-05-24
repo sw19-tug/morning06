@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -42,6 +43,11 @@ public class ConnectFragmentPrefilledEspressoTest {
         protected void beforeActivityLaunched() {
             super.beforeActivityLaunched();
             Utils.setTesting(true);
+
+            Context ctx = InstrumentationRegistry.getTargetContext();
+            SharedPreferences.Editor editor = ctx.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+            editor.clear();
+            editor.commit();
         }
     };
 
@@ -55,19 +61,9 @@ public class ConnectFragmentPrefilledEspressoTest {
 
         SharedPreferences.Editor prefrencesEditor =
                 activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        prefrencesEditor.clear();
         prefrencesEditor.putLong("lastConDev",1);
         prefrencesEditor.commit();
         activity.showConnectFragment();
-    }
-
-    @After
-    public void cleanUp()
-    {
-        SharedPreferences.Editor prefrencesEditor =
-                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        prefrencesEditor.clear();
-        prefrencesEditor.commit();
     }
 
     @Test
