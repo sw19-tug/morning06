@@ -128,30 +128,6 @@ public class MainActivity extends AppCompatActivity {
         return this.bluetoothProvider;
     }
 
-    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider, final boolean update) throws InterruptedException {
-        Runnable runSetProvider = new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.this.bluetoothProvider.unregisterHandler(bluetoothEventHandler);
-                MainActivity.this.bluetoothProvider = bluetoothProvider;
-                MainActivity.this.bluetoothProvider.registerHandler(bluetoothEventHandler);
-                if (update)
-                    connectFragment.updateValues();
-
-                synchronized (this)
-                {
-                    this.notify();
-                }
-            }
-        };
-
-        synchronized (runSetProvider)
-        {
-            runOnUiThread(runSetProvider);
-            runSetProvider.wait();
-        }
-    }
-
     public void showConnectFragment() {
         runOnUiThread(new Runnable() {
             @Override
