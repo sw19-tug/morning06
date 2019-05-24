@@ -153,25 +153,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showConnectFragment() {
-        setFragment(connectFragment);
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                setFragment(connectFragment);
                 connectFragmentVisible = true;
                 connectDisconnectButton.setText(getString(R.string.connect));
                 connectFragment.updateValues();
             }
         });
-
     }
 
     public void showChatFragment() throws InterruptedException {
-        setFragment(chatFragment);
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                setFragment(chatFragment);
                 connectFragmentVisible = false;
                 connectDisconnectButton.setText(getString(R.string.disconnect));
             }
@@ -190,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
-        transaction.commitAllowingStateLoss();
+        transaction.commitNowAllowingStateLoss();
     }
 
     public ListView getListView() {
