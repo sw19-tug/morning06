@@ -34,17 +34,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentToast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT);
 
         try {
-            bluetoothProvider = new RealBluetoothProvider();
-            if(!bluetoothProvider.isBluetoothEnabled())
+            // TODO: Make this nicer.
+            if (Utils.isTesting()) {
+                bluetoothProvider = new DummyBluetoothProvider();
+            } else {
+                bluetoothProvider = new RealBluetoothProvider();
+            }
+
+            if (!bluetoothProvider.isBluetoothEnabled())
             {
                 Toast.makeText(this, R.string.bluetooth_disabled, Toast.LENGTH_LONG).show();
             }
         } catch (BluetoothException e) {
             showToast(e.getMessage());
             bluetoothProvider = new DummyBluetoothProvider();
-            ((DummyBluetoothProvider) bluetoothProvider).enableDummyDevices(1);
         }
 
         setContentView(R.layout.activity_main);
@@ -129,36 +135,11 @@ public class MainActivity extends AppCompatActivity {
         return this.bluetoothProvider;
     }
 
-    public void setBluetoothProvider(final BluetoothProvider bluetoothProvider, final boolean update) throws InterruptedException {
-        Runnable runSetProvider = new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.this.bluetoothProvider.unregisterHandler(bluetoothEventHandler);
-                MainActivity.this.bluetoothProvider = bluetoothProvider;
-                MainActivity.this.bluetoothProvider.registerHandler(bluetoothEventHandler);
-                if (update)
-                    connectFragment.updateValues();
-
-                synchronized (this)
-                {
-                    this.notify();
-                }
-            }
-        };
-
-        synchronized (runSetProvider)
-        {
-            runOnUiThread(runSetProvider);
-            runSetProvider.wait();
-        }
-    }
-
     public void showConnectFragment() {
-        setFragment(connectFragment);
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                setFragment(connectFragment);
                 connectFragmentVisible = true;
                 connectDisconnectButton.setText(getString(R.string.connect));
                 connectFragment.updateValues();
@@ -167,11 +148,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showChatFragment() throws InterruptedException {
-        setFragment(chatFragment);
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                setFragment(chatFragment);
                 connectFragmentVisible = false;
                 connectDisconnectButton.setText(getString(R.string.disconnect));
             }
@@ -190,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeholder_frame, fragment);
-        transaction.commitAllowingStateLoss();
+        transaction.commitNowAllowingStateLoss();
     }
 
     public ListView getListView() {
@@ -199,11 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showToast(String text) {
-        if (currentToast != null) {
-            currentToast.cancel();
-        }
-
-        currentToast = Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT);
+        currentToast.setText(text);
         currentToast.show();
     }
 

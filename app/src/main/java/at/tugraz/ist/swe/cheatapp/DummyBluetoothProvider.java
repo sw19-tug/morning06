@@ -12,7 +12,10 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     public DummyBluetoothProvider() {
         this.devices = new ArrayList<>();
-        this.bluetoothEnabled = false;
+        this.bluetoothEnabled = true;
+        this.connected = false;
+
+        enableDummyDevices(1);
     }
 
     @Override
@@ -21,20 +24,16 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     }
     
     @Override
-    public void connectToDevice(Device device) {
-        connectedDevice = device;
-        connected = true;
+    public void connectToDevice(final Device device) {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                synchronized (DummyBluetoothProvider.this) {
+                    connectedDevice = device;
+                    connected = true;
+                }
+
                 DummyBluetoothProvider.super.onConnected();
-                // TODO: User-ID???
-                final Message message = new Message(connectedDevice.getDeviceId(),
-                        String.format(ON_CONNECTED_MESSAGE, connectedDevice.getDeviceName()),
-                        true);
-//                DummyBluetoothProvider.super.onMessageReceived(String.format
-//                        (ON_CONNECTED_MESSAGE, connectedDevice.getID()));
-                DummyBluetoothProvider.super.onMessageReceived(message);
             }
         });
         thread.start();

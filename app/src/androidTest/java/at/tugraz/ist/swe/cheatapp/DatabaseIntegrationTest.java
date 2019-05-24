@@ -26,20 +26,11 @@ public class DatabaseIntegrationTest {
     private MessageRepository messageRepository;
     private Context context;
 
-    public void deleteDatabase(Context appContext) {
-        File databases = new File(appContext.getApplicationInfo().dataDir + "/databases");
-        File db = new File(databases, "cheatapp_db");
-        if (db.delete())
-            System.out.println("Database deleted");
-        else
-            System.out.println("Failed to delete database");
-    }
 
     @Before
     public void setUp() {
         context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        deleteDatabase(context);
-        messageRepository = new MessageRepository(context);
+        messageRepository = MessageRepository.createInMemoryRepository(context);
     }
 
     @Test

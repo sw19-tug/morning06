@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -37,38 +38,40 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class ConnectFragmentPrefilledEspressoTest {
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
+        @Override
+        protected void beforeActivityLaunched() {
+            super.beforeActivityLaunched();
+            Utils.setTesting(true);
+
+            Context ctx = InstrumentationRegistry.getTargetContext();
+            SharedPreferences.Editor editor = ctx.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+            editor.clear();
+            editor.commit();
+        }
+    };
+
+    private MainActivity activity;
+    private DummyBluetoothProvider provider;
 
     @Before
     public void setUp() {
+        activity = mainActivityTestRule.getActivity();
+        provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
+
         SharedPreferences.Editor prefrencesEditor =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        prefrencesEditor.clear();
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
         prefrencesEditor.putLong("lastConDev",1);
         prefrencesEditor.commit();
-        mainActivityTestRule.getActivity().showConnectFragment();
-    }
-
-    @After
-    public void cleanUp()
-    {
-        SharedPreferences.Editor prefrencesEditor =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        prefrencesEditor.clear();
-        prefrencesEditor.commit();
+        activity.showConnectFragment();
     }
 
     @Test
     public void testReconnectWithSavedDevice() throws InterruptedException {
-
-        DummyBluetoothProvider provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, true);
-
-        ConnectFragment fragment = mainActivityTestRule.getActivity().getConnectFragment();
+        ConnectFragment fragment = activity.getConnectFragment();
 
         SharedPreferences sharedPreferences =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         long lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
 
         fragment.tryConnectByDeviceName(lastConnectedDeviceID);

@@ -9,12 +9,20 @@ import java.util.List;
 
 public class MessageRepository {
 
-    private String DB_NAME = "cheatapp_db";
+    private static String DB_NAME = "cheatapp_db";
 
     private CheatAppDatabase cheatAppDatabase;
 
-    public MessageRepository(Context context) {
-        cheatAppDatabase = Room.databaseBuilder(context, CheatAppDatabase.class, DB_NAME).build();
+    private MessageRepository(CheatAppDatabase cheatAppDatabase) {
+        this.cheatAppDatabase = cheatAppDatabase;
+    }
+
+    public static MessageRepository createRepository(Context context) {
+        return new MessageRepository(Room.databaseBuilder(context, CheatAppDatabase.class, MessageRepository.DB_NAME).build());
+    }
+
+    public static MessageRepository createInMemoryRepository(Context context) {
+        return new MessageRepository(Room.inMemoryDatabaseBuilder(context, CheatAppDatabase.class).build());
     }
 
     public AsyncTask<Void, Void, Void> insertMessage(final Message newMessage) {

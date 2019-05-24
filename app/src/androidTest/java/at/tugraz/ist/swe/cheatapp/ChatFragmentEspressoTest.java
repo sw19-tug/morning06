@@ -1,6 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -29,20 +30,30 @@ import static org.junit.Assert.assertTrue;
 public class ChatFragmentEspressoTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-    private MessageRepository messageRepository;
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
+        @Override
+        protected void beforeActivityLaunched() {
+            super.beforeActivityLaunched();
+            Utils.setTesting(true);
+
+            Context ctx = InstrumentationRegistry.getTargetContext();
+            SharedPreferences.Editor editor = ctx.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+            editor.clear();
+            editor.commit();
+        }
+    };
+
     private DummyBluetoothProvider provider;
+    private MainActivity activity;
+    private MessageRepository messageRepository;
 
     @Before
     public void setUp() throws InterruptedException {
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
-        provider = new DummyBluetoothProvider();
-        provider.enableDummyDevices(1);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider,true);
+        activity = mainActivityTestRule.getActivity();
+        provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
         provider.connectToDevice(provider.getPairedDevices().get(0));
-        mainActivityTestRule.getActivity().showChatFragment();
+        activity.showChatFragment();
+        messageRepository = activity.getChatFragment().getMessageRepository();
     }
 
     @Test
@@ -101,8 +112,6 @@ public class ChatFragmentEspressoTest {
     @Test
     // TODO this test does not check anything
     public void chatHistoryScrollable() {
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
-
         messageRepository.insertMessage(new Message(1, "Hi, how are you?", true));
         messageRepository.insertMessage(new Message(1, "I'm fine. Thanks.", false));
         messageRepository.insertMessage(new Message(1, "What are you doing?", true));
@@ -142,7 +151,6 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
         // TODO solve race condition
         int listLength = 0;
         while(listLength == 0)
@@ -154,7 +162,7 @@ public class ChatFragmentEspressoTest {
         assertEquals(testText, receiveMessage.getMessageText());
     }
 
-    /*
+
     @Test
     public void timestampVisibleOnSend() throws InterruptedException {
         String testText = "Hello, I is there a timestamp?";
@@ -173,19 +181,15 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
         Message receivedMessage = messageRepository.getRawMessagesByUserId(1).get(0);
-
-        assertEquals(receivedMessage.getMessageText(), sanitizedString);
-    } */
+        assertEquals(sanitizedString, receivedMessage.getMessageText());
+    }
 
     @Test
     public void testIfEmptyMessageIsSendable() {
         String testString = "         ";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testString), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
-
-        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
         assertTrue(messageRepository.getRawMessagesByUserId(1).isEmpty());
     }

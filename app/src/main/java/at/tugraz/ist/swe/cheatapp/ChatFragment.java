@@ -50,9 +50,12 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        messageRepository = new MessageRepository(this.getContext());
+        if (!Utils.isTesting()) {
+            messageRepository = MessageRepository.createRepository(this.getContext());
+        } else {
+            messageRepository = MessageRepository.createInMemoryRepository(this.getContext());
+        }
 
-        final List<Message> messageList = new ArrayList<>();
 
         Device connectedDevice = null;
         while(connectedDevice == null)
@@ -61,6 +64,8 @@ public class ChatFragment extends Fragment {
             Thread.yield();
         }
         connectedDeviceId = connectedDevice.getDeviceId();
+
+        final List<Message> messageList = new ArrayList<>();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
             @Override
             public void onChanged(@Nullable List<Message> messages) {
@@ -129,5 +134,9 @@ public class ChatFragment extends Fragment {
 
     public MessageAdapter getMessageAdapter() {
         return messageAdapter;
+    }
+
+    public MessageRepository getMessageRepository() {
+        return messageRepository;
     }
 }

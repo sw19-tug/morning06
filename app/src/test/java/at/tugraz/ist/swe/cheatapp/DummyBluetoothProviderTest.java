@@ -28,6 +28,7 @@ public class DummyBluetoothProviderTest {
 
     @Test
     public void testWithoutPairedDevices() {
+        bluetoothProvider.enableDummyDevices(0);
         assertEquals(0L, bluetoothProvider.getPairedDevices().size());
     }
 
@@ -256,6 +257,7 @@ public class DummyBluetoothProviderTest {
 
     @Test
     public void testGetDeviceByIDNoDevice() {
+        bluetoothProvider.enableDummyDevices(0);
         Device device = this.bluetoothProvider.getDeviceByID(1);
         assertNull(device);
     }
