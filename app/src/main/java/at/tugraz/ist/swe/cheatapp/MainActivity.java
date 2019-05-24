@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentToast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT);
 
         try {
             // TODO: Make this nicer.
@@ -198,11 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showToast(String text) {
-        if (currentToast != null) {
-            currentToast.cancel();
-        }
-
-        currentToast = Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT);
+        currentToast.setText(text);
         currentToast.show();
     }
 

@@ -52,7 +52,7 @@ public class ConnectFragmentEspressoTest {
     public void setUp() {
         activity = mainActivityTestRule.getActivity();
         activity.showConnectFragment();
-        provider = (DummyBluetoothProvider) mainActivityTestRule.getActivity().getBluetoothProvider();
+        provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
     }
 
     @After
@@ -191,10 +191,7 @@ public class ConnectFragmentEspressoTest {
         int count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
         assertEquals(count, 1);
 
-
-        // TODO
         provider.enableDummyDevices(2);
-        mainActivityTestRule.getActivity().setBluetoothProvider(provider, false);
 
         onView(withId(R.id.lv_con_devices)).perform(swipeDown());
         Thread.sleep(500);
@@ -211,7 +208,7 @@ public class ConnectFragmentEspressoTest {
         provider.getThread().join();
         Thread.sleep(100);
         SharedPreferences sharedPreferences =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         long lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
 
         assertEquals(1, lastConnectedDeviceID);
