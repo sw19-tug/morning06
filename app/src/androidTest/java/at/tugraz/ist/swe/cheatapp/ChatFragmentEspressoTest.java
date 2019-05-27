@@ -1,6 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -42,6 +43,11 @@ public class ChatFragmentEspressoTest {
         Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
         DatabaseIntegrationTest db = new DatabaseIntegrationTest();
         db.deleteDatabase(context);
+
+        SharedPreferences.Editor preferencesEditor =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.remove("lastConDev");
+        preferencesEditor.commit();
     }
 
     @Test
@@ -106,9 +112,9 @@ public class ChatFragmentEspressoTest {
     @Test
     // TODO this test does not check anything
     public void chatHistoryScrollable() throws InterruptedException {
-        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
-        db.deleteDatabase(context);
+        //Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        //DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        //db.deleteDatabase(context);
 
         messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
 
@@ -182,5 +188,4 @@ public class ChatFragmentEspressoTest {
 
         onView(withId(R.id.txt_chat_receivedMessage)).check(matches(isDisplayed()));
     }
-
 }

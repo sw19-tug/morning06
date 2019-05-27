@@ -1,9 +1,15 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Debug;
+import android.support.design.widget.TabLayout;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +22,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.DEFAULT;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -223,5 +230,19 @@ public class ConnectFragmentEspressoTest {
         long lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
 
         assertEquals(1, lastConnectedDeviceID);
+    }
+
+    @Test
+    public void testReconnectDevice() throws InterruptedException {
+        SharedPreferences.Editor preferencesEditor =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.putLong("lastConDev", 123456);
+        preferencesEditor.commit();
+
+        mainActivityTestRule.getActivity().restartApp();
+        Thread.sleep(1000);
+
+        onView(allOf(withId(android.support.design.R.id.snackbar_text), withText("Try to reconnect...")))
+                .check(matches(isDisplayed()));
     }
 }

@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -207,5 +208,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void clearLastConnectedDevice() {
         this.lastConnectedDeviceID = 0;
+    }
+
+    public void restartApp() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recreate();
+            }
+        });
     }
 }
