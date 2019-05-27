@@ -245,4 +245,13 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void restartApp() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recreate();
+            }
+        });
+    }
 }

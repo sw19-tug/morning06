@@ -28,7 +28,6 @@ public class RealBluetoothProvider extends BluetoothProvider {
         exceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable ex) {
-                ex.printStackTrace();
                 onError(ex.getMessage());
             }
         };
@@ -112,8 +111,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public boolean isBluetoothEnabled() {
-        if(adapter.isEnabled())
-        {
+        if (adapter.isEnabled()) {
             return true;
         }
 
@@ -124,10 +122,8 @@ public class RealBluetoothProvider extends BluetoothProvider {
     public Device getDeviceByID(long deviceID) {
         Set<BluetoothDevice> btDevices = adapter.getBondedDevices();
 
-        for(BluetoothDevice device : btDevices)
-        {
-            if(Device.idStringToLong(device.getAddress()) == deviceID)
-            {
+        for (BluetoothDevice device : btDevices) {
+            if (Device.idStringToLong(device.getAddress()) == deviceID) {
                 return new RealDevice(device);
             }
         }
@@ -135,8 +131,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         return null;
     }
 
-    private void initBluetoothThread()
-    {
+    private void initBluetoothThread() {
         bluetoothThread = new BluetoothThread(this);
         bluetoothThread.setUncaughtExceptionHandler(exceptionHandler);
         bluetoothThread.start();

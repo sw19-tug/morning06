@@ -24,6 +24,7 @@ public class BluetoothThread extends Thread {
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
     private RealDevice connectedDevice;
+    private BluetoothServerSocket serverSocket;
 
 
     public BluetoothThread(final RealBluetoothProvider provider) {
@@ -34,6 +35,7 @@ public class BluetoothThread extends Thread {
         this.inputReader = null;
         this.outputWriter = null;
         this.connectedDevice = null;
+        this.serverSocket = null;
     }
 
     public synchronized void sendBluetoothMessage(final BluetoothMessage bluetoothMessage) {
@@ -47,27 +49,23 @@ public class BluetoothThread extends Thread {
     @Override
     public void run() {
         try {
-            Log.d("BluetoothThread", "Create Socket");
             createBluetoothSocket();
-            Log.d("BluetoothThread", "Init Connection");
             initializeConnection();
-            Log.d("BluetoothThread", "Handle Message");
             handleMessages();
 
         } catch (IOException ex) {
             ex.printStackTrace();
-            throw new RuntimeException(ex);
+            throw new RuntimeException(ex.getMessage());
         } catch (InterruptedException ex) {
             ex.printStackTrace();
-            throw new RuntimeException(ex);
+            throw new RuntimeException(ex.getMessage());
         } catch (JSONException ex) {
             ex.printStackTrace();
-            throw new RuntimeException(ex);
+            throw new RuntimeException(ex.getMessage());
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new RuntimeException(ex);
+            throw new RuntimeException(ex.getMessage());
         } finally {
-            Log.d("BluetoothThread", "Shutdown");
             shutdownCommunication();
             provider.onDisconnected();
         }
@@ -76,17 +74,31 @@ public class BluetoothThread extends Thread {
     private void shutdownCommunication() {
 
         try {
-            if(inputReader != null)
+            if (inputReader != null)
                 inputReader.close();
-            if(outputWriter != null)
-                outputWriter.close();
-            if(socket != null)
+        } catch (IOException ignore) {
+            Log.d("BluetoothThread",
+                    "Got IOException while closing Input Reader, continuing as if nothing happened");
+        }
+
+        if (outputWriter != null)
+            outputWriter.close();
+
+        try {
+            if (socket != null)
                 socket.close();
         } catch (IOException ignore) {
             Log.d("BluetoothThread",
-                    "Got IOException while shutting down communication, continuing as if nothing happened");
+                    "Got IOException while closing socket, continuing as if nothing happened");
         }
 
+        try {
+            if (serverSocket != null)
+                serverSocket.close();
+        } catch (IOException ignore) {
+            Log.d("BluetoothThread",
+                    "Got IOException while closing Server Socket, continuing as if nothing happened");
+        }
     }
 
     private void handleMessages() throws Exception {
@@ -121,20 +133,16 @@ public class BluetoothThread extends Thread {
             // Message handling must not be done when holding the lock, otherwise we potentially
             // get a deadlock
             if (bluetoothMessage != null) {
-                if(bluetoothMessage.getMessageType() == BluetoothMessage.Type.CONNECT)
-                {
+                if (bluetoothMessage.getMessageType() == BluetoothMessage.Type.CONNECT) {
                     handshake_okay = true;
                 }
                 provider.handleBluetoothMessage(bluetoothMessage);
             }
             Thread.sleep(100);
 
-            if(!handshake_okay && timeout_counter == 0)
-            {
+            if (!handshake_okay && timeout_counter == 0) {
                 throw new Exception("Connection timeout! Handshake failed.");
-            }
-            else
-            {
+            } else {
                 timeout_counter--;
             }
         }
@@ -152,8 +160,7 @@ public class BluetoothThread extends Thread {
     }
 
     private void createBluetoothSocket() throws IOException {
-        final BluetoothServerSocket serverSocket = provider.getAdapter().listenUsingRfcommWithServiceRecord(BLUETOOTH_SERVICE_RECORD, BLUETOOTH_UUID);
-
+        serverSocket = provider.getAdapter().listenUsingRfcommWithServiceRecord(BLUETOOTH_SERVICE_RECORD, BLUETOOTH_UUID);
         boolean loop = true;
 
         while (loop && socket == null) {
@@ -170,8 +177,12 @@ public class BluetoothThread extends Thread {
                         socket = connectedDevice.getAndroidDevice().createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
 
                         if (socket != null) {
-                            socket.connect();
-                             Log.d("BluetoothThread", "Try connection as client");
+                            try {
+                                socket.connect();
+                            } catch (IOException e) {
+                                throw new IOException("Connection failed!");
+                            }
+                            Log.d("BluetoothThread", "Try connection as client");
                         }
                     }
                 }
@@ -179,6 +190,7 @@ public class BluetoothThread extends Thread {
         }
 
         serverSocket.close();
+        serverSocket = null;
     }
 
     public synchronized void connectToDevice(Device device) {

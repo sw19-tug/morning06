@@ -2,9 +2,13 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,13 +74,31 @@ public class ConnectFragment extends Fragment {
 
         if(lastConnectedDeviceID != 0)
         {
-            tryConnectByDeviceName(lastConnectedDeviceID);
+            tryReconnectByDeviceId(lastConnectedDeviceID);
         }
     }
 
-    public void tryConnectByDeviceName(long deviceName)
+    private void showSnackbar(String message)
     {
-        Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceName);
+        Snackbar snackbar = Snackbar
+            .make(this.view, message, Snackbar.LENGTH_LONG);
+        TextView mainTextView = (snackbar.getView()).findViewById(android.support.design.R.id.snackbar_text);
+
+        mainTextView.setTextColor(Color.WHITE);
+
+        View view = snackbar.getView();
+        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+        params.gravity = Gravity.TOP;
+        view.setLayoutParams(params);
+        view.setBackgroundColor(Color.GRAY);
+        snackbar.show();
+    }
+
+    public void tryReconnectByDeviceId(long deviceId)
+    {
+        showSnackbar("Try to reconnect...");
+
+        Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceId);
         if(connectDevice != null)
         {
             activity.clearLastConnectedDevice();

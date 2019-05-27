@@ -178,4 +178,18 @@ public class ConnectFragmentEspressoTest {
 
         assertEquals(1, lastConnectedDeviceID);
     }
+
+    @Test
+    public void testReconnectDevice() throws InterruptedException {
+        SharedPreferences.Editor preferencesEditor =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.putLong("lastConDev", 123456);
+        preferencesEditor.commit();
+
+        mainActivityTestRule.getActivity().restartApp();
+        Thread.sleep(1000);
+
+        onView(allOf(withId(android.support.design.R.id.snackbar_text), withText("Try to reconnect...")))
+                .check(matches(isDisplayed()));
+    }
 }
