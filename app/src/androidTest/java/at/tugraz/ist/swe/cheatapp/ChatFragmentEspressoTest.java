@@ -261,4 +261,28 @@ public class ChatFragmentEspressoTest {
 
     }
 
+    @Test
+    public void testAbortAndEditButtonVisible() throws Exception{
+        DummyBluetoothProvider provider = new DummyBluetoothProvider();
+        provider.enableDummyDevices(1);
+        mainActivityTestRule.getActivity().setBluetoothProvider(provider);
+
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        DatabaseIntegrationTest db = new DatabaseIntegrationTest();
+        db.deleteDatabase(context);
+
+        String testText = "Hello, please edit me!";
+        messageRepository = new MessageRepository(mainActivityTestRule.getActivity().getApplicationContext());
+
+        messageRepository.insertMessage(new Message(1, testText, true));
+        onView(withId(R.id.txt_chat_entry)).perform(typeText("hallo"), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        onView(withText(testText)).perform(longClick());
+        onView(withId(R.id.btn_abort_edit)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_edit_send)).check(matches(isDisplayed()));
+
+    }
+
 }
