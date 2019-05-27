@@ -58,6 +58,22 @@
             android:layout_alignParentBottom="true"
             />
 
+        <Button
+            android:id="@+id/btn_abort_edit"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_toStartOf="@+id/btn_edit_send"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="false"
+            android:background="@drawable/abort_edit"
+            android:drawableStart="@drawable/ic_input_extract_action_send"
+            android:paddingLeft="11dp"
+            android:textColor="@android:color/background_light"
+            android:visibility="invisible"
+            android:minHeight="48dp"
+            />
+
         <EditText
             android:id="@+id/txt_chat_entry"
             android:layout_width="50dp"
@@ -74,6 +90,7 @@
             android:paddingBottom="10dp"
             android:minHeight="48dp">
         </EditText>
+
         <TextView
             android:id="@+id/txt_chat_receivedMessage"
             android:layout_width="match_parent"
