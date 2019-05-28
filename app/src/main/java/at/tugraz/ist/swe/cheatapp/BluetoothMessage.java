@@ -8,11 +8,11 @@ public class BluetoothMessage {
     enum Type {CONNECT, DISCONNECT, CHAT}
 
     private Type messageType;
-    private Message message = null;
+    private ChatMessage message = null;
     private ConnectMessage connectMessage = null;
     private DisconnectMessage disconnectMessage = null;
 
-    public BluetoothMessage(Message message) {
+    public BluetoothMessage(ChatMessage message) {
         messageType = Type.CHAT;
         this.message = message;
     }
@@ -31,7 +31,7 @@ public class BluetoothMessage {
         return messageType;
     }
 
-    public Message getMessage() {
+    public ChatMessage getMessage() {
         return message;
     }
 
@@ -70,9 +70,8 @@ public class BluetoothMessage {
 
         switch (messageType) {
             case CHAT: {
-                // TODO: MessageSent parameter?
-                Message message = new Message(payload, false);
-                return new BluetoothMessage(message);
+                ChatMessage chatMessage = new ChatMessage(payload, false);
+                return new BluetoothMessage(chatMessage);
             }
 
             case CONNECT: {

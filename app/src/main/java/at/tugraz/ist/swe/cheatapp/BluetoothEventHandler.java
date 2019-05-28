@@ -1,7 +1,7 @@
 package at.tugraz.ist.swe.cheatapp;
 
 public interface BluetoothEventHandler {
-    void onMessageReceived(Message message);
+    void onMessageReceived(ChatMessage message);
 
     void onConnected();
 

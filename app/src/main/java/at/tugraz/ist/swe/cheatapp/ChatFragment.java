@@ -65,12 +65,12 @@ public class ChatFragment extends Fragment {
         }
         connectedDeviceId = connectedDevice.getDeviceId();
 
-        final List<Message> messageList = new ArrayList<>();
-        messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<Message>>() { // TODO: change user id to the id of the chat partner
+        final List<ChatMessage> messageList = new ArrayList<>();
+        messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() { // TODO: change user id to the id of the chat partner
             @Override
-            public void onChanged(@Nullable List<Message> messages) {
+            public void onChanged(@Nullable List<ChatMessage> messages) {
                 messageList.clear();
-                for (Message msg : messages) {
+                for (ChatMessage msg : messages) {
                     /*
                     System.out.println("-----------REMOTE------------");
                     System.out.println(msg.getUserId());
@@ -112,14 +112,14 @@ public class ChatFragment extends Fragment {
         String sanitizedMessageText = Utils.sanitizeMessage(textEntry.getText().toString());
 
         if (sanitizedMessageText != null) {
-            final Message message = new Message(connectedDeviceId, sanitizedMessageText, true);
+            final ChatMessage message = new ChatMessage(connectedDeviceId, sanitizedMessageText, true);
             activity.getBluetoothProvider().sendMessage(message);
             messageRepository.insertMessage(message);
             textEntry.getText().clear();
         }
     }
 
-    public void onMessageReceived(final Message message) {
+    public void onMessageReceived(final ChatMessage message) {
         message.setUserId(connectedDeviceId);
         messageRepository.insertMessage(message);
         System.out.println("Receive: " + message.getJsonString());

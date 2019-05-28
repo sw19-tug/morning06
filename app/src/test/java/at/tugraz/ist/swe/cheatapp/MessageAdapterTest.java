@@ -13,10 +13,10 @@ public class MessageAdapterTest {
 
     @Test
     public void testGetItemViewType() {
-        Message messageSent = new Message(1, "Hi, how are you?", true);
-        Message messageReceived = new Message(2, "I'm fine. Thanks.", false);
+        ChatMessage messageSent = new ChatMessage(1, "Hi, how are you?", true);
+        ChatMessage messageReceived = new ChatMessage(2, "I'm fine. Thanks.", false);
 
-        List<Message> messageList = new ArrayList<>();
+        List<ChatMessage> messageList = new ArrayList<>();
         messageList.add(messageSent);
         messageList.add(messageReceived);
 

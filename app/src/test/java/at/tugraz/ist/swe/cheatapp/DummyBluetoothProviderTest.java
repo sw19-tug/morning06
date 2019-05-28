@@ -42,7 +42,7 @@ public class DummyBluetoothProviderTest {
     public void testAddEventHandler() {
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(Message message) {
+            public void onMessageReceived(ChatMessage message) {
 
             }
 
@@ -74,7 +74,7 @@ public class DummyBluetoothProviderTest {
     public void testRemoveEventHandler() {
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(Message message) {
+            public void onMessageReceived(ChatMessage message) {
 
             }
 
@@ -110,7 +110,7 @@ public class DummyBluetoothProviderTest {
 
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(Message message) {
+            public void onMessageReceived(ChatMessage message) {
 
             }
 
@@ -142,12 +142,12 @@ public class DummyBluetoothProviderTest {
     @Test
     public void testOnMessageReceivedCallback() throws InterruptedException {
         // hack for setting variable out of BluetoothEventHandler class
-        final Message[] calledList = new Message[1];
+        final ChatMessage[] calledList = new ChatMessage[1];
         calledList[0] = null;
 
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(Message message) {
+            public void onMessageReceived(ChatMessage message) {
                 calledList[0] = message;
             }
 
@@ -172,7 +172,7 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.getThread().join();
 
         // TODO: Maybe change the name of this method?
-        this.bluetoothProvider.setReceivedMessage(new Message(0, "test", true));
+        this.bluetoothProvider.setReceivedMessage(new ChatMessage(0, "test", true));
 
         assertNotNull(calledList[0]);
         assertEquals(calledList[0].getMessageText(), "test");
@@ -186,7 +186,7 @@ public class DummyBluetoothProviderTest {
 
         BluetoothEventHandler handler = new BluetoothEventHandler() {
             @Override
-            public void onMessageReceived(Message message) {
+            public void onMessageReceived(ChatMessage message) {
             }
 
             @Override

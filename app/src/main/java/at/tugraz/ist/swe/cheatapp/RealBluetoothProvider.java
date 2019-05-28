@@ -57,7 +57,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    public void sendMessage(final Message message) {
+    public void sendMessage(final ChatMessage message) {
         final BluetoothMessage btMessage = new BluetoothMessage(message);
         bluetoothThread.sendBluetoothMessage(btMessage);
     }
@@ -70,7 +70,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    protected void onMessageReceived(final Message message) {
+    protected void onMessageReceived(final ChatMessage message) {
         super.onMessageReceived(message);
     }
 

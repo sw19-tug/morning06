@@ -25,7 +25,7 @@ public class MessageRepository {
         return new MessageRepository(Room.inMemoryDatabaseBuilder(context, CheatAppDatabase.class).build());
     }
 
-    public AsyncTask<Void, Void, Void> insertMessage(final Message newMessage) {
+    public AsyncTask<Void, Void, Void> insertMessage(final ChatMessage newMessage) {
         return new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -35,11 +35,11 @@ public class MessageRepository {
         }.execute();
     }
 
-    public List<Message> getRawMessagesByUserId(long userId) {                   //For testing purposes
+    public List<ChatMessage> getRawMessagesByUserId(long userId) {                   //For testing purposes
         return cheatAppDatabase.messageDao().getRawMessagesByUserId(userId);
     }
 
-    public LiveData<List<Message>> getMessagesByUserId(long userId) {
+    public LiveData<List<ChatMessage>> getMessagesByUserId(long userId) {
         return cheatAppDatabase.messageDao().getMessagesByUserId(userId);
     }
 }

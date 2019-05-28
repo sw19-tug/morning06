@@ -2,13 +2,12 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity
-public class Message {
+public class ChatMessage {
 
     @PrimaryKey(autoGenerate = true)
     private int messageId;
@@ -18,14 +17,14 @@ public class Message {
     private String messageText;
     private boolean messageSent;
 
-    public Message(long userId, String messageText, boolean messageSent) {
+    public ChatMessage(long userId, String messageText, boolean messageSent) {
         this.userId = userId;
         this.messageText = messageText;
         this.messageSent = messageSent;
         this.timestamp = System.currentTimeMillis();
     }
 
-    public Message(String jsonMessageString, boolean messageSent) throws JSONException {
+    public ChatMessage(String jsonMessageString, boolean messageSent) throws JSONException {
         JSONObject jsonMessage = new JSONObject(jsonMessageString);
         this.userId = jsonMessage.getLong("userId");
         this.messageText = jsonMessage.getString("messageText");
@@ -33,7 +32,7 @@ public class Message {
         this.timestamp = jsonMessage.getLong("timeStamp");
     }
 
-    public Message(final Message other) {
+    public ChatMessage(final ChatMessage other) {
         this.userId = other.userId;
         this.timestamp = other.timestamp;
         this.messageText = other.messageText;
