@@ -153,14 +153,14 @@ public class ConnectFragmentEspressoTest {
         onView(withId(R.id.swp_pull_to_refresh)).check(matches(isDisplayed()));
 
         Thread.sleep(500);
-        int count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
+        int count = activity.getListView().getAdapter().getCount();
         assertEquals(count, 1);
 
         provider.enableDummyDevices(2);
 
         onView(withId(R.id.lv_con_devices)).perform(swipeDown());
         Thread.sleep(500);
-        count = mainActivityTestRule.getActivity().getListView().getAdapter().getCount();
+        count = activity.getListView().getAdapter().getCount();
 
         assertEquals(count, 2);
     }
@@ -182,11 +182,11 @@ public class ConnectFragmentEspressoTest {
     @Test
     public void testReconnectDevice() throws InterruptedException {
         SharedPreferences.Editor preferencesEditor =
-                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
         preferencesEditor.putLong("lastConDev", 123456);
         preferencesEditor.commit();
 
-        mainActivityTestRule.getActivity().restartApp();
+        activity.restartApp();
         Thread.sleep(1000);
 
         onView(allOf(withId(android.support.design.R.id.snackbar_text), withText("Try to reconnect...")))

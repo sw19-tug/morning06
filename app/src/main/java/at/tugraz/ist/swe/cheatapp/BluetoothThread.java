@@ -130,7 +130,7 @@ public class BluetoothThread extends Thread {
             }
 
 
-            // Message handling must not be done when holding the lock, otherwise we potentially
+            // ChatMessage handling must not be done when holding the lock, otherwise we potentially
             // get a deadlock
             if (bluetoothMessage != null) {
                 if (bluetoothMessage.getMessageType() == BluetoothMessage.Type.CONNECT) {

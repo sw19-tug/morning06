@@ -2,7 +2,6 @@ package at.tugraz.ist.swe.cheatapp;
 
 import java.util.ArrayList;
 import java.util.List;
-import static at.tugraz.ist.swe.cheatapp.Constants.ON_CONNECTED_MESSAGE;
 
 public class DummyBluetoothProvider extends BluetoothProvider {
     private List<Device> devices;
@@ -40,11 +39,11 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     }
 
     @Override
-    public void sendMessage(final Message message) {
+    public void sendMessage(final ChatMessage message) {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                final Message receivedMessage = new Message(message);
+                final ChatMessage receivedMessage = new ChatMessage(message);
                 receivedMessage.setMessageSent(false);
                 DummyBluetoothProvider.super.onMessageReceived(receivedMessage);
             }
@@ -94,7 +93,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     }
 
     // TODO just for testing purposes, maybe remove later
-    public void setReceivedMessage(final Message message) {
+    public void setReceivedMessage(final ChatMessage message) {
         super.onMessageReceived(message);
     }
 

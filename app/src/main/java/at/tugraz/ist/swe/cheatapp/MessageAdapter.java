@@ -15,10 +15,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-    private List<Message> messageList;
+    private List<ChatMessage> messageList;
     Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    public MessageAdapter(List<Message> messageList) {
+    public MessageAdapter(List<ChatMessage> messageList) {
         this.messageList = messageList;
     }
 
@@ -29,7 +29,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        Message message = messageList.get(position);
+        ChatMessage message = messageList.get(position);
         if (message.getMessageSent()) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -55,7 +55,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message message = messageList.get(position);
+        ChatMessage message = messageList.get(position);
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
@@ -76,7 +76,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText = itemView.findViewById(R.id.txt_message_time);
         }
 
-        void bind(Message message) {
+        void bind(ChatMessage message) {
             messageText.setText(message.getMessageText());
             timeText.setText(dateFormat.format(message.getTimestamp()));
         }
@@ -92,13 +92,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText = itemView.findViewById(R.id.txt_message_time);
         }
 
-        void bind(Message message) {
+        void bind(ChatMessage message) {
             timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
         }
     }
 
-    public List<Message> getMessageList() {
+    public List<ChatMessage> getMessageList() {
         return messageList;
     }
 }

@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 public class BluetoothMessageTest {
     @Test
     public void testMessageConstructor() {
-        Message chatMessage = new Message(4, "This is a test for the Constructor with a Message object", true);
+        ChatMessage chatMessage = new ChatMessage(4, "This is a test for the Constructor with a ChatMessage object", true);
         BluetoothMessage btMessage = new BluetoothMessage(chatMessage);
 
         assertEquals(btMessage.getMessageType(), BluetoothMessage.Type.CHAT);
@@ -39,7 +39,7 @@ public class BluetoothMessageTest {
 
     @Test
     public void testToJSONStringWithChatMessage() throws JSONException {
-        Message chatMessage = new Message(4, "This is a Test for the JSON methods", false);
+        ChatMessage chatMessage = new ChatMessage(4, "This is a Test for the JSON methods", false);
         BluetoothMessage chatBluetoothMessage = new BluetoothMessage(chatMessage);
 
         JSONObject jsonBluetoothMessage = new JSONObject();
@@ -61,7 +61,7 @@ public class BluetoothMessageTest {
 
     @Test
     public void testFromJSONStringWithChatMessage() throws JSONException {
-        Message chatMessage = new Message(4, "This is a Test for the JSON methods", false);
+        ChatMessage chatMessage = new ChatMessage(4, "This is a Test for the JSON methods", false);
         BluetoothMessage chatBluetoothMessage1 = new BluetoothMessage(chatMessage);
         BluetoothMessage chatBluetoothMessage2 = BluetoothMessage.fromJSONString(chatBluetoothMessage1.toJSONString());
 

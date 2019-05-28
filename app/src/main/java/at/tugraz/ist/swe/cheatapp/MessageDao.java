@@ -11,11 +11,11 @@ import java.util.List;
 public interface MessageDao {
 
     @Insert
-    Long insertMessage(Message message);
+    Long insertMessage(ChatMessage message);
 
-    @Query("SELECT * FROM Message WHERE userId=:userId ORDER BY messageId asc")
-    List<Message> getRawMessagesByUserId(long userId);       //For testing purposes
+    @Query("SELECT * FROM ChatMessage WHERE userId=:userId ORDER BY messageId asc")
+    List<ChatMessage> getRawMessagesByUserId(long userId);       //For testing purposes
 
-    @Query("SELECT * FROM Message WHERE userId=:userId ORDER BY messageId asc")
-    LiveData<List<Message>> getMessagesByUserId(long userId);
+    @Query("SELECT * FROM ChatMessage WHERE userId=:userId ORDER BY messageId asc")
+    LiveData<List<ChatMessage>> getMessagesByUserId(long userId);
 }

@@ -17,7 +17,7 @@ public class MessageTest {
 
     @Test
     public void testGetJsonString() throws JSONException {
-        Message message = new Message(5, "Hello, this is a test message! :)", true);
+        ChatMessage message = new ChatMessage(5, "Hello, this is a test message! :)", true);
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("userId", 5);
         jsonMessage.put("messageText", "Hello, this is a test message! :)");
@@ -33,7 +33,7 @@ public class MessageTest {
         long systemTime = System.currentTimeMillis();
         jsonMessage.put("timeStamp", systemTime);
 
-        Message testMessage = new Message(jsonMessage.toString(), false);
+        ChatMessage testMessage = new ChatMessage(jsonMessage.toString(), false);
         testMessage.setUserId(5);
         testMessage.setMessageText("Test setter method!");
         testMessage.setMessageSent(true);
@@ -58,10 +58,10 @@ public class MessageTest {
         long systemTime = System.currentTimeMillis();
         chatJson.put("timeStamp", systemTime);
 
-        Message chatMessage2 = new Message(chatJson.toString(), true);
+        ChatMessage chatMessage2 = new ChatMessage(chatJson.toString(), true);
         assertEquals(chatJson.toString(), chatMessage2.getJsonString());
 
-        Message chatMessage3 = new Message(chatMessage2);
+        ChatMessage chatMessage3 = new ChatMessage(chatMessage2);
         assertEquals(chatMessage2.getJsonString(), chatMessage3.getJsonString());
     }
 }

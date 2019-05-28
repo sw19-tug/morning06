@@ -97,8 +97,8 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        MessageAdapter messageAdapter = mainActivityTestRule.getActivity().getChatFragment().getMessageAdapter();
-        List<Message> messageList = messageAdapter.getMessageList();
+        MessageAdapter messageAdapter = activity.getChatFragment().getMessageAdapter();
+        List<ChatMessage> messageList = messageAdapter.getMessageList();
 
         assertEquals(messageList.get(messageList.size() - 1).getMessageText(), testText);
     }
@@ -112,31 +112,31 @@ public class ChatFragmentEspressoTest {
     @Test
     // TODO this test does not check anything
     public void chatHistoryScrollable() {
-        messageRepository.insertMessage(new Message(1, "Hi, how are you?", true));
-        messageRepository.insertMessage(new Message(1, "I'm fine. Thanks.", false));
-        messageRepository.insertMessage(new Message(1, "What are you doing?", true));
-        messageRepository.insertMessage(new Message(1, "Nothing. Wanna drink some coffee?", false));
-        messageRepository.insertMessage(new Message(1, "Sure!", true));
-        messageRepository.insertMessage(new Message(1, "When? Where?", true));
-        messageRepository.insertMessage(new Message(1, "At 3? Ducks Coffee?", false));
-        messageRepository.insertMessage(new Message(1, "You are late!!", false));
-        messageRepository.insertMessage(new Message(1, "-.-", false));
-        messageRepository.insertMessage(new Message(1, "Sorry, the tram is late...", true));
-        messageRepository.insertMessage(new Message(1, "I'll buy you some cake :D", true));
-        messageRepository.insertMessage(new Message(1, "Hmmm. ok...", false));
-        messageRepository.insertMessage(new Message(1, "It was a nice day with you :)", false));
-        messageRepository.insertMessage(new Message(1, "We definitely have to do this again!", true));
-        messageRepository.insertMessage(new Message(1, "On Saturday?", false));
-        messageRepository.insertMessage(new Message(1, "Sure! Same time, same place?", true));
-        messageRepository.insertMessage(new Message(1, "Perfect. See you then. :)", false));
-        messageRepository.insertMessage(new Message(1, "See you :D", true));
-        messageRepository.insertMessage(new Message(1, "I think I forgot my jacket in your flat", true));
-        messageRepository.insertMessage(new Message(1, "Can you bring it on Saturday?", true));
-        messageRepository.insertMessage(new Message(1, "I hope I won't forget ;)", false));
-        messageRepository.insertMessage(new Message(1, "Send me a reminder please xD", false));
-        messageRepository.insertMessage(new Message(1, "OK :D", true));
-        messageRepository.insertMessage(new Message(1, ":P", true));
-        messageRepository.insertMessage(new Message(1, ":)", true));
+        messageRepository.insertMessage(new ChatMessage(1, "Hi, how are you?", true));
+        messageRepository.insertMessage(new ChatMessage(1, "I'm fine. Thanks.", false));
+        messageRepository.insertMessage(new ChatMessage(1, "What are you doing?", true));
+        messageRepository.insertMessage(new ChatMessage(1, "Nothing. Wanna drink some coffee?", false));
+        messageRepository.insertMessage(new ChatMessage(1, "Sure!", true));
+        messageRepository.insertMessage(new ChatMessage(1, "When? Where?", true));
+        messageRepository.insertMessage(new ChatMessage(1, "At 3? Ducks Coffee?", false));
+        messageRepository.insertMessage(new ChatMessage(1, "You are late!!", false));
+        messageRepository.insertMessage(new ChatMessage(1, "-.-", false));
+        messageRepository.insertMessage(new ChatMessage(1, "Sorry, the tram is late...", true));
+        messageRepository.insertMessage(new ChatMessage(1, "I'll buy you some cake :D", true));
+        messageRepository.insertMessage(new ChatMessage(1, "Hmmm. ok...", false));
+        messageRepository.insertMessage(new ChatMessage(1, "It was a nice day with you :)", false));
+        messageRepository.insertMessage(new ChatMessage(1, "We definitely have to do this again!", true));
+        messageRepository.insertMessage(new ChatMessage(1, "On Saturday?", false));
+        messageRepository.insertMessage(new ChatMessage(1, "Sure! Same time, same place?", true));
+        messageRepository.insertMessage(new ChatMessage(1, "Perfect. See you then. :)", false));
+        messageRepository.insertMessage(new ChatMessage(1, "See you :D", true));
+        messageRepository.insertMessage(new ChatMessage(1, "I think I forgot my jacket in your flat", true));
+        messageRepository.insertMessage(new ChatMessage(1, "Can you bring it on Saturday?", true));
+        messageRepository.insertMessage(new ChatMessage(1, "I hope I won't forget ;)", false));
+        messageRepository.insertMessage(new ChatMessage(1, "Send me a reminder please xD", false));
+        messageRepository.insertMessage(new ChatMessage(1, "OK :D", true));
+        messageRepository.insertMessage(new ChatMessage(1, ":P", true));
+        messageRepository.insertMessage(new ChatMessage(1, ":)", true));
 
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
         onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
@@ -158,7 +158,7 @@ public class ChatFragmentEspressoTest {
             listLength = messageRepository.getRawMessagesByUserId(1).size();
             Thread.sleep(100);
         }
-        Message receiveMessage = messageRepository.getRawMessagesByUserId(1).get(listLength-1);
+        ChatMessage receiveMessage = messageRepository.getRawMessagesByUserId(1).get(listLength-1);
         assertEquals(testText, receiveMessage.getMessageText());
     }
 
@@ -181,7 +181,7 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        Message receivedMessage = messageRepository.getRawMessagesByUserId(1).get(0);
+        ChatMessage receivedMessage = messageRepository.getRawMessagesByUserId(1).get(0);
         assertEquals(sanitizedString, receivedMessage.getMessageText());
     }
 
