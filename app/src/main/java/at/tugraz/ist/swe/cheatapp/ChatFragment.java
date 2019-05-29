@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiPopup;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +25,14 @@ public class ChatFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private Button sendButton;
-    private EditText textEntry;
+    private EmojiEditText textEntry;
     private RecyclerView messageRecycler;
     private MessageAdapter messageAdapter;
     private MessageRepository messageRepository;
     private boolean chatFragmentReady = false;
     private long connectedDeviceId;
+    private EmojiPopup emojiPopup;
+
 
 
     @Override
@@ -36,12 +42,21 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        activity = (MainActivity) getActivity();
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         textEntry = view.findViewById(R.id.txt_chat_entry);
         sendButton = view.findViewById(R.id.btn_chat_send);
+        ViewGroup rootView = view.findViewById(R.id.relativeLayout1);
+
+        emojiPopup = EmojiPopup.Builder.fromRootView(rootView).build(textEntry);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        activity = (MainActivity) getActivity();
+
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,5 +153,9 @@ public class ChatFragment extends Fragment {
 
     public MessageRepository getMessageRepository() {
         return messageRepository;
+    }
+
+    public boolean isEmojiKeyboardShowing() {
+        return emojiPopup.isShowing();
     }
 }

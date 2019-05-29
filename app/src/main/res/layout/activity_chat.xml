@@ -57,7 +57,7 @@
             android:layout_alignParentBottom="true"
             />
 
-        <EditText
+        <com.vanniktech.emoji.EmojiEditText
             android:id="@+id/txt_chat_entry"
             android:layout_width="287dp"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
-            android:paddingBottom="10dp"></EditText>
+            android:paddingBottom="10dp"></com.vanniktech.emoji.EmojiEditText>
 
         <TextView
             android:id="@+id/txt_chat_receivedMessage"

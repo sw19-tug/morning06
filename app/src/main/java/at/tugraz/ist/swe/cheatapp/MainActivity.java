@@ -19,6 +19,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
+
 public class MainActivity extends AppCompatActivity {
 
     private BluetoothProvider bluetoothProvider;
