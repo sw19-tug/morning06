@@ -8,7 +8,19 @@
     <string name="disconnected">Disconnected</string>
     <string name="no_device_selected">No device selected</string>
     <string name="menu_set_nickname">Set Nickname</string>
-    <string name="set_nickname_dialog_title">Set Nickname</string>
+    <string name="menu_about_page">About Page</string>
+    <string name="title_set_nickname_dialog">Set Nickname</string>
+    <string name="title_about_page">About</string>
+    <string name="text_about_page"><b>The Team</b> \n Philipp Diethard\n
+Stefan Ertl\n
+Karl Petschl\n
+Elisabeth Salomon\n
+Thomas Schuster\n
+Peter Stroissnig\n
+Johannes Trattner\n
+Lukas Wagner\n
+</string>
+    <string name="close_button">Close</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
 </resources>

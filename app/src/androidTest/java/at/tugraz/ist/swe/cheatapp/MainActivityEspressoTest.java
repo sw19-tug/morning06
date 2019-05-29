@@ -56,6 +56,7 @@ public class MainActivityEspressoTest {
     public void testMenuItemsVisible() {
         openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).check(matches(isDisplayed()));
+        onView(withText(R.string.menu_about_page)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -68,8 +69,18 @@ public class MainActivityEspressoTest {
     }
 
     @Test
+    public void testAboutPageVisible() {
+        openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
+        onView(withText(R.string.menu_about_page)).check(matches(isDisplayed()));
+        onView(withText(R.string.menu_about_page)).perform(click());
+        onView(withId(android.R.id.button1)).check(matches(isDisplayed())); // positive button (close)
+        onView(withText(R.string.title_about_page)).check(matches(isDisplayed()));
+        onView(withText(R.string.text_about_page)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testSetNicknameDialogSave() {
-        for(int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 1; i++) {
             String testNickname = "Nickname " + i;
             openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
             onView(withText(R.string.menu_set_nickname)).perform(click());
