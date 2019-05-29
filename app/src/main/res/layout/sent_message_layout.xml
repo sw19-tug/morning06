@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="8dp">
 
-    <TextView
+    <com.vanniktech.emoji.EmojiTextView
         android:id="@+id/txt_message_body"
         android:text=""
         android:background="@drawable/sent_message_view"
