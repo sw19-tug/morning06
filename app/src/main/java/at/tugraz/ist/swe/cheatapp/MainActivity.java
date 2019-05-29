@@ -9,14 +9,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputFilter;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -199,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_set_nickname:
+            case R.id.menu_set_nickname: {
                 Log.d("MainActivity", "Selected Menu Item menu_set_nickname");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -208,11 +211,8 @@ public class MainActivity extends AppCompatActivity {
                                 Context.MODE_PRIVATE);
                 String currentNickname = sharedPreferences.getString("nickname", null);
 
-                builder.setTitle(R.string.set_nickname_dialog_title);
+                builder.setTitle(R.string.title_set_nickname_dialog);
                 final EditText userInput = new EditText(this);
-                userInput.setFilters(new InputFilter[] { new InputFilter.LengthFilter(25) });
-                userInput.setSingleLine(true);
-                userInput.setText(currentNickname);
 
                 if (currentNickname != null) {
                     userInput.setSelection(currentNickname.length());
@@ -241,8 +241,49 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
-            case R.id.menu_about_page:
+            }
+            case R.id.menu_about_page: {
+                Log.d("MainActivity", "Selected Menu Item menu_set_nickname");
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                ImageView image = new ImageView(this);
+                image.setImageResource(R.drawable.cheat_app_logo_big);
+
+                LinearLayout layout = new LinearLayout(this);
+                LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                layout.setLayoutParams(parms);
+
+                layout.setGravity(Gravity.CLIP_VERTICAL);
+                layout.setPadding(2, 2, 2, 2);
+
+
+
+
+                builder.setTitle(R.string.title_about_page);
+                TextView textViewAboutPage = new TextView(this);
+                textViewAboutPage.setText(R.string.text_about_page);
+                textViewAboutPage.setPadding(40, 40, 40, 40);
+                textViewAboutPage.setGravity(Gravity.CENTER);
+                textViewAboutPage.setTextSize(20);
+
+                LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                tv1Params.bottomMargin = 5;
+                layout.addView(textViewAboutPage,tv1Params);
+                layout.addView(image, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+
+
+                builder.setPositiveButton(R.string.close_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                //builder.setView(textViewAboutPage);
+                builder.setView(layout);
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
