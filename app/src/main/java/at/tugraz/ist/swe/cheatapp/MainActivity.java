@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences =
                 this.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
+        String nickname = sharedPreferences.getString("nickname", "");
+        getBluetoothProvider().setOwnNickname(nickname);
 
         showConnectFragment();
     }

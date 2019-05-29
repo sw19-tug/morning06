@@ -144,6 +144,10 @@ public class ConnectFragment extends Fragment {
 
     private void connectToDevice(Device device)
     {
+        SharedPreferences sharedPreferences =
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+        String nickname = sharedPreferences.getString("nickname", device.getDeviceName());
+        activity.getBluetoothProvider().setOwnNickname(nickname);
         activity.getBluetoothProvider().connectToDevice(device);
     }
 }

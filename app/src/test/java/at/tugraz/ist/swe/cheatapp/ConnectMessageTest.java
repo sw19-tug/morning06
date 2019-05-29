@@ -28,7 +28,7 @@ public class ConnectMessageTest {
 
         assertEquals("com.example.testapp", testMessage.getApplicationId());
         assertEquals("1.3.3.7", testMessage.getVersionName());
-        assertEquals("nickname", testMessage.getNickname());
+        assertEquals("Cheater", testMessage.getNickname());
         assertEquals(jsonMessage.toString(), testMessage.getJsonString());
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 public abstract class BluetoothProvider {
     protected List<BluetoothEventHandler> eventHandlerList;
     protected Device connectedDevice;
+    protected String ownNickname;
 
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
@@ -19,6 +20,10 @@ public abstract class BluetoothProvider {
 
     public abstract void sendMessage(ChatMessage message);
 
+    public void setOwnNickname(String ownNickname) {
+        this.ownNickname = ownNickname;
+    }
+
     public abstract void disconnect();
 
     public void registerHandler(BluetoothEventHandler handler) {
@@ -27,6 +32,10 @@ public abstract class BluetoothProvider {
 
     public void unregisterHandler(BluetoothEventHandler handler) {
         eventHandlerList.remove(handler);
+    }
+
+    public String getOwnNickname() {
+        return ownNickname;
     }
 
     protected void onConnected() {
