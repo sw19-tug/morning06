@@ -251,13 +251,22 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Selected Menu Item menu_set_nickname");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                ImageView image = new ImageView(this);
-                if (number_of_abouts > Constants.NUMBER_UNTIL_EGG) {
-                    image.setImageResource(R.drawable.cheat_app_logo_big_round_x);
-                } else {
-                    image.setImageResource(R.drawable.cheat_app_logo_big_round);
-                }
-                number_of_abouts++;
+                number_of_abouts = 0;
+
+                final ImageView image = new ImageView(this);
+                image.setImageResource(R.drawable.cheat_app_logo_big_round);
+
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (v.equals(image)) {
+                            if (number_of_abouts == Constants.NUMBER_UNTIL_EGG) {
+                                image.setImageResource(R.drawable.cheat_app_logo_big_round_x);
+                            }
+                            number_of_abouts++;
+                        }
+                    }
+                });
 
                 LinearLayout layout = new LinearLayout(this);
                 LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -274,9 +283,9 @@ public class MainActivity extends AppCompatActivity {
                 textViewAboutPage.setGravity(Gravity.CENTER);
                 textViewAboutPage.setTextSize(20);
 
-                LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                tv1Params.bottomMargin = 5;
-                layout.addView(textViewAboutPage, tv1Params);
+                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                textViewParams.bottomMargin = 5;
+                layout.addView(textViewAboutPage, textViewParams);
                 layout.addView(image, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 builder.setPositiveButton(R.string.close_button, new DialogInterface.OnClickListener() {
