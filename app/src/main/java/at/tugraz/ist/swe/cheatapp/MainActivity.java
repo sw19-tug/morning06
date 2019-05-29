@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private Button connectDisconnectButton;
     private Toast currentToast;
     private long lastConnectedDeviceID;
+    private int number_of_abouts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,7 +248,15 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 ImageView image = new ImageView(this);
-                image.setImageResource(R.drawable.cheat_app_logo_big);
+                if(number_of_abouts == 3)
+                {
+                    image.setImageResource(R.drawable.cheat_app_logo_big_round_x);
+                }
+                else
+                {
+                    image.setImageResource(R.drawable.cheat_app_logo_big_round);
+                }
+                number_of_abouts++;
 
                 LinearLayout layout = new LinearLayout(this);
                 LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -256,9 +265,6 @@ public class MainActivity extends AppCompatActivity {
 
                 layout.setGravity(Gravity.CLIP_VERTICAL);
                 layout.setPadding(2, 2, 2, 2);
-
-
-
 
                 builder.setTitle(R.string.title_about_page);
                 TextView textViewAboutPage = new TextView(this);
@@ -271,8 +277,6 @@ public class MainActivity extends AppCompatActivity {
                 tv1Params.bottomMargin = 5;
                 layout.addView(textViewAboutPage,tv1Params);
                 layout.addView(image, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-
 
                 builder.setPositiveButton(R.string.close_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
