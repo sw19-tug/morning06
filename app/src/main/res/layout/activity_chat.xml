@@ -28,6 +28,20 @@
             android:layout_above="@id/txt_chat_entry"
             android:paddingBottom="5dp" />
 
+        <Button
+            android:id="@+id/btn_emoji_keyboard"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/button_layout"
+            android:paddingLeft="11dp"
+            android:drawableStart="@drawable/ic_input_extract_action_send"
+            android:textColor="@android:color/background_light"
+            android:layout_alignParentBottom="true"
+            />
+
 
         <Button
             android:id="@+id/btn_chat_send"
@@ -47,18 +61,18 @@
             android:id="@+id/txt_chat_entry"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_alignStart="@id/btn_emoji_keyboard"
+            android:layout_alignParentStart="false"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
             android:layout_marginEnd="5dp"
             android:layout_toStartOf="@+id/btn_chat_send"
             android:background="@drawable/edit_text_round_corners"
             android:hint="Enter Text Here"
+            android:minHeight="48dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:minHeight="48dp">
-        </EditText>
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"></EditText>
         <TextView
             android:id="@+id/txt_chat_receivedMessage"
             android:layout_width="match_parent"
