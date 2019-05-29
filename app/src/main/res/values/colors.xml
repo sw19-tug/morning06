@@ -6,4 +6,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorHighlight">#DDDDDD</color>
     <color name="colorTextField">#F7EEEEEE</color>
+    <color name="colorEmojiButton">#CACACA</color>
 </resources>

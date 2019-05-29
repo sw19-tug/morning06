@@ -35,9 +35,9 @@
             android:layout_height="48dp"
             android:layout_alignParentTop="false"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/button_layout"
+            android:background="@drawable/emoji_button_layout"
             android:paddingLeft="11dp"
-            android:drawableStart="@drawable/ic_input_extract_action_send"
+            android:drawableStart="@drawable/ic_sentiment_emoji_face"
             android:textColor="@android:color/background_light"
             android:layout_alignParentBottom="true"
             />
@@ -59,13 +59,14 @@
 
         <EditText
             android:id="@+id/txt_chat_entry"
-            android:layout_width="50dp"
+            android:layout_width="287dp"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/btn_emoji_keyboard"
-            android:layout_alignParentStart="false"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="7dp"
             android:layout_toStartOf="@+id/btn_chat_send"
+            android:layout_toEndOf="@+id/btn_emoji_keyboard"
             android:background="@drawable/edit_text_round_corners"
             android:hint="Enter Text Here"
             android:minHeight="48dp"
@@ -73,11 +74,11 @@
             android:paddingTop="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"></EditText>
+
         <TextView
             android:id="@+id/txt_chat_receivedMessage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 
