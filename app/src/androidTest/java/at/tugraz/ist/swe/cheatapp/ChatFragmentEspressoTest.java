@@ -24,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -197,5 +198,14 @@ public class ChatFragmentEspressoTest {
     @Test
     public void testIfEmojiButtonVisible() {
         onView(withId(R.id.btn_emoji_keyboard)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testIfEmojiKeyboardIsShown(){
+        assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
+        onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        assertTrue(activity.getChatFragment().isEmojiKeyboardShowing());
+        onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
     }
 }
