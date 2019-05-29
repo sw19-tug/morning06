@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +30,15 @@ public class ChatFragment extends Fragment {
     private Button sendButton;
     private Button editButton;
     private Button abortEditButton;
-    private EditText textEntry;
+    private Button emojiKeyboardButton;
+    private EmojiEditText textEntry;
     private RecyclerView messageRecycler;
     private MessageAdapter messageAdapter;
     private MessageRepository messageRepository;
     private boolean chatFragmentReady = false;
     private long connectedDeviceId;
+    private EmojiPopup emojiPopup;
+
 
 
     @Override
@@ -39,19 +48,53 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        activity = (MainActivity) getActivity();
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         textEntry = view.findViewById(R.id.txt_chat_entry);
         sendButton = view.findViewById(R.id.btn_chat_send);
         editButton = view.findViewById(R.id.btn_edit_send);
         abortEditButton = view.findViewById(R.id.btn_abort_edit);
+        emojiKeyboardButton = view.findViewById(R.id.btn_emoji_keyboard);
+
+        ViewGroup rootView = view.findViewById(R.id.relativeLayout1);
+
+        emojiPopup = EmojiPopup.Builder.fromRootView(rootView)
+                .setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+                    @Override
+                    public void onEmojiPopupDismiss() {
+                        emojiKeyboardButton.setBackground(getResources().getDrawable(R.drawable.emoji_button_layout_inactive));
+                    }
+                })
+                .setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+                    @Override
+                    public void onEmojiPopupShown() {
+                        emojiKeyboardButton.setBackground(getResources().getDrawable(R.drawable.emoji_button_layout_active));
+                    }
+                })
+                .build(textEntry);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        emojiPopup.dismiss();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (MainActivity) getActivity();
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSendButtonClicked();
+            }
+        });
+        emojiKeyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEmojiKeyboardButtonClicked();
             }
         });
 
@@ -116,6 +159,10 @@ public class ChatFragment extends Fragment {
             messageRepository.insertMessage(message);
             textEntry.getText().clear();
         }
+    }
+
+    private void onEmojiKeyboardButtonClicked() {
+        emojiPopup.toggle();
     }
 
     public void onMessageReceived(final ChatMessage message) {
@@ -183,4 +230,8 @@ public class ChatFragment extends Fragment {
     }
 
     public EditText getTextEntry() {return textEntry;}
+
+    public boolean isEmojiKeyboardShowing() {
+        return emojiPopup.isShowing();
+    }
 }

@@ -50,6 +50,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -286,5 +287,21 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
 
         assertTrue(messageRepository.getRawMessagesByUserId(1).isEmpty());
+    }
+
+    @Test
+    public void testIfEmojiButtonVisible() {
+        onView(withId(R.id.btn_emoji_keyboard)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testIfEmojiKeyboardIsShown() throws InterruptedException{
+        assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
+        onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        Thread.sleep(300);
+        assertTrue(activity.getChatFragment().isEmojiKeyboardShowing());
+        onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        Thread.sleep(300);
+        assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
     }
 }
