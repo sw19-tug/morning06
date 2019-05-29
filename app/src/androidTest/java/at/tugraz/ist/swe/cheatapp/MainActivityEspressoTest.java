@@ -80,7 +80,7 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testSetNicknameDialogSave() {
-        for(int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 1; i++) {
             String testNickname = "Nickname " + i;
             openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
             onView(withText(R.string.menu_set_nickname)).perform(click());

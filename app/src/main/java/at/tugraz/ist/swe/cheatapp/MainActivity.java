@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -48,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 bluetoothProvider = new RealBluetoothProvider();
             }
 
-            if (!bluetoothProvider.isBluetoothEnabled())
-            {
+            if (!bluetoothProvider.isBluetoothEnabled()) {
                 Toast.makeText(this, R.string.bluetooth_disabled, Toast.LENGTH_LONG).show();
             }
         } catch (BluetoothException e) {
@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
     public void clearLastConnectedDevice() {
         this.lastConnectedDeviceID = 0;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -214,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
 
                 builder.setTitle(R.string.title_set_nickname_dialog);
                 final EditText userInput = new EditText(this);
+                userInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+                userInput.setSingleLine(true);
+                userInput.setText(currentNickname);
 
                 if (currentNickname != null) {
                     userInput.setSelection(currentNickname.length());
@@ -248,12 +252,9 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 ImageView image = new ImageView(this);
-                if(number_of_abouts == 3)
-                {
+                if (number_of_abouts > Constants.NUMBER_UNTIL_EGG) {
                     image.setImageResource(R.drawable.cheat_app_logo_big_round_x);
-                }
-                else
-                {
+                } else {
                     image.setImageResource(R.drawable.cheat_app_logo_big_round);
                 }
                 number_of_abouts++;
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
                 LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 tv1Params.bottomMargin = 5;
-                layout.addView(textViewAboutPage,tv1Params);
+                layout.addView(textViewAboutPage, tv1Params);
                 layout.addView(image, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 builder.setPositiveButton(R.string.close_button, new DialogInterface.OnClickListener() {
