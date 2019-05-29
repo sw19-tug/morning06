@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private Button connectDisconnectButton;
     private Toast currentToast;
     private long lastConnectedDeviceID;
-    private int number_of_abouts = 0;
+    private int numberOfLogoClicks = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Selected Menu Item menu_set_nickname");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                number_of_abouts = 0;
+                numberOfLogoClicks = 0;
 
                 final ImageView image = new ImageView(this);
                 image.setImageResource(R.drawable.cheat_app_logo_big_round);
@@ -260,10 +260,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (v.equals(image)) {
-                            if (number_of_abouts == Constants.NUMBER_UNTIL_EGG) {
+                            if (numberOfLogoClicks == Constants.NUMBER_UNTIL_EGG) {
                                 image.setImageResource(R.drawable.cheat_app_logo_big_round_x);
                             }
-                            number_of_abouts++;
+                            numberOfLogoClicks++;
                         }
                     }
                 });
