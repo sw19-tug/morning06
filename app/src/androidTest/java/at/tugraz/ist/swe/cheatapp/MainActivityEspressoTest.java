@@ -56,6 +56,7 @@ public class MainActivityEspressoTest {
     public void testMenuItemsVisible() {
         openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).check(matches(isDisplayed()));
+        onView(withText(R.string.menu_about_page)).check(matches(isDisplayed()));
     }
 
     @Test
