@@ -20,6 +20,7 @@ public class ChatFragment extends Fragment {
     private View view;
     private Button sendButton;
     private Button editButton;
+    private Button abortEditButton;
     private EditText textEntry;
     private RecyclerView messageRecycler;
     private MessageAdapter messageAdapter;
@@ -41,6 +42,7 @@ public class ChatFragment extends Fragment {
         textEntry = view.findViewById(R.id.txt_chat_entry);
         sendButton = view.findViewById(R.id.btn_chat_send);
         editButton = view.findViewById(R.id.btn_edit_send);
+        abortEditButton = view.findViewById(R.id.btn_abort_edit);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +106,8 @@ public class ChatFragment extends Fragment {
         textEntry.setText(message.getMessageText());
         sendButton.setVisibility(view.INVISIBLE);
         editButton.setVisibility(view.VISIBLE);
+        abortEditButton.setVisibility(view.VISIBLE);
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,13 +116,19 @@ public class ChatFragment extends Fragment {
                 textEntry.getText().clear();
                 sendButton.setVisibility(view.VISIBLE);
                 editButton.setVisibility(view.INVISIBLE);
+                abortEditButton.setVisibility(view.INVISIBLE);
             }
         });
-        // wait for user to enter edit text
-        // change messagetext to edited text
-        //messageRepository.updateMessage(message);
-        //update view
 
+        abortEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textEntry.getText().clear();
+                sendButton.setVisibility(view.VISIBLE);
+                editButton.setVisibility(view.INVISIBLE);
+                abortEditButton.setVisibility(view.INVISIBLE);
+            }
+        });
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {
