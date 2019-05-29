@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
@@ -25,6 +24,7 @@ public class ChatFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private Button sendButton;
+    private Button emojiKeyboardButton;
     private EmojiEditText textEntry;
     private RecyclerView messageRecycler;
     private MessageAdapter messageAdapter;
@@ -46,6 +46,7 @@ public class ChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         textEntry = view.findViewById(R.id.txt_chat_entry);
         sendButton = view.findViewById(R.id.btn_chat_send);
+        emojiKeyboardButton = view.findViewById(R.id.btn_emoji_keyboard);
         ViewGroup rootView = view.findViewById(R.id.relativeLayout1);
 
         emojiPopup = EmojiPopup.Builder.fromRootView(rootView).build(textEntry);
@@ -62,6 +63,12 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onSendButtonClicked();
+            }
+        });
+        emojiKeyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEmojiKeyboardButtonClicked();
             }
         });
 
@@ -132,6 +139,10 @@ public class ChatFragment extends Fragment {
             messageRepository.insertMessage(message);
             textEntry.getText().clear();
         }
+    }
+
+    private void onEmojiKeyboardButtonClicked() {
+        emojiPopup.toggle();
     }
 
     public void onMessageReceived(final ChatMessage message) {

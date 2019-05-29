@@ -201,11 +201,13 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void testIfEmojiKeyboardIsShown(){
+    public void testIfEmojiKeyboardIsShown() throws InterruptedException{
         assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
         onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        Thread.sleep(100);
         assertTrue(activity.getChatFragment().isEmojiKeyboardShowing());
         onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        Thread.sleep(100);
         assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
     }
 }
