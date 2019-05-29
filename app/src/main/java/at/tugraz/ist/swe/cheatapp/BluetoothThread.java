@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONException;

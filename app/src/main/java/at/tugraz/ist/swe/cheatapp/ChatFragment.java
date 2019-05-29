@@ -56,7 +56,6 @@ public class ChatFragment extends Fragment {
             messageRepository = MessageRepository.createInMemoryRepository(this.getContext());
         }
 
-
         Device connectedDevice = null;
         while(connectedDevice == null)
         {
@@ -64,6 +63,8 @@ public class ChatFragment extends Fragment {
             Thread.yield();
         }
         connectedDeviceId = connectedDevice.getDeviceId();
+
+        activity.getSupportActionBar().setTitle(connectedDevice.getNickname());
 
         final List<ChatMessage> messageList = new ArrayList<>();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() { // TODO: change user id to the id of the chat partner
@@ -102,6 +103,7 @@ public class ChatFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        activity.getSupportActionBar().setTitle(R.string.app_name);
         synchronized (this ) {
             this.chatFragmentReady = false;
         }
