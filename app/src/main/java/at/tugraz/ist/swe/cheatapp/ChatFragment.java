@@ -102,6 +102,7 @@ public class ChatFragment extends Fragment {
     public void onMessageEdit(final Message message)
     {
         textEntry.setText(message.getMessageText());
+        message.setMessageEdited(true);
         sendButton.setVisibility(view.INVISIBLE);
         editButton.setVisibility(view.VISIBLE);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +110,7 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 message.setMessageText(textEntry.getText().toString());
                 messageRepository.updateMessage(message);
+                activity.getBluetoothProvider().sendMessage(message.getMessageText());
                 textEntry.getText().clear();
                 sendButton.setVisibility(view.VISIBLE);
                 editButton.setVisibility(view.INVISIBLE);

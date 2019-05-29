@@ -20,10 +20,10 @@ public class MessageAdapterTest {
         messageList.add(messageSent);
         messageList.add(messageReceived);
 
-        MessageAdapter messageListAdapter = new MessageAdapter(messageList);
+        ChatFragment chatFragment = new ChatFragment();
+        MessageAdapter messageListAdapter = new MessageAdapter(messageList, chatFragment);
         assertEquals(VIEW_TYPE_MESSAGE_SENT, messageListAdapter.getItemViewType(0));
         assertEquals(VIEW_TYPE_MESSAGE_RECEIVED, messageListAdapter.getItemViewType(1));
         assertEquals(messageList.size(), messageListAdapter.getItemCount());
     }
-
 }
