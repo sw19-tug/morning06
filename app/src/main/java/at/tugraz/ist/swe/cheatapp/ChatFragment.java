@@ -16,6 +16,8 @@ import android.widget.Button;
 
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +51,20 @@ public class ChatFragment extends Fragment {
         emojiKeyboardButton = view.findViewById(R.id.btn_emoji_keyboard);
         ViewGroup rootView = view.findViewById(R.id.relativeLayout1);
 
-        emojiPopup = EmojiPopup.Builder.fromRootView(rootView).build(textEntry);
+        emojiPopup = EmojiPopup.Builder.fromRootView(rootView)
+                .setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+                    @Override
+                    public void onEmojiPopupDismiss() {
+                        emojiKeyboardButton.setBackground(getResources().getDrawable(R.drawable.emoji_button_layout_inactive));
+                    }
+                })
+                .setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+                    @Override
+                    public void onEmojiPopupShown() {
+                        emojiKeyboardButton.setBackground(getResources().getDrawable(R.drawable.emoji_button_layout_active));
+                    }
+                })
+                .build(textEntry);
     }
 
     @Override

@@ -35,7 +35,7 @@
             android:layout_height="48dp"
             android:layout_alignParentTop="false"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/emoji_button_layout"
+            android:background="@drawable/emoji_button_layout_inactive"
             android:paddingLeft="11dp"
             android:drawableStart="@drawable/ic_sentiment_emoji_face"
             android:textColor="@android:color/background_light"
