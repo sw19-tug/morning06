@@ -193,4 +193,9 @@ public class ChatFragmentEspressoTest {
 
         assertTrue(messageRepository.getRawMessagesByUserId(1).isEmpty());
     }
+
+    @Test
+    public void testIfEmojiButtonVisible() {
+        onView(withId(R.id.btn_emoji_keyboard)).check(matches(isDisplayed()));
+    }
 }
