@@ -8,6 +8,7 @@
     <string name="disconnected">Disconnected</string>
     <string name="no_device_selected">No device selected</string>
     <string name="menu_set_nickname">Set Nickname</string>
+    <string name="menu_about_page">About Page</string>
     <string name="set_nickname_dialog_title">Set Nickname</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>

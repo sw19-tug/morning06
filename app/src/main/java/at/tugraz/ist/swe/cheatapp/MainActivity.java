@@ -241,6 +241,8 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
+            case R.id.menu_about_page:
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -3,4 +3,7 @@
     <item
         android:id="@+id/menu_set_nickname"
         android:title="@string/menu_set_nickname" />
+    <item
+        android:id="@+id/menu_about_page"
+        android:title="@string/menu_about_page" />
 </menu>
