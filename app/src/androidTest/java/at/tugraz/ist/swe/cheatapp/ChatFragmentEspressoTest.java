@@ -40,9 +40,10 @@ public class ChatFragmentEspressoTest {
             SharedPreferences.Editor editor = ctx.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
             editor.clear();
             editor.commit();
+            editor.putString("nickname", "Test Nickname");
+            editor.apply();
         }
     };
-
     private DummyBluetoothProvider provider;
     private MainActivity activity;
     private MessageRepository messageRepository;
@@ -59,6 +60,11 @@ public class ChatFragmentEspressoTest {
     @Test
     public void testFieldVisible() {
         onView(withId(R.id.txt_chat_entry)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testNicknameVisible() {
+        onView(withText("Test Nickname")).check(matches(isDisplayed()));
     }
 
     @Test

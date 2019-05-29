@@ -20,6 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 
 /**
@@ -103,5 +104,19 @@ public class MainActivityEspressoTest {
         openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).perform(click());
         onView(withId(android.R.id.button2)).perform(click());
+    }
+
+    @Test
+    public void testNicknameSetInSharedPreferences() {
+        String testNickname = "Nickname Test";
+        openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
+        onView(withText(R.string.menu_set_nickname)).perform(click());
+        onView(withClassName(endsWith("EditText"))).perform(replaceText(testNickname));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        SharedPreferences sharedPreferences =
+                mainActivityTestRule.getActivity().getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
+        String savedNickname = sharedPreferences.getString("nickname", "");
+        assertEquals(testNickname, savedNickname);
     }
 }
