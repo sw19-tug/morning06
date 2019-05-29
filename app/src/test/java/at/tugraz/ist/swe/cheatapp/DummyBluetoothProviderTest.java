@@ -172,7 +172,7 @@ public class DummyBluetoothProviderTest {
         this.bluetoothProvider.getThread().join();
 
         // TODO: Maybe change the name of this method?
-        this.bluetoothProvider.setReceivedMessage(new ChatMessage(0, "test", true));
+        this.bluetoothProvider.setReceivedMessage(new ChatMessage(0, "test", true, false));
 
         assertNotNull(calledList[0]);
         assertEquals(calledList[0].getMessageText(), "test");

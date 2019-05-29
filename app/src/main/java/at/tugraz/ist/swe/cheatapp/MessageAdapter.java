@@ -17,9 +17,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private List<ChatMessage> messageList;
     Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private ChatFragment chatFragment;
 
-    public MessageAdapter(List<ChatMessage> messageList) {
+    public MessageAdapter(List<ChatMessage> messageList, ChatFragment chatFragment) {
         this.messageList = messageList;
+        this.chatFragment = chatFragment;
     }
 
     @Override
@@ -66,19 +68,31 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public List<ChatMessage> getMessageList() {
+        return messageList;
+    }
+
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
 
-        SentMessageHolder(View itemView) {
+        SentMessageHolder(final View itemView) {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.txt_message_body);
             timeText = itemView.findViewById(R.id.txt_message_time);
         }
 
-        void bind(ChatMessage message) {
+        void bind(final ChatMessage message) {
             messageText.setText(message.getMessageText());
             timeText.setText(dateFormat.format(message.getTimestamp()));
+
+            messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    chatFragment.onMessageEdit(message);
+                    return true;
+                }
+            });
         }
     }
 
@@ -96,9 +110,5 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
         }
-    }
-
-    public List<ChatMessage> getMessageList() {
-        return messageList;
     }
 }

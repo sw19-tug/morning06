@@ -16,11 +16,14 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ChatFragment extends Fragment {
     private MainActivity activity;
     private View view;
     private Button sendButton;
+    private Button editButton;
+    private Button abortEditButton;
     private EditText textEntry;
     private RecyclerView messageRecycler;
     private MessageAdapter messageAdapter;
@@ -42,6 +45,8 @@ public class ChatFragment extends Fragment {
 
         textEntry = view.findViewById(R.id.txt_chat_entry);
         sendButton = view.findViewById(R.id.btn_chat_send);
+        editButton = view.findViewById(R.id.btn_edit_send);
+        abortEditButton = view.findViewById(R.id.btn_abort_edit);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +60,6 @@ public class ChatFragment extends Fragment {
         } else {
             messageRepository = MessageRepository.createInMemoryRepository(this.getContext());
         }
-
 
         Device connectedDevice = null;
         while(connectedDevice == null)
@@ -71,11 +75,6 @@ public class ChatFragment extends Fragment {
             public void onChanged(@Nullable List<ChatMessage> messages) {
                 messageList.clear();
                 for (ChatMessage msg : messages) {
-                    /*
-                    System.out.println("-----------REMOTE------------");
-                    System.out.println(msg.getUserId());
-                    System.out.println(msg.getMessageText());
-                    System.out.println(msg.getMessageSent()); */
                     messageList.add(msg);
                 }
                 messageAdapter.notifyDataSetChanged();
@@ -85,7 +84,7 @@ public class ChatFragment extends Fragment {
         });
 
         messageRecycler = view.findViewById(R.id.rvChat);
-        messageAdapter = new MessageAdapter(messageList);
+        messageAdapter = new MessageAdapter(messageList, this);
         messageRecycler.setAdapter(messageAdapter);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -112,7 +111,7 @@ public class ChatFragment extends Fragment {
         String sanitizedMessageText = Utils.sanitizeMessage(textEntry.getText().toString());
 
         if (sanitizedMessageText != null) {
-            final ChatMessage message = new ChatMessage(connectedDeviceId, sanitizedMessageText, true);
+            final ChatMessage message = new ChatMessage(connectedDeviceId, sanitizedMessageText, true, false);
             activity.getBluetoothProvider().sendMessage(message);
             messageRepository.insertMessage(message);
             textEntry.getText().clear();
@@ -121,8 +120,51 @@ public class ChatFragment extends Fragment {
 
     public void onMessageReceived(final ChatMessage message) {
         message.setUserId(connectedDeviceId);
-        messageRepository.insertMessage(message);
+        if(message.getMessageEdited()){
+            ChatMessage updatedMessage = messageRepository.getMessageByMessageUUID(message.getMessageUUID());
+            updatedMessage.setMessageText(message.getMessageText());
+            updatedMessage.setMessageEdited(true);
+
+            messageRepository.updateMessage(updatedMessage);
+
+            System.out.println("Update message: " + updatedMessage.getJsonString());
+        }
+        else{
+            messageRepository.insertMessage(message);
+        }
         System.out.println("Receive: " + message.getJsonString());
+    }
+
+    public void onMessageEdit(final ChatMessage message)
+    {
+        textEntry.setText(message.getMessageText());
+        message.setMessageEdited(true);
+        sendButton.setVisibility(view.INVISIBLE);
+        editButton.setVisibility(view.VISIBLE);
+        abortEditButton.setVisibility(view.VISIBLE);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                message.setMessageText(textEntry.getText().toString());
+                messageRepository.updateMessage(message);
+                activity.getBluetoothProvider().sendMessage(message);
+                textEntry.getText().clear();
+                sendButton.setVisibility(view.VISIBLE);
+                editButton.setVisibility(view.INVISIBLE);
+                abortEditButton.setVisibility(view.INVISIBLE);
+            }
+        });
+
+        abortEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textEntry.getText().clear();
+                sendButton.setVisibility(view.VISIBLE);
+                editButton.setVisibility(view.INVISIBLE);
+                abortEditButton.setVisibility(view.INVISIBLE);
+            }
+        });
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {
@@ -139,4 +181,6 @@ public class ChatFragment extends Fragment {
     public MessageRepository getMessageRepository() {
         return messageRepository;
     }
+
+    public EditText getTextEntry() {return textEntry;}
 }
