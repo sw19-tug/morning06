@@ -9,10 +9,11 @@ import static org.junit.Assert.assertEquals;
 public class ConnectMessageTest {
     @Test
     public void testGetJsonString() throws JSONException {
-        ConnectMessage connectMessage = new ConnectMessage("com.example.testapp", "1.3.3.7");
+        ConnectMessage connectMessage = new ConnectMessage("com.example.testapp", "1.3.3.7", "Cheater");
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("applicationId", "com.example.testapp");
         jsonMessage.put("versionName", "1.3.3.7");
+        jsonMessage.put("nickname", "Cheater");
         assertEquals(jsonMessage.toString(), connectMessage.getJsonString());
     }
 
@@ -21,11 +22,13 @@ public class ConnectMessageTest {
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("applicationId", "com.example.testapp");
         jsonMessage.put("versionName", "1.3.3.7");
+        jsonMessage.put("nickname", "Cheater");
 
         ConnectMessage testMessage = new ConnectMessage(jsonMessage.toString());
 
         assertEquals("com.example.testapp", testMessage.getApplicationId());
         assertEquals("1.3.3.7", testMessage.getVersionName());
+        assertEquals("nickname", testMessage.getNickname());
         assertEquals(jsonMessage.toString(), testMessage.getJsonString());
     }
 }
