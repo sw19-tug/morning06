@@ -46,7 +46,7 @@ public class MessageRepository {
     }
 
 
-    public ChatMessage getMessageByMessageUUID(String uuid) {
+    public List<ChatMessage> getMessagesByMessageUUID(String uuid) {
         return cheatAppDatabase.messageDao().getMessageByMessageUUID(uuid);
     }
 

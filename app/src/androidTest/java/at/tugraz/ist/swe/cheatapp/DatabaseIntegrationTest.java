@@ -114,7 +114,7 @@ public class DatabaseIntegrationTest {
         ChatMessage originalMessage = new ChatMessage(userId, originalMessageText, true, false);
 
         messageRepository.insertMessage(originalMessage).get();
-        ChatMessage originalMessageDTO = messageRepository.getMessageByMessageUUID(originalMessage.getMessageUUID());
+        ChatMessage originalMessageDTO = messageRepository.getMessagesByMessageUUID(originalMessage.getMessageUUID()).get(0);
         assertMessageEqual(originalMessageDTO, originalMessage);
 
         originalMessageDTO.setMessageText(editedMessageText);
@@ -123,7 +123,7 @@ public class DatabaseIntegrationTest {
 
         messageRepository.updateMessage(originalMessageDTO).get();
 
-        ChatMessage editedMessageDTO = messageRepository.getMessageByMessageUUID(originalMessage.getMessageUUID());
+        ChatMessage editedMessageDTO = messageRepository.getMessagesByMessageUUID(originalMessage.getMessageUUID()).get(0);
         assertMessageEqual(originalMessageDTO, editedMessageDTO);
 
         List<ChatMessage> allMessages = messageRepository.getRawMessagesByUserId(userId);
