@@ -79,7 +79,7 @@ public class ChatFragmentEspressoTest {
         activity = mainActivityTestRule.getActivity();
         provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
         provider.connectToDevice(provider.getPairedDevices().get(0));
-        activity.showChatFragment();
+        //activity.showChatFragment();
         messageRepository = activity.getChatFragment().getMessageRepository();
     }
 
