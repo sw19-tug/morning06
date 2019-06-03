@@ -1,13 +1,10 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import org.junit.runner.RunWith;
 
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -91,5 +88,17 @@ public class FileEncoderTest {
 
         assert(Arrays.equals(decoderTest, originalByte));
         assertEquals(new String(decoderTest), originalString);
+    }
+
+    @Test
+    public void testEncodeDecodeWithTestImage() throws IOException {
+        File testImage = new File("sampledata/test_img_1.png");
+        assert(testImage.exists());
+        byte[] originalByte = Files.readAllBytes(testImage.toPath());
+
+        String encoderTest = encoder.encodeBase64(testImage);
+        byte[] decoderTest = encoder.decodeBase64(encoderTest);
+
+        assert(Arrays.equals(decoderTest, originalByte));
     }
 }
