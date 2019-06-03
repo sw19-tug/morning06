@@ -288,4 +288,29 @@ public class ChatFragmentEspressoTest {
 
         assertTrue(messageRepository.getRawMessagesByUserId(1).isEmpty());
     }
+
+
+    @Test
+    public void testEditedIndicatorVisibleOnEdit() throws InterruptedException {
+        String testText = "Hello, please edit me!";
+
+        messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
+        onView(withId(R.id.txt_chat_entry)).perform(typeText("hallo"), closeSoftKeyboard());
+        onView(withId(R.id.btn_chat_send)).perform(click());
+        provider.getThread().join();
+
+        String editText = "I'm edited!";
+
+        onView(withText(testText)).perform(longClick());
+        EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
+        textEntry.setText("");
+        activity.getChatFragment().clearTextEntry();
+
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
+        onView(withId(R.id.btn_edit_send)).perform(click());
+        provider.getThread().join();
+
+        onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
+    }
+
 }
