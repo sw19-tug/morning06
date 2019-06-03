@@ -32,6 +32,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                     connected = true;
                 }
 
+                connectedDevice.setNickname(DummyBluetoothProvider.super.ownNickname);
                 DummyBluetoothProvider.super.onConnected();
             }
         });
