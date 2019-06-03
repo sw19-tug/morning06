@@ -51,6 +51,7 @@ import static java.lang.Thread.sleep;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.core.StringContains.containsString;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentEspressoTest {
@@ -295,11 +296,9 @@ public class ChatFragmentEspressoTest {
         String testText = "Hello, please edit me!";
 
         messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
-        onView(withId(R.id.txt_chat_entry)).perform(typeText("hallo"), closeSoftKeyboard());
-        onView(withId(R.id.btn_chat_send)).perform(click());
-        provider.getThread().join();
 
-        String editText = "I'm edited!";
+
+        String editText = "I'm done!";
 
         onView(withText(testText)).perform(longClick());
         EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
@@ -310,7 +309,7 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_edit_send)).perform(click());
         provider.getThread().join();
 
-        //onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
+        onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
     }
 
 }
