@@ -82,7 +82,6 @@ public class ChatFragmentEspressoTest {
         provider.connectToDevice(provider.getPairedDevices().get(0));
 
         onView(withText("New Nickname")).check(matches(isDisplayed()));
-
     }
 
     @Test
