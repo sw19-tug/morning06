@@ -1,36 +1,21 @@
 package at.tugraz.ist.swe.cheatapp;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.internal.util.Checks;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
-import org.hamcrest.CustomMatcher;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -38,17 +23,9 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnHolderItem;
-import static android.support.test.espresso.contrib.RecyclerViewActions.scrollTo;
-import static android.support.test.espresso.matcher.ViewMatchers.hasBackground;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static java.lang.Thread.sleep;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -79,7 +56,7 @@ public class ChatFragmentEspressoTest {
         activity = mainActivityTestRule.getActivity();
         provider = (DummyBluetoothProvider) activity.getBluetoothProvider();
         provider.connectToDevice(provider.getPairedDevices().get(0));
-        //activity.showChatFragment();
+        provider.getThread().join();
         messageRepository = activity.getChatFragment().getMessageRepository();
     }
 
@@ -179,12 +156,11 @@ public class ChatFragmentEspressoTest {
 
         // TODO solve race condition
         int listLength = 0;
-        while(listLength == 0)
-        {
+        while (listLength == 0) {
             listLength = messageRepository.getRawMessagesByUserId(1).size();
             Thread.sleep(100);
         }
-        ChatMessage receiveMessage = messageRepository.getRawMessagesByUserId(1).get(listLength-1);
+        ChatMessage receiveMessage = messageRepository.getRawMessagesByUserId(1).get(listLength - 1);
         assertEquals(testText, receiveMessage.getMessageText());
     }
 
@@ -255,7 +231,7 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void testAbortAndEditButtonVisible() throws Exception{
+    public void testAbortAndEditButtonVisible() throws Exception {
         String testText = "Hello, please edit me!";
 
         messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
@@ -295,7 +271,7 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void testIfEmojiKeyboardIsShown() throws InterruptedException{
+    public void testIfEmojiKeyboardIsShown() throws InterruptedException {
         assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
         onView(withId(R.id.btn_emoji_keyboard)).perform(click());
         Thread.sleep(300);
