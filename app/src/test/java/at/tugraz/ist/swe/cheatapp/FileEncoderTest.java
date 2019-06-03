@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -27,20 +29,22 @@ public class FileEncoderTest {
     @Test
     public void testEncoding() throws IOException {
         PowerMockito.mockStatic(android.util.Base64.class);
-//        when(android.util.Base64.encodeToString(any<Byte[]>(), anyInt())).thenAnswer(invocation -> java.util.Base64.getEncoder().encode((byte[]) invocation.getArguments()[0]));
-//        when(Base64.decode(anyString(), anyInt())).thenAnswer(invocation -> java.util.Base64.getMimeDecoder().decode((String) invocation.getArguments()[0]));
+        when(android.util.Base64.encodeToString(any(byte[].class), anyInt())).thenAnswer(new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                return java.util.Base64.getEncoder().encodeToString((byte[]) invocation.getArgument(0));
+            }
+        });
 
         File testImage = new File("sampledata/test_img_1.png");
         assert(testImage.exists());
         byte[] fileContent = Files.readAllBytes(testImage.toPath());
 
-        String encodedFileCheck = Base64.getEncoder().encodeToString(fileContent);
-
         FileEncoder encoder = new FileEncoder();
-        when(android.util.Base64.encodeToString(any(byte[].class), anyInt())).thenReturn(encodedFileCheck);
 
         String encodedFile = encoder.encodeBase64(testImage);
-
+        
+        String encodedFileCheck = Base64.getEncoder().encodeToString(fileContent);
         assertEquals(encodedFile, encodedFileCheck);
     }
 }
