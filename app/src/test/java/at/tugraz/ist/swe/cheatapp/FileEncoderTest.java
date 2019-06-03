@@ -57,10 +57,10 @@ public class FileEncoderTest {
     @Test
     public void testDecodeBase64() throws IOException {
         PowerMockito.mockStatic(android.util.Base64.class);
-        when(android.util.Base64.decode(any(String.class), anyInt())).thenAnswer(new Answer<String>() {
+        when(android.util.Base64.decode(any(String.class), anyInt())).thenAnswer(new Answer<byte[]>() {
             @Override
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                return java.util.Base64.getDecoder().decode((String.class) invocation.getArgument(0));
+            public byte[] answer(InvocationOnMock invocation) throws Throwable {
+                return java.util.Base64.getDecoder().decode((String) invocation.getArgument(0));
             }
         });
 
@@ -74,5 +74,4 @@ public class FileEncoderTest {
         byte[] decodedFileCheck = Base64.getDecoder().decode(encodedString);
         assertEquals(decodedFile, decodedFileCheck);
     }
-
 }
