@@ -27,6 +27,8 @@ import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -296,8 +298,6 @@ public class ChatFragmentEspressoTest {
         String testText = "Hello, please edit me!";
 
         messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
-
-
         String editText = "I'm done!";
 
         onView(withText(testText)).perform(longClick());
@@ -310,6 +310,28 @@ public class ChatFragmentEspressoTest {
         provider.getThread().join();
 
         onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
+    }
+
+    @Test
+    public void testTimestampUpdatedOnEdit() throws InterruptedException {
+        String testText = "Hello, please edit me!";
+
+        messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
+        String editText = "I'm done!";
+
+        onView(withText(testText)).perform(longClick());
+        EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
+        textEntry.setText("");
+        activity.getChatFragment().clearTextEntry();
+
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
+        onView(withId(R.id.btn_edit_send)).perform(click());
+        provider.getThread().join();
+
+        ChatMessage message = messageRepository.getRawMessagesByUserId(1).get(0);
+
+        Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        onData(withId(R.id.txt_message_time)).check(matches(withText(dateFormat.format(message.getTimestamp()))));
     }
 
 }

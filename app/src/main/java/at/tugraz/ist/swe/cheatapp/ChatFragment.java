@@ -127,7 +127,6 @@ public class ChatFragment extends Fragment {
             updatedMessage.setMessageEdited(true);
 
             messageRepository.updateMessage(updatedMessage);
-            //textEditedIndicator.setText("edited");
             System.out.println("Update message: " + updatedMessage.getJsonString());
         }
         else{
@@ -150,7 +149,6 @@ public class ChatFragment extends Fragment {
                 message.setMessageText(textEntry.getText().toString());
                 message.setMessageEdited(true);
                 messageRepository.updateMessage(message);
-                //textEditedIndicator.setText((CharSequence)"edited");
 
                 activity.getBluetoothProvider().sendMessage(message);
                 textEntry.getText().clear();
