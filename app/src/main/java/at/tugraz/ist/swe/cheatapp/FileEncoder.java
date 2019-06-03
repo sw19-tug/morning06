@@ -22,4 +22,8 @@ public class FileEncoder {
         byte[] data = readBytesFromFile(file);
         return Base64.encodeToString(data, Base64.DEFAULT);
     }
+
+    public byte[] decodeBase64(final String data) {
+        return Base64.decode(data, Base64.DEFAULT);
+    }
 }
