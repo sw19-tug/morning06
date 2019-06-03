@@ -219,7 +219,7 @@ public class ChatFragmentEspressoTest {
 
         messageRepository.insertMessage(testMessage).get();
         String editText = "I'm edited!";
-        ChatMessage editedMessage = testMessage;
+        ChatMessage editedMessage = new ChatMessage(testMessage);
         editedMessage.setMessageText(editText);
         editedMessage.setMessageUUID(uuid);
         editedMessage.setMessageEdited(true);

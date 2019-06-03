@@ -20,8 +20,8 @@ public interface MessageDao {
     @Query("SELECT * FROM ChatMessage WHERE userId=:userId ORDER BY messageId asc")
     LiveData<List<ChatMessage>> getMessagesByUserId(long userId);
 
-    @Query("SELECT * FROM ChatMessage WHERE messageUUID=:uuid LIMIT 1")
-    ChatMessage getMessageByMessageUUID(String uuid);
+    @Query("SELECT * FROM ChatMessage WHERE messageUUID=:uuid LIMIT 2")
+    List<ChatMessage> getMessageByMessageUUID(String uuid);
 
     @Update
     void updateMessage(ChatMessage message);

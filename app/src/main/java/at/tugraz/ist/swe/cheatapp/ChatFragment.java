@@ -22,7 +22,6 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ChatFragment extends Fragment {
     private MainActivity activity;
@@ -168,13 +167,20 @@ public class ChatFragment extends Fragment {
     public void onMessageReceived(final ChatMessage message) {
         message.setUserId(connectedDeviceId);
         if(message.getMessageEdited()){
-            ChatMessage updatedMessage = messageRepository.getMessageByMessageUUID(message.getMessageUUID());
-            updatedMessage.setMessageText(message.getMessageText());
-            updatedMessage.setMessageEdited(true);
+            List<ChatMessage> updatedMessages = messageRepository.getMessagesByMessageUUID(message.getMessageUUID());
 
-            messageRepository.updateMessage(updatedMessage);
+            for(ChatMessage updatedMessage : updatedMessages)
+            {
+                if(!updatedMessage.getMessageSent())
+                {
+                    updatedMessage.setMessageText(message.getMessageText());
+                    updatedMessage.setMessageEdited(true);
 
-            System.out.println("Update message: " + updatedMessage.getJsonString());
+                    messageRepository.updateMessage(updatedMessage);
+
+                    System.out.println("Update message: " + updatedMessage.getJsonString());
+                }
+            }
         }
         else{
             messageRepository.insertMessage(message);
