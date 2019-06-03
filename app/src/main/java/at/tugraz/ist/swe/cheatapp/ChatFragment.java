@@ -125,6 +125,7 @@ public class ChatFragment extends Fragment {
             ChatMessage updatedMessage = messageRepository.getMessageByMessageUUID(message.getMessageUUID());
             updatedMessage.setMessageText(message.getMessageText());
             updatedMessage.setMessageEdited(true);
+            updatedMessage.setTimestamp(System.currentTimeMillis());
 
             messageRepository.updateMessage(updatedMessage);
             System.out.println("Update message: " + updatedMessage.getJsonString());

@@ -332,6 +332,7 @@ public class ChatFragmentEspressoTest {
 
         Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         onData(withId(R.id.txt_message_time)).check(matches(withText(dateFormat.format(message.getTimestamp()))));
+        onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
     }
 
 }
