@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class BluetoothMessage {
 
-    enum Type {CONNECT, DISCONNECT, CHAT}
+    enum Type {CONNECT, DISCONNECT, CHAT, FILE}
 
     private Type messageType;
     private ChatMessage message = null;
