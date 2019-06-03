@@ -148,7 +148,8 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 message.setMessageText(textEntry.getText().toString());
-
+                message.setMessageEdited(true);
+                messageRepository.updateMessage(message);
                 //textEditedIndicator.setText((CharSequence)"edited");
 
                 activity.getBluetoothProvider().sendMessage(message);
