@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +127,7 @@ public class ChatFragment extends Fragment {
             updatedMessage.setMessageEdited(true);
 
             messageRepository.updateMessage(updatedMessage);
-
+            //textEditedIndicator.setText("edited");
             System.out.println("Update message: " + updatedMessage.getJsonString());
         }
         else{
@@ -147,7 +148,9 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 message.setMessageText(textEntry.getText().toString());
-                messageRepository.updateMessage(message);
+
+                //textEditedIndicator.setText((CharSequence)"edited");
+
                 activity.getBluetoothProvider().sendMessage(message);
                 textEntry.getText().clear();
                 sendButton.setVisibility(view.VISIBLE);
