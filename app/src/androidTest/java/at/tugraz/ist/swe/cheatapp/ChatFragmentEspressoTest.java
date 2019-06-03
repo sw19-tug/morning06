@@ -15,14 +15,17 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -65,6 +68,21 @@ public class ChatFragmentEspressoTest {
     @Test
     public void testNicknameVisible() {
         onView(withText("Test Nickname")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testIfNicknameChangesAtReconnect(){
+        onView(withText("Test Nickname")).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+
+        openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
+        onView(withText(R.string.menu_set_nickname)).perform(click());
+        onView(withClassName(endsWith("EditText"))).perform(replaceText("New Nickname"));
+
+        provider.connectToDevice(provider.getPairedDevices().get(0));
+
+        onView(withText("New Nickname")).check(matches(isDisplayed()));
+
     }
 
     @Test
