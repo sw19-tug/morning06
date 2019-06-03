@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -47,9 +48,9 @@ public class DatabaseIntegrationTest {
         assertEquals(1, allMessages.size());
         assertEquals("First Message!", message.getMessageText());
         assertEquals(0, message.getUserId());
-        assertEquals(true, message.getMessageSent());
+        assertTrue(message.getMessageSent());
         assertEquals(1, message.getMessageId());
-        assertEquals(false, message.getMessageEdited());
+        assertFalse(message.getMessageEdited());
         assertNotNull(message.getMessageUUID());
     }
 
@@ -68,24 +69,24 @@ public class DatabaseIntegrationTest {
 
         assertEquals("First Message!", message1.getMessageText());
         assertEquals(1, message1.getUserId());
-        assertEquals(true, message1.getMessageSent());
-        assertEquals(false, message1.getMessageEdited());
+        assertTrue(message1.getMessageSent());
+        assertFalse(message1.getMessageEdited());
         assertNotNull(message1.getMessageUUID());
         assertTrue(message1.getMessageId() < message2.getMessageId()
                 && message1.getMessageId() < message3.getMessageId());
 
         assertEquals("Response to first Message!", message2.getMessageText());
         assertEquals(1, message2.getUserId());
-        assertEquals(false, message2.getMessageSent());
-        assertEquals(false, message2.getMessageEdited());
+        assertFalse(message2.getMessageSent());
+        assertFalse(message2.getMessageEdited());
         assertNotNull(message2.getMessageUUID());
         assertTrue(message2.getMessageId() > message1.getMessageId()
                 && message2.getMessageId() < message3.getMessageId());
 
         assertEquals("Second Message!", message3.getMessageText());
         assertEquals(1, message3.getUserId());
-        assertEquals(true, message3.getMessageSent());
-        assertEquals(false, message3.getMessageEdited());
+        assertTrue(message3.getMessageSent());
+        assertFalse(message3.getMessageEdited());
         assertNotNull(message3.getMessageUUID());
         assertTrue(message3.getMessageId() > message1.getMessageId()
                 && message3.getMessageId() > message2.getMessageId());
