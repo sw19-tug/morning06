@@ -183,4 +183,13 @@ public class ChatFragment extends Fragment {
     }
 
     public EditText getTextEntry() {return textEntry;}
+
+    public void clearTextEntry() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textEntry.setText("");
+            }
+        });
+    }
 }

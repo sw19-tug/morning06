@@ -224,6 +224,7 @@ public class ChatFragmentEspressoTest {
         onView(withText(testText)).perform(longClick());
         EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
         textEntry.setText("");
+        activity.getChatFragment().clearTextEntry();
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
         onView(withId(R.id.btn_edit_send)).perform(click());
