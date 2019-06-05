@@ -14,7 +14,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         this.bluetoothEnabled = true;
         this.connected = false;
 
-        enableDummyDevices(1);
+        setNumberOfEnabledDummyDevices(1);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         thread.start();
     }
 
-    public void enableDummyDevices(int count) {
+    public void setNumberOfEnabledDummyDevices(int count) {
         this.devices.clear();
         for (int i = 1; i <= count; i++) {
             this.devices.add(new DummyDevice(Integer.toString(i), Integer.toString(i)));

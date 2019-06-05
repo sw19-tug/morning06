@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,13 +27,13 @@ public class DummyBluetoothProviderTest {
 
     @Test
     public void testWithoutPairedDevices() {
-        bluetoothProvider.enableDummyDevices(0);
+        bluetoothProvider.setNumberOfEnabledDummyDevices(0);
         assertEquals(0L, bluetoothProvider.getPairedDevices().size());
     }
 
     @Test
     public void testWithPairedDevices() {
-        bluetoothProvider.enableDummyDevices(5);
+        bluetoothProvider.setNumberOfEnabledDummyDevices(5);
         assertEquals(5L, bluetoothProvider.getPairedDevices().size());
     }
 
@@ -131,7 +130,6 @@ public class DummyBluetoothProviderTest {
         };
 
         this.bluetoothProvider.registerHandler(handler);
-        this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
         this.bluetoothProvider.getThread().join();
@@ -166,12 +164,10 @@ public class DummyBluetoothProviderTest {
         };
 
         this.bluetoothProvider.registerHandler(handler);
-        this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
         this.bluetoothProvider.getThread().join();
 
-        // TODO: Maybe change the name of this method?
         this.bluetoothProvider.setReceivedMessage(new ChatMessage(0, "test", true, false));
 
         assertNotNull(calledList[0]);
@@ -205,7 +201,6 @@ public class DummyBluetoothProviderTest {
         };
 
         this.bluetoothProvider.registerHandler(handler);
-        this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
         this.bluetoothProvider.getThread().join();
@@ -249,7 +244,6 @@ public class DummyBluetoothProviderTest {
 
     @Test
     public void testConnectToDevice() throws InterruptedException {
-        this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
         this.bluetoothProvider.connectToDevice(devices.get(0));
         this.bluetoothProvider.getThread().join();
@@ -280,7 +274,6 @@ public class DummyBluetoothProviderTest {
 
     @Test
     public void testGetDeviceByID() {
-        this.bluetoothProvider.enableDummyDevices(1);
         Device device = this.bluetoothProvider.getDeviceByID(1);
 
         assertNotNull(device);
@@ -289,8 +282,20 @@ public class DummyBluetoothProviderTest {
 
     @Test
     public void testGetDeviceByIDNoDevice() {
-        bluetoothProvider.enableDummyDevices(0);
+        bluetoothProvider.setNumberOfEnabledDummyDevices(0);
         Device device = this.bluetoothProvider.getDeviceByID(1);
         assertNull(device);
+    }
+
+    @Test
+    public void testNoNickname() {
+        bluetoothProvider.getOwnNickname();
+        assertNull(bluetoothProvider.getOwnNickname());
+    }
+
+    @Test
+    public void testSetNickname() {
+        bluetoothProvider.setOwnNickname("testing");
+        assertEquals("testing", bluetoothProvider.getOwnNickname());
     }
 }
