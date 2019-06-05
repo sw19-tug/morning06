@@ -39,6 +39,10 @@ public class BluetoothMessage {
         return connectMessage;
     }
 
+    public DisconnectMessage getDisconnectMessage() {
+        return disconnectMessage;
+    }
+
     public String toJSONString() throws JSONException{
 
         JSONObject serializedMessage = new JSONObject();

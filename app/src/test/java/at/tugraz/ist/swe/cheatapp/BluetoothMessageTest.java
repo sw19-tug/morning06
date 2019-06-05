@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class BluetoothMessageTest {
     @Test
@@ -69,5 +70,16 @@ public class BluetoothMessageTest {
         BluetoothMessage chatBluetoothMessage2 = BluetoothMessage.fromJSONString(chatBluetoothMessage1.toJSONString());
 
         assertEquals(chatBluetoothMessage1.toJSONString(), chatBluetoothMessage2.toJSONString());
+    }
+
+    @Test
+    public void testFromJSONStringWithDisconnectMessage() throws JSONException {
+        DisconnectMessage disconnectMessage = new DisconnectMessage();
+
+        BluetoothMessage disconnectBluetoothMessage1 = new BluetoothMessage(disconnectMessage);
+        BluetoothMessage disconnectBluetoothMessage2 = BluetoothMessage.fromJSONString(disconnectBluetoothMessage1.toJSONString());
+
+        assertEquals(disconnectBluetoothMessage1.toJSONString(), disconnectBluetoothMessage2.toJSONString());
+        assertNotNull(disconnectBluetoothMessage2.getDisconnectMessage());
     }
 }
