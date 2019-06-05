@@ -33,7 +33,7 @@ public class ConnectMessageTest {
         assertEquals("com.example.testapp", testMessage.getApplicationId());
         assertEquals("1.3.3.7", testMessage.getVersionName());
         assertEquals("Cheater", testMessage.getNickname());
-        assertEquals("Picture", testMessage.getNickname());
+        assertEquals("Picture", testMessage.getProfilePicture());
         assertEquals(jsonMessage.toString(), testMessage.getJsonString());
     }
 }
