@@ -157,7 +157,7 @@ public class BluetoothThread extends Thread {
         synchronized (this) {
             final BluetoothMessage connectMessage = new BluetoothMessage(
                     new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME,
-                            provider.getOwnNickname()));
+                            provider.getOwnNickname(), provider.getOwnProfilePicture()));
             messageQueue.add(connectMessage);
         }
     }

@@ -7,30 +7,38 @@ public class ConnectMessage {
     private String applicationId;
     private String versionName;
     private String nickname;
+    private String profilePicture;
 
-    public ConnectMessage(String applicationId, String versionName, String nickname) {
+    public ConnectMessage(String applicationId, String versionName, String nickname,
+                          String profilePicture) {
         this.applicationId = applicationId;
         this.versionName = versionName;
         this.nickname = nickname;
+        this.profilePicture = profilePicture;
     }
 
     public ConnectMessage(String jsonConnectMessageString) throws JSONException  {
         JSONObject jsonConnectMessage = new JSONObject(jsonConnectMessageString);
-        this.applicationId = jsonConnectMessage.getString("applicationId");
-        this.versionName = jsonConnectMessage.getString("versionName");
-        this.nickname = jsonConnectMessage.getString("nickname");
+        applicationId = jsonConnectMessage.getString("applicationId");
+        versionName = jsonConnectMessage.getString("versionName");
+        nickname = jsonConnectMessage.getString("nickname");
+        profilePicture = jsonConnectMessage.getString("profilePicture");
     }
 
     public String getApplicationId() {
-        return this.applicationId;
+        return applicationId;
     }
 
     public String getVersionName() {
-        return this.versionName;
+        return versionName;
     }
 
     public String getNickname() {
-        return this.nickname;
+        return nickname;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
     public String getJsonString() {
@@ -39,6 +47,7 @@ public class ConnectMessage {
             jsonMessage.put("applicationId", applicationId);
             jsonMessage.put("versionName", versionName);
             jsonMessage.put("nickname", nickname);
+            jsonMessage.put("profilePicture", profilePicture);
         } catch (JSONException exception) {
             exception.printStackTrace();
             return null;

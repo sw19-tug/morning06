@@ -23,9 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -137,6 +137,17 @@ public class MainActivity extends AppCompatActivity {
         lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
         String nickname = sharedPreferences.getString("nickname", "");
         getBluetoothProvider().setOwnNickname(nickname);
+
+        try {
+            FileEncoder encoder = new FileEncoder();
+            // TODO take commented version after merge
+            // File file = new File(this.getApplicationContext().getFilesDir(), getString(R.string.profile_picture_path));
+            File image = new File("sampledata/test_img_1.png");
+            getBluetoothProvider().setOwnProfilePicture(encoder.encodeBase64(image));
+        }
+        catch (IOException e) {
+            getBluetoothProvider().setOwnProfilePicture(Constants.EMPTY_PROFILE_PICTURE);
+        }
 
         showConnectFragment();
     }
@@ -319,4 +330,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
