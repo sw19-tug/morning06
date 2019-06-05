@@ -111,6 +111,8 @@ public class ChatFragment extends Fragment {
         }
         connectedDeviceId = connectedDevice.getDeviceId();
 
+        activity.getSupportActionBar().setTitle(connectedDevice.getNickname());
+
         final List<ChatMessage> messageList = new ArrayList<>();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() { // TODO: change user id to the id of the chat partner
             @Override
@@ -143,6 +145,7 @@ public class ChatFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        activity.getSupportActionBar().setTitle(R.string.app_name);
         synchronized (this ) {
             this.chatFragmentReady = false;
         }

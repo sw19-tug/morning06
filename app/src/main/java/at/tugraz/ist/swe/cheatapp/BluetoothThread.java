@@ -2,6 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -154,7 +155,9 @@ public class BluetoothThread extends Thread {
         outputWriter = new PrintWriter(socket.getOutputStream());
 
         synchronized (this) {
-            final BluetoothMessage connectMessage = new BluetoothMessage(new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME));
+            final BluetoothMessage connectMessage = new BluetoothMessage(
+                    new ConnectMessage(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME,
+                            provider.getOwnNickname()));
             messageQueue.add(connectMessage);
         }
     }

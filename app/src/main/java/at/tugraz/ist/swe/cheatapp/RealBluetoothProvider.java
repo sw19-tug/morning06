@@ -92,6 +92,11 @@ public class RealBluetoothProvider extends BluetoothProvider {
                 onMessageReceived(bluetoothMessage.getMessage());
                 break;
             case CONNECT:
+                String nickname = bluetoothMessage.getConnectMessage().getNickname();
+                if(nickname.isEmpty()) {
+                    nickname = this.bluetoothThread.getConnectedDevice().getDeviceName();
+                }
+                this.bluetoothThread.getConnectedDevice().setNickname(nickname);
                 onConnected();
                 break;
             case DISCONNECT:

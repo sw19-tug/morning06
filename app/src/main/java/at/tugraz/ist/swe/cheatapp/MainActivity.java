@@ -135,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences =
                 this.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
+        String nickname = sharedPreferences.getString("nickname", "");
+        getBluetoothProvider().setOwnNickname(nickname);
 
         showConnectFragment();
     }
@@ -234,8 +236,10 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences.Editor preferencesEditor =
                                 getSharedPreferences("CheatAppSharedPreferences",
                                         Context.MODE_PRIVATE).edit();
-                        preferencesEditor.putString("nickname", userInput.getText().toString().replaceAll("\n", ""));
+                        String newNickname = userInput.getText().toString().replaceAll("\n", "");
+                        preferencesEditor.putString("nickname", newNickname);
                         preferencesEditor.apply();
+                        getBluetoothProvider().setOwnNickname(newNickname);
                         Log.d("MainActivity",
                                 "Set Nickname Dialog: User clicked Save button");
                     }
