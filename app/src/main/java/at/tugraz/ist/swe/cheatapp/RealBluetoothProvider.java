@@ -100,7 +100,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
                 String profilePicture = bluetoothMessage.getConnectMessage().getProfilePicture();
                 if(profilePicture.isEmpty()) {
-                    profilePicture = "no picture"; // TODO empty png encoded instead
+                    profilePicture = Constants.EMPTY_PROFILE_PICTURE;
                 }
                 this.bluetoothThread.getConnectedDevice().setProfilePicture(profilePicture);
 

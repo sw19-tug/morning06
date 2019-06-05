@@ -27,6 +27,10 @@ import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.ios.IosEmojiProvider;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class MainActivity extends AppCompatActivity {
 
     private BluetoothProvider bluetoothProvider;
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
         String nickname = sharedPreferences.getString("nickname", "");
         getBluetoothProvider().setOwnNickname(nickname);
-        String profilePicture = sharedPreferences.getString("profilePicture", "no picture");
+        String profilePicture = sharedPreferences.getString("profilePicture", Constants.EMPTY_PROFILE_PICTURE);
         getBluetoothProvider().setOwnProfilePicture(profilePicture);
 
         showConnectFragment();
@@ -321,4 +325,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

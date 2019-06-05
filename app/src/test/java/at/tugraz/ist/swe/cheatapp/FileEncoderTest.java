@@ -101,4 +101,19 @@ public class FileEncoderTest {
 
         assert(Arrays.equals(decoderTest, originalByte));
     }
+
+    /*@Test
+    public void testEncodeDecodeWithBlackImage() throws IOException {
+
+        File testImage = new File("sampledata/empty_profilePicture.png");
+        assert(testImage.exists());
+
+        String encodedFile = encoder.encodeBase64(testImage);
+
+        File originalFile = new File ("sampledata/empty_profilePicture_encoded.txt");
+        assert(originalFile.exists());
+        PrintWriter writer = new PrintWriter(originalFile.getPath());
+        writer.print(encodedFile);
+        writer.close();
+    }*/
 }
