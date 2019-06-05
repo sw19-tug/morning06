@@ -2,8 +2,16 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -15,17 +23,16 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothEventHandler bluetoothEventHandler;
     private boolean connectFragmentVisible;
     private Toolbar toolbar;
-    private Button connectDisconnectButton;
+    private ImageButton connectDisconnectButton;
     private Toast currentToast;
     private long lastConnectedDeviceID;
     private int numberOfLogoClicks = 0;
+    private static int RESULT_LOAD_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +140,22 @@ public class MainActivity extends AppCompatActivity {
         // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
+        String profile_picture_path = this.getApplicationContext().getFilesDir().toString() + "/" + getString(R.string.profile_picture_name);
+        Bitmap bmp = BitmapFactory.decodeFile(profile_picture_path);
+        if(bmp != null) {
+            Drawable drawable = new BitmapDrawable(getResources(), bmp);
+            toolbar.setNavigationIcon(drawable);
+        } else {
+            toolbar.setNavigationIcon(R.mipmap.cheat_app_logo);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent GaleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(GaleryIntent, RESULT_LOAD_IMAGE);
+            }
+        });
+
         SharedPreferences sharedPreferences =
                 this.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE);
         lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
@@ -139,6 +163,55 @@ public class MainActivity extends AppCompatActivity {
         getBluetoothProvider().setOwnNickname(nickname);
 
         showConnectFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri SelectedImage = data.getData();
+            String[] FilePathColumn = {MediaStore.Images.Media.DATA };
+
+            Cursor SelectedCursor = getContentResolver().query(SelectedImage, FilePathColumn, null, null, null);
+            SelectedCursor.moveToFirst();
+
+            int columnIndex = SelectedCursor.getColumnIndex(FilePathColumn[0]);
+            String picturePath = SelectedCursor.getString(columnIndex);
+            SelectedCursor.close();
+
+            BitmapFactory.Options options;
+            Bitmap bmp = null;
+            try {
+                bmp = BitmapFactory.decodeFile(picturePath);
+            } catch (OutOfMemoryError e) {
+                try {
+                    options = new BitmapFactory.Options();
+                    options.inSampleSize = 4;
+                    bmp = BitmapFactory.decodeFile(picturePath, options);
+                } catch(Exception excepetion) {
+                    Log.e("MainActivity", excepetion.getMessage());
+                }
+            }
+
+            try {
+                System.out.println("Bitmap");
+                System.out.println(bmp);
+                File file = new File(this.getApplicationContext().getFilesDir(), getString(R.string.profile_picture_name));
+                FileOutputStream outStream = new FileOutputStream(file);
+                bmp = Bitmap.createScaledBitmap(bmp, 140, 140, false);
+                bmp = Utils.getRoundedCornerBitmap(bmp, 70);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                outStream.flush();
+                outStream.close();
+
+                Drawable drawable = new BitmapDrawable(getResources(), bmp);
+                toolbar.setNavigationIcon(drawable);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public BluetoothProvider getBluetoothProvider() {
@@ -151,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 setFragment(connectFragment);
                 connectFragmentVisible = true;
-                connectDisconnectButton.setText(getString(R.string.connect));
+                connectDisconnectButton.setImageResource(R.drawable.connect_icon);
                 connectFragment.updateValues();
             }
         });
@@ -163,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 setFragment(chatFragment);
                 connectFragmentVisible = false;
-                connectDisconnectButton.setText(getString(R.string.disconnect));
+                connectDisconnectButton.setImageResource(R.drawable.disconnect_icon);
             }
         });
         chatFragment.waitForFragmentReady();
