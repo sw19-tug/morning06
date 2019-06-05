@@ -149,6 +149,7 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 message.setMessageText(textEntry.getText().toString());
                 message.setMessageEdited(true);
+                message.setTimestamp(System.currentTimeMillis());
                 messageRepository.updateMessage(message);
 
                 activity.getBluetoothProvider().sendMessage(message);
