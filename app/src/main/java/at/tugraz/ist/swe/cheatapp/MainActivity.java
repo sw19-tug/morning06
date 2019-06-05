@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.util.Log;
-import android.view.FocusFinder;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,13 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
