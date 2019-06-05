@@ -300,7 +300,7 @@ public class ChatFragmentEspressoTest {
 
         messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
         String editText = "I'm done!";
-        sleep(100);
+        sleep(200);
         onView(withText(testText)).perform(longClick());
         EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
         textEntry.setText("");
@@ -325,7 +325,7 @@ public class ChatFragmentEspressoTest {
         messageRepository.insertMessage(firstMessage);
         String editText = "I'm done!";
 
-        sleep(100);
+        sleep(200);
         onView(withText(testText)).perform(longClick());
         EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
         textEntry.setText("");
