@@ -300,7 +300,7 @@ public class ChatFragmentEspressoTest {
 
         messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
         String editText = "I'm done!";
-
+        sleep(100);
         onView(withText(testText)).perform(longClick());
         EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
         textEntry.setText("");
@@ -309,20 +309,23 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
         onView(withId(R.id.btn_edit_send)).perform(click());
         provider.getThread().join();
+
 
         onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
     }
 
     @Test
     public void testTimestampUpdatedOnEdit() throws InterruptedException {
+        Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String testText = "Hello, please edit me!";
         ChatMessage firstMessage = new ChatMessage(1, testText, true, false);
-        long currentTimestamp = firstMessage.getTimestamp() - 10000;
-        firstMessage.setTimestamp(currentTimestamp);
+        long currentTimestamp = firstMessage.getTimestamp() - 1000000;
 
+        firstMessage.setTimestamp(currentTimestamp);
         messageRepository.insertMessage(firstMessage);
         String editText = "I'm done!";
 
+        sleep(100);
         onView(withText(testText)).perform(longClick());
         EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
         textEntry.setText("");
@@ -332,11 +335,6 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_edit_send)).perform(click());
         provider.getThread().join();
 
-        ChatMessage message = messageRepository.getRawMessagesByUserId(1).get(0);
-        System.out.println("CurrentTimestamp: " + currentTimestamp);
-        System.out.println("Timestamp firstmessage: " + firstMessage.getTimestamp());
-        Thread.sleep(1000);
-        Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         onView(withId(R.id.txt_message_time)).check(matches(not((withText(dateFormat.format(currentTimestamp))))));
     }
 }
