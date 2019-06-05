@@ -27,6 +27,9 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                if (device == null)
+                    throw new RuntimeException("No device provided");
+
                 synchronized (DummyBluetoothProvider.this) {
                     connectedDevice = device;
                     connected = true;
@@ -36,6 +39,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                 DummyBluetoothProvider.super.onConnected();
             }
         });
+        thread.setUncaughtExceptionHandler(createExceptionHandler());
         thread.start();
     }
 
@@ -49,6 +53,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                 DummyBluetoothProvider.super.onMessageReceived(receivedMessage);
             }
         });
+        thread.setUncaughtExceptionHandler(createExceptionHandler());
         thread.start();
     }
 
@@ -70,6 +75,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                 DummyBluetoothProvider.super.onDisconnected();
             }
         });
+        thread.setUncaughtExceptionHandler(createExceptionHandler());
         thread.start();
     }
 

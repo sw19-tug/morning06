@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 public class RealBluetoothProvider extends BluetoothProvider {
+    private final static String TAG = "RealBluetoothProvider";
+
     private BluetoothAdapter adapter;
     private BluetoothThread bluetoothThread;
     private Thread.UncaughtExceptionHandler exceptionHandler;
@@ -25,14 +27,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
             throw new BluetoothException("Hardware has no bluetooth support");
         }
 
-        exceptionHandler = new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable ex) {
-                onError(ex.getMessage());
-            }
-        };
-
-        Log.d("RealBluetoothProvider", "Starting bluetooth thread");
+        Log.d(TAG, "Starting bluetooth thread");
 
         initBluetoothThread();
     }
@@ -138,7 +133,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     private void initBluetoothThread() {
         bluetoothThread = new BluetoothThread(this);
-        bluetoothThread.setUncaughtExceptionHandler(exceptionHandler);
+        bluetoothThread.setUncaughtExceptionHandler(createExceptionHandler());
         bluetoothThread.start();
     }
 }

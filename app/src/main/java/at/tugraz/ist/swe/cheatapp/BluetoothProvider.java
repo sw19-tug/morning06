@@ -67,4 +67,13 @@ public abstract class BluetoothProvider {
     }
 
     public abstract boolean isBluetoothEnabled();
+
+    protected Thread.UncaughtExceptionHandler createExceptionHandler() {
+        return new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable ex) {
+                onError(ex.getMessage());
+            }
+        };
+    }
 }

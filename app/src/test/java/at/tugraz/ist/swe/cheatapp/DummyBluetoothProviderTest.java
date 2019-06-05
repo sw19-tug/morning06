@@ -216,6 +216,38 @@ public class DummyBluetoothProviderTest {
     }
 
     @Test
+    public void testOnErrorCallback() throws InterruptedException {
+        // hack for setting variable out of BluetoothEventHandler class
+        final String[] calledList = new String[1];
+        calledList[0] = "";
+
+        BluetoothEventHandler handler = new BluetoothEventHandler() {
+            @Override
+            public void onMessageReceived(ChatMessage message) {
+            }
+
+            @Override
+            public void onConnected() {
+            }
+
+            @Override
+            public void onDisconnected() {
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+                calledList[0] = errorMsg;
+            }
+        };
+
+        this.bluetoothProvider.registerHandler(handler);
+        this.bluetoothProvider.connectToDevice(null);
+        this.bluetoothProvider.getThread().join();
+
+        assertEquals("No device provided", calledList[0]);
+    }
+
+    @Test
     public void testConnectToDevice() throws InterruptedException {
         this.bluetoothProvider.enableDummyDevices(1);
         List<Device> devices = this.bluetoothProvider.getPairedDevices();
