@@ -137,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
         String nickname = sharedPreferences.getString("nickname", "");
         getBluetoothProvider().setOwnNickname(nickname);
+        String profilePicture = sharedPreferences.getString("profilePicture", "no picture");
+        getBluetoothProvider().setOwnProfilePicture(profilePicture);
 
         showConnectFragment();
     }

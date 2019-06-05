@@ -97,6 +97,13 @@ public class RealBluetoothProvider extends BluetoothProvider {
                     nickname = this.bluetoothThread.getConnectedDevice().getDeviceName();
                 }
                 this.bluetoothThread.getConnectedDevice().setNickname(nickname);
+
+                String profilePicture = bluetoothMessage.getConnectMessage().getProfilePicture();
+                if(profilePicture.isEmpty()) {
+                    profilePicture = "no picture"; // TODO empty png encoded instead
+                }
+                this.bluetoothThread.getConnectedDevice().setProfilePicture(profilePicture);
+
                 onConnected();
                 break;
             case DISCONNECT:

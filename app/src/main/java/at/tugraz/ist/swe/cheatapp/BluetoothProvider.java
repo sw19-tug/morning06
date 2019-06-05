@@ -7,6 +7,7 @@ public abstract class BluetoothProvider {
     protected List<BluetoothEventHandler> eventHandlerList;
     protected Device connectedDevice;
     protected String ownNickname;
+    protected String ownProfilePicture;
 
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
@@ -20,9 +21,9 @@ public abstract class BluetoothProvider {
 
     public abstract void sendMessage(ChatMessage message);
 
-    public void setOwnNickname(String ownNickname) {
-        this.ownNickname = ownNickname;
-    }
+    public void setOwnNickname(String ownNickname) { this.ownNickname = ownNickname; }
+
+    public void setOwnProfilePicture(String ownProfilePicture) { this.ownProfilePicture = ownProfilePicture; }
 
     public abstract void disconnect();
 
@@ -37,6 +38,8 @@ public abstract class BluetoothProvider {
     public String getOwnNickname() {
         return ownNickname;
     }
+
+    public String getOwnProfilePicture() { return ownProfilePicture; }
 
     protected void onConnected() {
         for (BluetoothEventHandler handler : eventHandlerList) {
