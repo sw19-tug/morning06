@@ -13,14 +13,12 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     private BluetoothAdapter adapter;
     private BluetoothThread bluetoothThread;
-    private Thread.UncaughtExceptionHandler exceptionHandler;
 
     public RealBluetoothProvider() throws BluetoothException {
         initialize();
     }
 
     public void initialize() throws BluetoothException {
-        // TODO: Should the bluetooth adapter be a member of BluetoothThread?
         adapter = BluetoothAdapter.getDefaultAdapter();
 
         if (adapter == null) {
@@ -123,7 +121,7 @@ public class RealBluetoothProvider extends BluetoothProvider {
         Set<BluetoothDevice> btDevices = adapter.getBondedDevices();
 
         for (BluetoothDevice device : btDevices) {
-            if (Device.idStringToLong(device.getAddress()) == deviceID) {
+            if (Utils.idStringToLong(device.getAddress()) == deviceID) {
                 return new RealDevice(device);
             }
         }

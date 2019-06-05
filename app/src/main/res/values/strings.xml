@@ -23,4 +23,5 @@ Lukas Wagner\n
     <string name="close_button">Close</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="trying_to_reconnect">Try to reconnect...</string>
 </resources>

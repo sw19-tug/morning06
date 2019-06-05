@@ -8,7 +8,7 @@ public class RealDevice extends Device {
     public RealDevice(BluetoothDevice device) {
         this.androidDevice = device;
         this.deviceName = device.getName();
-        this.deviceId = idStringToLong(device.getAddress());
+        this.deviceId = Utils.idStringToLong(device.getAddress());
     }
 
     public BluetoothDevice getAndroidDevice() {

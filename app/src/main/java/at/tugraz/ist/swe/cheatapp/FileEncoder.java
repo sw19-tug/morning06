@@ -8,15 +8,13 @@ import java.io.IOException;
 
 public class FileEncoder {
 
-
     private byte[] readBytesFromFile(final File file) throws IOException {
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            byte data[] = new byte[(int) file.length()];
+            byte[] data = new byte[(int) file.length()];
             fileInputStream.read(data);
             return data;
         }
     }
-
 
     public String encodeBase64(final File file) throws IOException {
         byte[] data = readBytesFromFile(file);

@@ -23,10 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
-
 public class MainActivity extends AppCompatActivity {
 
     private BluetoothProvider bluetoothProvider;
@@ -46,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         currentToast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT);
 
         try {
-            // TODO: Make this nicer.
             if (Utils.isTesting()) {
                 bluetoothProvider = new DummyBluetoothProvider();
             } else {
@@ -277,9 +272,9 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 LinearLayout layout = new LinearLayout(this);
-                LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);
-                layout.setLayoutParams(parms);
+                layout.setLayoutParams(params);
 
                 layout.setGravity(Gravity.CLIP_VERTICAL);
                 layout.setPadding(2, 2, 2, 2);
@@ -300,7 +295,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-                //builder.setView(textViewAboutPage);
                 builder.setView(layout);
                 AlertDialog dialog = builder.create();
                 dialog.show();

@@ -3,15 +3,13 @@ package at.tugraz.ist.swe.cheatapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectFragment extends Fragment {
-    SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private MainActivity activity;
     private View view;
     private ListView listView;
@@ -32,7 +30,7 @@ public class ConnectFragment extends Fragment {
     private int selectedListIndex = -1;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_connect, container, false);
         return view;
     }
@@ -72,35 +70,31 @@ public class ConnectFragment extends Fragment {
         preferencesEditor.remove("lastConDev");
         preferencesEditor.apply();
 
-        if(lastConnectedDeviceID != 0)
-        {
+        if (lastConnectedDeviceID != 0) {
             tryReconnectByDeviceId(lastConnectedDeviceID);
         }
     }
 
-    private void showSnackbar(String message)
-    {
+    private void showSnackbar(String message) {
         Snackbar snackbar = Snackbar
-            .make(this.view, message, Snackbar.LENGTH_LONG);
+                .make(this.view, message, Snackbar.LENGTH_LONG);
         TextView mainTextView = (snackbar.getView()).findViewById(android.support.design.R.id.snackbar_text);
 
         mainTextView.setTextColor(Color.WHITE);
 
         View view = snackbar.getView();
-        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
         params.gravity = Gravity.TOP;
         view.setLayoutParams(params);
         view.setBackgroundColor(Color.GRAY);
         snackbar.show();
     }
 
-    public void tryReconnectByDeviceId(long deviceId)
-    {
-        showSnackbar("Try to reconnect...");
+    public void tryReconnectByDeviceId(long deviceId) {
+        showSnackbar(activity.getString(R.string.trying_to_reconnect));
 
         Device connectDevice = activity.getBluetoothProvider().getDeviceByID(deviceId);
-        if(connectDevice != null)
-        {
+        if (connectDevice != null) {
             activity.clearLastConnectedDevice();
             connectToDevice(connectDevice);
         }
@@ -142,8 +136,7 @@ public class ConnectFragment extends Fragment {
         return listView;
     }
 
-    private void connectToDevice(Device device)
-    {
+    private void connectToDevice(Device device) {
         activity.getBluetoothProvider().connectToDevice(device);
     }
 }
