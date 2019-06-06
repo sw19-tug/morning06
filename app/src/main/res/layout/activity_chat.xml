@@ -17,6 +17,17 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
 
+        <Button
+            android:id="@+id/btn_camera"
+            android:layout_width="49dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="71dp"
+            android:layout_marginBottom="5dp"
+            android:drawableStart="@drawable/ic_photo_camera_black_24dp"
+            android:color="@drawable/camera_button_layout"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvChat"
             android:transcriptMode="alwaysScroll"
