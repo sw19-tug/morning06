@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,8 @@ public class ChatFragment extends Fragment {
     private boolean chatFragmentReady = false;
     private long connectedDeviceId;
     private EmojiPopup emojiPopup;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
 
     @Override
@@ -123,6 +126,13 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCameraClicked();
+            }
+        });
+
         if (!Utils.isTesting()) {
             messageRepository = MessageRepository.createRepository(this.getContext());
         } else {
@@ -189,6 +199,11 @@ public class ChatFragment extends Fragment {
 
     private void onEmojiKeyboardButtonClicked() {
         emojiPopup.toggle();
+    }
+
+    private void onCameraClicked(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     public void onMessageReceived(final ChatMessage message) {
