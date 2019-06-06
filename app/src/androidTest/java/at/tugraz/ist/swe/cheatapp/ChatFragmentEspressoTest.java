@@ -360,4 +360,13 @@ public class ChatFragmentEspressoTest {
     public void testIfCameraButtonVisible() {
         onView(withId(R.id.btn_camera)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testIfCameraHidesOnWrittingMessage() {
+        String testText = "Go Away Camera Button!!!";
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
+        onView(withId(R.id.btn_camera)).check(matches(not(isDisplayed())));
+    }
+
+
 }
