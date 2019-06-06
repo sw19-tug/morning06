@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.annotation.UiThreadTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.InputStream;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -89,20 +92,18 @@ public class MainActivityEspressoTest {
     }
 
     @Test
+    @UiThreadTest
     public void testIfProfilePictureIsSet() {
         Toolbar toolbar = activity.getToolbar();
+        InputStream testPicture = activity.getClass().getResourceAsStream("trump.png");
+        Bitmap bmp = BitmapFactory.decodeStream(testPicture);
 
-
-        String profile_picture_path = classLoader.get"res/testData/test_img_1.png";
-        Bitmap bmp = BitmapFactory.decodeFile(profile_picture_path);
-        Drawable drawable = new BitmapDrawable(activity.getResources(), bmp);
+        Drawable drawable = new BitmapDrawable(bmp);
         toolbar.setNavigationIcon(drawable);
 
-        Drawable setDrawable = toolbar.getNavigationIcon();
-        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-        Bitmap bitmap2 = ((BitmapDrawable)setDrawable).getBitmap();
-        assertTrue(bitmap == bitmap2);
-
+        Drawable drawableTest = toolbar.getNavigationIcon();
+        Bitmap bitmapTest = ((BitmapDrawable) drawableTest).getBitmap();
+        assertEquals(bmp, bitmapTest);
     }
 
     @Test
