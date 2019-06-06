@@ -3,6 +3,9 @@ package at.tugraz.ist.swe.cheatapp;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -112,6 +115,12 @@ public class ChatFragment extends Fragment {
         connectedDeviceId = connectedDevice.getDeviceId();
 
         activity.getSupportActionBar().setTitle(connectedDevice.getNickname());
+        FileEncoder fileEncoder = new FileEncoder();
+        byte[] profilePicture = fileEncoder.decodeBase64(connectedDevice.getProfilePicture());
+        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(profilePicture, 0, profilePicture.length));
+        activity.getToolbar().setNavigationIcon(image);
+
+
 
         final List<ChatMessage> messageList = new ArrayList<>();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() { // TODO: change user id to the id of the chat partner
