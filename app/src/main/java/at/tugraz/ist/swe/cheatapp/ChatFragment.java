@@ -64,6 +64,10 @@ public class ChatFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 cameraButton.setVisibility(View.INVISIBLE);
+                if (textEntry.getText().toString().isEmpty())
+                {
+                    cameraButton.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
