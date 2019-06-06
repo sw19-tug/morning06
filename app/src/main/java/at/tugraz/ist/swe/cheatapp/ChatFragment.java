@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
@@ -178,9 +179,9 @@ public class ChatFragment extends Fragment {
                 {
                     updatedMessage.setMessageText(message.getMessageText());
                     updatedMessage.setMessageEdited(true);
+                    updatedMessage.setTimestamp(System.currentTimeMillis());
 
                     messageRepository.updateMessage(updatedMessage);
-
                     System.out.println("Update message: " + updatedMessage.getJsonString());
                 }
             }
@@ -203,7 +204,10 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 message.setMessageText(textEntry.getText().toString());
+                message.setMessageEdited(true);
+                message.setTimestamp(System.currentTimeMillis());
                 messageRepository.updateMessage(message);
+
                 activity.getBluetoothProvider().sendMessage(message);
                 textEntry.getText().clear();
                 sendButton.setVisibility(view.VISIBLE);
@@ -242,5 +246,14 @@ public class ChatFragment extends Fragment {
 
     public boolean isEmojiKeyboardShowing() {
         return emojiPopup.isShowing();
+    }
+
+    public void clearTextEntry() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textEntry.setText("");
+            }
+        });
     }
 }

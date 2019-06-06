@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -29,9 +31,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static java.lang.Thread.sleep;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.core.StringContains.containsString;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentEspressoTest {
@@ -224,6 +230,7 @@ public class ChatFragmentEspressoTest {
         onView(withText(testText)).perform(longClick());
         EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
         textEntry.setText("");
+        activity.getChatFragment().clearTextEntry();
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
         onView(withId(R.id.btn_edit_send)).perform(click());
@@ -302,5 +309,50 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_emoji_keyboard)).perform(click());
         Thread.sleep(300);
         assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
+    }
+
+
+    @Test
+    public void testEditedIndicatorVisibleOnEdit() throws InterruptedException {
+        String testText = "Hello, please edit me!";
+
+        messageRepository.insertMessage(new ChatMessage(1, testText, true, false));
+        String editText = "I'm done!";
+        sleep(200);
+        onView(withText(testText)).perform(longClick());
+        EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
+        textEntry.setText("");
+        activity.getChatFragment().clearTextEntry();
+
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
+        onView(withId(R.id.btn_edit_send)).perform(click());
+        provider.getThread().join();
+
+
+        onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
+    }
+
+    @Test
+    public void testTimestampUpdatedOnEdit() throws InterruptedException {
+        Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String testText = "Hello, please edit me!";
+        ChatMessage firstMessage = new ChatMessage(1, testText, true, false);
+        long currentTimestamp = firstMessage.getTimestamp() - 1000000;
+
+        firstMessage.setTimestamp(currentTimestamp);
+        messageRepository.insertMessage(firstMessage);
+        String editText = "I'm done!";
+
+        sleep(200);
+        onView(withText(testText)).perform(longClick());
+        EditText textEntry = mainActivityTestRule.getActivity().getChatFragment().getTextEntry();
+        textEntry.setText("");
+        activity.getChatFragment().clearTextEntry();
+
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
+        onView(withId(R.id.btn_edit_send)).perform(click());
+        provider.getThread().join();
+
+        onView(withId(R.id.txt_message_time)).check(matches(not((withText(dateFormat.format(currentTimestamp))))));
     }
 }

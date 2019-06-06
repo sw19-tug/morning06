@@ -74,18 +74,27 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
+        TextView textEditedIndicator;
+
 
         SentMessageHolder(final View itemView) {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.txt_message_body);
             timeText = itemView.findViewById(R.id.txt_message_time);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_edited);
+
         }
 
         void bind(final ChatMessage message) {
             messageText.setText(message.getMessageText());
             timeText.setText(dateFormat.format(message.getTimestamp()));
-
+            if(message.getMessageEdited()){
+                textEditedIndicator.setText("edited");
+            }
+            else{
+                textEditedIndicator.setText("");
+            }
             messageText.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -98,17 +107,25 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
+        TextView textEditedIndicator;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.txt_message_body);
             timeText = itemView.findViewById(R.id.txt_message_time);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_edited);
         }
 
         void bind(ChatMessage message) {
             timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
+            if(message.getMessageEdited()){
+                textEditedIndicator.setText("edited");
+            }
+            else{
+                textEditedIndicator.setText("");
+            }
         }
     }
 }
