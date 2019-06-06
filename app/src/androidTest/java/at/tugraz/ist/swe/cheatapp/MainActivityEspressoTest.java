@@ -1,10 +1,17 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,7 +28,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.junit.Assert.assertSame;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -77,6 +86,23 @@ public class MainActivityEspressoTest {
         onView(withId(android.R.id.button1)).check(matches(isDisplayed())); // positive button (close)
         onView(withText(R.string.title_about_page)).check(matches(isDisplayed()));
         onView(withText(R.string.text_about_page)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testIfProfilePictureIsSet() {
+        Toolbar toolbar = activity.getToolbar();
+
+
+        String profile_picture_path = classLoader.get"res/testData/test_img_1.png";
+        Bitmap bmp = BitmapFactory.decodeFile(profile_picture_path);
+        Drawable drawable = new BitmapDrawable(activity.getResources(), bmp);
+        toolbar.setNavigationIcon(drawable);
+
+        Drawable setDrawable = toolbar.getNavigationIcon();
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Bitmap bitmap2 = ((BitmapDrawable)setDrawable).getBitmap();
+        assertTrue(bitmap == bitmap2);
+
     }
 
     @Test
