@@ -165,8 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             FileEncoder encoder = new FileEncoder();
-            // TODO take commented version after merge
-            File image = new File(this.getApplicationContext().getFilesDir(), getString(R.string.profile_picture_path));
+            File image = new File(profile_picture_path);
             getBluetoothProvider().setOwnProfilePicture(encoder.encodeBase64(image));
         }
         catch (IOException e) {
