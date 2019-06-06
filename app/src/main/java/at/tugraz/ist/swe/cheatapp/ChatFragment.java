@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ public class ChatFragment extends Fragment {
     private Button sendButton;
     private Button editButton;
     private Button abortEditButton;
+    private Button cameraButton;
     private Button emojiKeyboardButton;
     private EmojiEditText textEntry;
     private RecyclerView messageRecycler;
@@ -51,6 +54,23 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         textEntry = view.findViewById(R.id.txt_chat_entry);
+        cameraButton = view.findViewById(R.id.btn_camera);
+        textEntry.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                cameraButton.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         sendButton = view.findViewById(R.id.btn_chat_send);
         editButton = view.findViewById(R.id.btn_edit_send);
         abortEditButton = view.findViewById(R.id.btn_abort_edit);
@@ -89,6 +109,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onSendButtonClicked();
+                cameraButton.setVisibility(View.VISIBLE);
             }
         });
         emojiKeyboardButton.setOnClickListener(new View.OnClickListener() {

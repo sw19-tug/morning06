@@ -25,6 +25,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="71dp"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/emoji_button_layout_inactive"
             android:drawableStart="@drawable/ic_photo_camera_black_24dp"
             android:color="@drawable/camera_button_layout"/>
 
