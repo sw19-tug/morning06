@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
         profilePicturePath = this.getApplicationContext().getFilesDir().toString() + "/" +
                 getString(R.string.profile_picture_name);
-
+        setOwnProfilePicture();
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,15 +161,6 @@ public class MainActivity extends AppCompatActivity {
         lastConnectedDeviceID = sharedPreferences.getLong("lastConDev", 0);
         String nickname = sharedPreferences.getString("nickname", "");
         getBluetoothProvider().setOwnNickname(nickname);
-
-        try {
-            FileEncoder encoder = new FileEncoder();
-            File image = new File(profilePicturePath);
-            getBluetoothProvider().setOwnProfilePicture(encoder.encodeBase64(image));
-        }
-        catch (IOException e) {
-            getBluetoothProvider().setOwnProfilePicture(Constants.EMPTY_PROFILE_PICTURE);
-        }
 
         showConnectFragment();
     }
@@ -422,6 +413,15 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setNavigationIcon(drawable);
         } else {
             toolbar.setNavigationIcon(R.mipmap.cheat_app_logo);
+        }
+
+        try {
+            FileEncoder encoder = new FileEncoder();
+            File image = new File(profilePicturePath);
+            getBluetoothProvider().setOwnProfilePicture(encoder.encodeBase64(image));
+        }
+        catch (IOException e) {
+            getBluetoothProvider().setOwnProfilePicture(Constants.EMPTY_PROFILE_PICTURE);
         }
     }
 }
