@@ -368,5 +368,12 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_camera)).check(matches(not(isDisplayed())));
     }
 
-
+    @Test
+    public void testIfCameraAppearsWhenClearingMessage() {
+        String testText = "Go Away Camera Button!!!";
+        onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
+       
+        activity.getChatFragment().clearTextEntry();
+        onView(withId(R.id.btn_camera)).check(matches(isDisplayed()));
+    }
 }
