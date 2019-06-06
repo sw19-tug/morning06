@@ -11,6 +11,7 @@
     <string name="menu_about_page">About Page</string>
     <string name="title_set_nickname_dialog">Set Nickname</string>
     <string name="title_about_page">About</string>
+    <string name="profile_picture_name">profile_picture.png</string>
     <string name="text_about_page"><b>The Team</b> \n Philipp Diethard\n
 Stefan Ertl\n
 Karl Petschl\n
