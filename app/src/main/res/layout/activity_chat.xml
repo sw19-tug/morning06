@@ -23,12 +23,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="71dp"
+            android:layout_marginEnd="81dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/emoji_button_layout_inactive"
-            android:drawableEnd="@drawable/ic_photo_camera_black_24dp"
             android:color="@drawable/camera_button_layout"
-            android:scaleType="fitCenter"            />
+            android:drawableEnd="@drawable/ic_photo_camera_black_24dp"
+            android:scaleType="fitCenter" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvChat"
@@ -63,12 +63,11 @@
             android:layout_height="48dp"
             android:layout_alignParentTop="false"
             android:layout_alignParentRight="true"
-            android:background="@drawable/button_layout"
-            android:paddingLeft="11dp"
-            android:drawableStart="@drawable/ic_input_extract_action_send"
-            android:textColor="@android:color/background_light"
             android:layout_alignParentBottom="true"
-            />
+            android:background="@drawable/button_layout"
+            android:drawableStart="@drawable/ic_input_extract_action_send"
+            android:paddingLeft="11dp"
+            android:textColor="@android:color/background_light" />
 
         <Button
             android:id="@+id/btn_edit_send"

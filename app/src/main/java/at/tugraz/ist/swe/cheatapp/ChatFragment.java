@@ -4,15 +4,19 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +29,14 @@ import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static android.os.Environment.DIRECTORY_PICTURES;
 
 public class ChatFragment extends Fragment {
     private MainActivity activity;
@@ -45,6 +55,7 @@ public class ChatFragment extends Fragment {
     private EmojiPopup emojiPopup;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    String currentPhotoPath;
 
 
     @Override
@@ -203,8 +214,37 @@ public class ChatFragment extends Fragment {
 
     private void onCameraClicked(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        File photoFile = null;
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            Log.d("ChatFragment", "Cannot create image file");
+        }
+
+        if (photoFile != null) {
+            Uri photoURI = FileProvider.getUriForFile(getContext(), "at.tugraz.ist.swe.cheatapp.fileprovider", photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "CHEAT_" + timeStamp;
+        Log.d("ChatFragment", "ImageFileName: " + imageFileName);
+
+        File storageDir = getContext().getExternalFilesDir(DIRECTORY_PICTURES);
+        Log.d("ChatFragment", "Storage Directory: " + storageDir);
+
+        File image = File.createTempFile(imageFileName,".jpg", storageDir);
+        Log.d("ChatFragment", "Image file created");
+
+        currentPhotoPath = image.getAbsolutePath();
+        Log.d("ChatFragment", "Photo Path: " + currentPhotoPath);
+
+        return image;
+    }
+
 
     public void onMessageReceived(final ChatMessage message) {
         message.setUserId(connectedDeviceId);
