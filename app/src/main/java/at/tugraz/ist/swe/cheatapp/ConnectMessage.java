@@ -14,7 +14,7 @@ public class ConnectMessage {
         this.nickname = nickname;
     }
 
-    public ConnectMessage(String jsonConnectMessageString) throws JSONException  {
+    public ConnectMessage(String jsonConnectMessageString) throws JSONException {
         JSONObject jsonConnectMessage = new JSONObject(jsonConnectMessageString);
         this.applicationId = jsonConnectMessage.getString("applicationId");
         this.versionName = jsonConnectMessage.getString("versionName");

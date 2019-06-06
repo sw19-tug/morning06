@@ -40,7 +40,6 @@ public class ChatFragment extends Fragment {
     private EmojiPopup emojiPopup;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_chat, container, false);
@@ -105,8 +104,7 @@ public class ChatFragment extends Fragment {
         }
 
         Device connectedDevice = null;
-        while(connectedDevice == null)
-        {
+        while (connectedDevice == null) {
             connectedDevice = activity.getBluetoothProvider().getConnectedDevice();
             Thread.yield();
         }
@@ -119,11 +117,10 @@ public class ChatFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<ChatMessage> messages) {
                 messageList.clear();
-                for (ChatMessage msg : messages) {
-                    messageList.add(msg);
-                }
+                messageList.addAll(messages);
+
                 messageAdapter.notifyDataSetChanged();
-                if(messageAdapter.getItemCount() > 1)
+                if (messageAdapter.getItemCount() > 1)
                     messageRecycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
             }
         });
@@ -134,8 +131,8 @@ public class ChatFragment extends Fragment {
         messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         SharedPreferences.Editor preferencesEditor =
-                 activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
-        preferencesEditor.putLong("lastConDev",connectedDevice.getDeviceId());
+                activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();
+        preferencesEditor.putLong("lastConDev", connectedDevice.getDeviceId());
         preferencesEditor.apply();
 
         synchronized (this) {
@@ -147,7 +144,7 @@ public class ChatFragment extends Fragment {
     @Override
     public void onDestroy() {
         activity.getSupportActionBar().setTitle(R.string.app_name);
-        synchronized (this ) {
+        synchronized (this) {
             this.chatFragmentReady = false;
         }
         super.onDestroy();
@@ -170,13 +167,11 @@ public class ChatFragment extends Fragment {
 
     public void onMessageReceived(final ChatMessage message) {
         message.setUserId(connectedDeviceId);
-        if(message.getMessageEdited()){
+        if (message.getMessageEdited()) {
             List<ChatMessage> updatedMessages = messageRepository.getMessagesByMessageUUID(message.getMessageUUID());
 
-            for(ChatMessage updatedMessage : updatedMessages)
-            {
-                if(!updatedMessage.getMessageSent())
-                {
+            for (ChatMessage updatedMessage : updatedMessages) {
+                if (!updatedMessage.getMessageSent()) {
                     updatedMessage.setMessageText(message.getMessageText());
                     updatedMessage.setMessageEdited(true);
                     updatedMessage.setTimestamp(System.currentTimeMillis());
@@ -185,20 +180,18 @@ public class ChatFragment extends Fragment {
                     System.out.println("Update message: " + updatedMessage.getJsonString());
                 }
             }
-        }
-        else{
+        } else {
             messageRepository.insertMessage(message);
         }
         System.out.println("Receive: " + message.getJsonString());
     }
 
-    public void onMessageEdit(final ChatMessage message)
-    {
+    public void onMessageEdit(final ChatMessage message) {
         textEntry.setText(message.getMessageText());
         message.setMessageEdited(true);
-        sendButton.setVisibility(view.INVISIBLE);
-        editButton.setVisibility(view.VISIBLE);
-        abortEditButton.setVisibility(view.VISIBLE);
+        sendButton.setVisibility(View.INVISIBLE);
+        editButton.setVisibility(View.VISIBLE);
+        abortEditButton.setVisibility(View.VISIBLE);
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,9 +203,9 @@ public class ChatFragment extends Fragment {
 
                 activity.getBluetoothProvider().sendMessage(message);
                 textEntry.getText().clear();
-                sendButton.setVisibility(view.VISIBLE);
-                editButton.setVisibility(view.INVISIBLE);
-                abortEditButton.setVisibility(view.INVISIBLE);
+                sendButton.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.INVISIBLE);
+                abortEditButton.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -220,16 +213,15 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 textEntry.getText().clear();
-                sendButton.setVisibility(view.VISIBLE);
-                editButton.setVisibility(view.INVISIBLE);
-                abortEditButton.setVisibility(view.INVISIBLE);
+                sendButton.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.INVISIBLE);
+                abortEditButton.setVisibility(View.INVISIBLE);
             }
         });
     }
 
     public synchronized void waitForFragmentReady() throws InterruptedException {
-        if(!this.chatFragmentReady)
-        {
+        if (!this.chatFragmentReady) {
             this.wait();
         }
     }
@@ -242,7 +234,9 @@ public class ChatFragment extends Fragment {
         return messageRepository;
     }
 
-    public EditText getTextEntry() {return textEntry;}
+    public EditText getTextEntry() {
+        return textEntry;
+    }
 
     public boolean isEmojiKeyboardShowing() {
         return emojiPopup.isShowing();

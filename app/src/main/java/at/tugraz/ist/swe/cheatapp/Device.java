@@ -18,9 +18,4 @@ public abstract class Device {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
-    public static long idStringToLong(String idString) {
-        idString = idString.replace(":", "");
-        return Long.valueOf(idString, 16);
-    }
 }

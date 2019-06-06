@@ -14,7 +14,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         this.bluetoothEnabled = true;
         this.connected = false;
 
-        enableDummyDevices(1);
+        setNumberOfEnabledDummyDevices(1);
     }
 
     @Override
@@ -27,6 +27,9 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                if (device == null)
+                    throw new RuntimeException("No device provided");
+
                 synchronized (DummyBluetoothProvider.this) {
                     connectedDevice = device;
                     connected = true;
@@ -36,6 +39,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                 DummyBluetoothProvider.super.onConnected();
             }
         });
+        thread.setUncaughtExceptionHandler(createExceptionHandler());
         thread.start();
     }
 
@@ -49,6 +53,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                 DummyBluetoothProvider.super.onMessageReceived(receivedMessage);
             }
         });
+        thread.setUncaughtExceptionHandler(createExceptionHandler());
         thread.start();
     }
 
@@ -70,10 +75,11 @@ public class DummyBluetoothProvider extends BluetoothProvider {
                 DummyBluetoothProvider.super.onDisconnected();
             }
         });
+        thread.setUncaughtExceptionHandler(createExceptionHandler());
         thread.start();
     }
 
-    public void enableDummyDevices(int count) {
+    public void setNumberOfEnabledDummyDevices(int count) {
         this.devices.clear();
         for (int i = 1; i <= count; i++) {
             this.devices.add(new DummyDevice(Integer.toString(i), Integer.toString(i)));

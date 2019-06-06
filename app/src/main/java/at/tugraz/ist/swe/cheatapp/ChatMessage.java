@@ -1,7 +1,6 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONException;
@@ -22,15 +21,6 @@ public class ChatMessage {
     private String messageUUID;
     private boolean messageEdited;
 
-   /* public ChatMessage(long userId, String messageText, boolean messageSent) {
-        this.userId = userId;
-        this.messageText = messageText;
-        this.messageSent = messageSent;
-        this.timestamp = System.currentTimeMillis();
-        this.messageUUID = UUID.randomUUID().toString();
-        this.messageEdited = false;
-    }
-*/
     public ChatMessage(long userId, String messageText, boolean messageSent, boolean messageEdited) {
         this.userId = userId;
         this.messageText = messageText;
@@ -44,10 +34,11 @@ public class ChatMessage {
         JSONObject jsonMessage = new JSONObject(jsonMessageString);
         this.userId = jsonMessage.getLong("userId");
         this.messageText = jsonMessage.getString("messageText");
-        this.messageSent = messageSent;
         this.timestamp = jsonMessage.getLong("timeStamp");
         this.messageUUID = jsonMessage.getString("messageUUID");
         this.messageEdited = jsonMessage.getBoolean("messageEdited");
+        this.messageSent = messageSent;
+
     }
 
     public ChatMessage(final ChatMessage other) {
@@ -71,16 +62,16 @@ public class ChatMessage {
         return userId;
     }
 
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
     public long getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 
     public String getMessageText() {
