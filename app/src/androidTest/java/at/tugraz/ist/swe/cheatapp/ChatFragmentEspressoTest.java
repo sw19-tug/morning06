@@ -355,4 +355,9 @@ public class ChatFragmentEspressoTest {
 
         onView(withId(R.id.txt_message_time)).check(matches(not((withText(dateFormat.format(currentTimestamp))))));
     }
+
+    @Test
+    public void testIfCameraButtonVisible() {
+        onView(withId(R.id.btn_camera)).check(matches(isDisplayed()));
+    }
 }
