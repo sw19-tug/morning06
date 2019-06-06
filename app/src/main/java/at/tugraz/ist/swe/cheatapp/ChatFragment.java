@@ -120,8 +120,6 @@ public class ChatFragment extends Fragment {
         Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(profilePicture, 0, profilePicture.length));
         activity.getToolbar().setNavigationIcon(image);
 
-
-
         final List<ChatMessage> messageList = new ArrayList<>();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() { // TODO: change user id to the id of the chat partner
             @Override

@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private long lastConnectedDeviceID;
     private int numberOfLogoClicks = 0;
     private static int RESULT_LOAD_IMAGE = 1;
+    private String profilePicturePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,19 +142,17 @@ public class MainActivity extends AppCompatActivity {
         // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
-        String profile_picture_path = this.getApplicationContext().getFilesDir().toString() + "/" + getString(R.string.profile_picture_name);
-        Bitmap bmp = BitmapFactory.decodeFile(profile_picture_path);
-        if(bmp != null) {
-            Drawable drawable = new BitmapDrawable(getResources(), bmp);
-            toolbar.setNavigationIcon(drawable);
-        } else {
-            toolbar.setNavigationIcon(R.mipmap.cheat_app_logo);
-        }
+        profilePicturePath = this.getApplicationContext().getFilesDir().toString() + "/" +
+                getString(R.string.profile_picture_name);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent GaleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(GaleryIntent, RESULT_LOAD_IMAGE);
+                if (!chatFragment.isVisible()) {
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                }
             }
         });
 
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             FileEncoder encoder = new FileEncoder();
-            File image = new File(profile_picture_path);
+            File image = new File(profilePicturePath);
             getBluetoothProvider().setOwnProfilePicture(encoder.encodeBase64(image));
         }
         catch (IOException e) {
@@ -207,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 System.out.println("Bitmap");
                 System.out.println(bmp);
-                File file = new File(this.getApplicationContext().getFilesDir(), getString(R.string.profile_picture_name));
+                File file = new File(this.getApplicationContext().getFilesDir(),
+                        getString(R.string.profile_picture_name));
                 FileOutputStream outStream = new FileOutputStream(file);
                 bmp = Bitmap.createScaledBitmap(bmp, 140, 140, false);
                 bmp = Utils.getRoundedCornerBitmap(bmp, 70);
@@ -233,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 setFragment(connectFragment);
+                setOwnProfilePicture();
                 connectFragmentVisible = true;
                 connectDisconnectButton.setImageResource(R.drawable.connect_icon);
                 connectFragment.updateValues();
@@ -360,7 +361,8 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 LinearLayout layout = new LinearLayout(this);
-                LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 layout.setLayoutParams(parms);
 
@@ -374,10 +376,12 @@ public class MainActivity extends AppCompatActivity {
                 textViewAboutPage.setGravity(Gravity.CENTER);
                 textViewAboutPage.setTextSize(20);
 
-                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textViewParams.bottomMargin = 5;
                 layout.addView(textViewAboutPage, textViewParams);
-                layout.addView(image, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                layout.addView(image, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 builder.setPositiveButton(R.string.close_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -405,5 +409,19 @@ public class MainActivity extends AppCompatActivity {
 
     public Toolbar getToolbar() {
         return toolbar;
+    }
+
+    public void setOwnProfilePicture() {
+        if (profilePicturePath == null) {
+            toolbar.setNavigationIcon(R.mipmap.cheat_app_logo);
+            return;
+        }
+        Bitmap bmp = BitmapFactory.decodeFile(profilePicturePath);
+        if (bmp != null) {
+            Drawable drawable = new BitmapDrawable(getResources(), bmp);
+            toolbar.setNavigationIcon(drawable);
+        } else {
+            toolbar.setNavigationIcon(R.mipmap.cheat_app_logo);
+        }
     }
 }
