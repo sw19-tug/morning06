@@ -32,11 +32,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static int RESULT_LOAD_IMAGE = 1;
     private BluetoothProvider bluetoothProvider;
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private Toast currentToast;
     private long lastConnectedDeviceID;
     private int numberOfLogoClicks = 0;
-    private static int RESULT_LOAD_IMAGE = 1;
     private String profilePicturePath;
 
     @Override
@@ -169,9 +169,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             Uri SelectedImage = data.getData();
-            String[] FilePathColumn = {MediaStore.Images.Media.DATA };
+            String[] FilePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor SelectedCursor = getContentResolver().query(SelectedImage, FilePathColumn, null, null, null);
             SelectedCursor.moveToFirst();
@@ -189,30 +189,34 @@ public class MainActivity extends AppCompatActivity {
                     options = new BitmapFactory.Options();
                     options.inSampleSize = 4;
                     bmp = BitmapFactory.decodeFile(picturePath, options);
-                } catch(Exception excepetion) {
-                    Log.e("MainActivity", excepetion.getMessage());
+                } catch (Exception ex) {
+                    Log.e("MainActivity", ex.getMessage());
                 }
             }
 
-            try {
-                System.out.println("Bitmap");
-                System.out.println(bmp);
-                File file = new File(this.getApplicationContext().getFilesDir(),
-                        getString(R.string.profile_picture_name));
-                FileOutputStream outStream = new FileOutputStream(file);
-                bmp = Bitmap.createScaledBitmap(bmp, 140, 140, false);
-                bmp = Utils.getRoundedCornerBitmap(bmp, 70);
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-                outStream.flush();
-                outStream.close();
+            if (bmp == null) {
+                showToast(getString(R.string.image_loading_failed));
+            } else {
+                try {
+                    System.out.println("Bitmap");
+                    System.out.println(bmp);
+                    File file = new File(this.getApplicationContext().getFilesDir(),
+                            getString(R.string.profile_picture_name));
+                    FileOutputStream outStream = new FileOutputStream(file);
+                    bmp = Bitmap.createScaledBitmap(bmp, 140, 140, false);
+                    bmp = Utils.getRoundedCornerBitmap(bmp, 70);
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                    outStream.flush();
+                    outStream.close();
 
-                Drawable drawable = new BitmapDrawable(getResources(), bmp);
-                toolbar.setNavigationIcon(drawable);
-            } catch (Exception e) {
-                e.printStackTrace();
+                    Drawable drawable = new BitmapDrawable(getResources(), bmp);
+                    toolbar.setNavigationIcon(drawable);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast(e.getMessage());
+                }
             }
         }
-
     }
 
     public BluetoothProvider getBluetoothProvider() {
@@ -419,8 +423,7 @@ public class MainActivity extends AppCompatActivity {
             FileEncoder encoder = new FileEncoder();
             File image = new File(profilePicturePath);
             getBluetoothProvider().setOwnProfilePicture(encoder.encodeBase64(image));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             getBluetoothProvider().setOwnProfilePicture(Constants.EMPTY_PROFILE_PICTURE);
         }
     }
