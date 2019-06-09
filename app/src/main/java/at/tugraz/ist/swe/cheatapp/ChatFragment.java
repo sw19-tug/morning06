@@ -117,7 +117,7 @@ public class ChatFragment extends Fragment {
         activity.getSupportActionBar().setTitle(connectedDevice.getNickname());
         FileEncoder fileEncoder = new FileEncoder();
         byte[] profilePicture = fileEncoder.decodeBase64(connectedDevice.getProfilePicture());
-        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(profilePicture, 0, profilePicture.length));
+        Drawable image = new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(profilePicture, 0, profilePicture.length));
         activity.getToolbar().setNavigationIcon(image);
 
         final List<ChatMessage> messageList = new ArrayList<>();
