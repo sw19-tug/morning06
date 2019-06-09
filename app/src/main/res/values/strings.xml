@@ -6,6 +6,7 @@
     <string name="connected">Connected</string>
     <string name="bluetooth_disabled">Please enable bluetooth!</string>
     <string name="image_loading_failed">Selected image could not be loaded</string>
+    <string name="storage_permissions_needed">You have to grant permissions to set a profile picture.</string>
     <string name="disconnected">Disconnected</string>
     <string name="no_device_selected">No device selected</string>
     <string name="menu_set_nickname">Set Nickname</string>

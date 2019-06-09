@@ -1,9 +1,12 @@
 package at.tugraz.ist.swe.cheatapp;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,8 +15,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -37,7 +42,8 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int RESULT_LOAD_IMAGE = 1;
+    private static final int RESULT_LOAD_IMAGE = 1;
+    private static final int RESULT_PERMISSION_DIALOG = 2;
     private BluetoothProvider bluetoothProvider;
     private ConnectFragment connectFragment;
     private ChatFragment chatFragment;
@@ -137,9 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothProvider.registerHandler(bluetoothEventHandler);
 
-        // Attaching the layout to the toolbar object
         toolbar = findViewById(R.id.toolbar);
-        // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
         profilePicturePath = this.getApplicationContext().getFilesDir().toString() + "/" +
@@ -149,9 +153,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!chatFragment.isVisible()) {
-                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                RESULT_PERMISSION_DIALOG);
+                    } else {
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                    }
                 }
             }
         });
@@ -215,6 +228,24 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                     showToast(e.getMessage());
                 }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case RESULT_PERMISSION_DIALOG: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                } else {
+                    showToast(getString(R.string.storage_permissions_needed));
+                }
+                return;
             }
         }
     }
