@@ -86,6 +86,7 @@ public class ChatFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
+        BluetoothProvider provider = activity.getBluetoothProvider();
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,12 +107,14 @@ public class ChatFragment extends Fragment {
             messageRepository = MessageRepository.createInMemoryRepository(this.getContext());
         }
 
-        Device connectedDevice = null;
-        while(connectedDevice == null)
-        {
-            connectedDevice = activity.getBluetoothProvider().getConnectedDevice();
-            Thread.yield();
+        try {
+            provider.waitForConnectionFinished();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            activity.showToast(e.getMessage());
         }
+
+        Device connectedDevice = provider.getConnectedDevice();
         connectedDeviceId = connectedDevice.getDeviceId();
 
         activity.getSupportActionBar().setTitle(connectedDevice.getNickname());

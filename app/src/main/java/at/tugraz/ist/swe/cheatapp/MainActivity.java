@@ -222,8 +222,7 @@ public class MainActivity extends AppCompatActivity {
                     outStream.flush();
                     outStream.close();
 
-                    Drawable drawable = new BitmapDrawable(getResources(), bmp);
-                    toolbar.setNavigationIcon(drawable);
+                    setOwnProfilePicture();
                 } catch (Exception e) {
                     e.printStackTrace();
                     showToast(e.getMessage());
