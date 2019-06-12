@@ -91,10 +91,8 @@ public class MainActivityEspressoTest {
     @UiThreadTest
     public void testIfProfilePictureIsSet() {
         Toolbar toolbar = activity.getToolbar();
-        InputStream testPicture = activity.getClass().getResourceAsStream("trump.png");
-        Bitmap bmp = BitmapFactory.decodeStream(testPicture);
-
-        Drawable drawable = new BitmapDrawable(activity.getApplicationContext().getResources(), bmp);
+        Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.test_image);
+        Drawable drawable = new BitmapDrawable(activity.getResources(), bmp);
         toolbar.setNavigationIcon(drawable);
 
         Drawable drawableTest = toolbar.getNavigationIcon();
