@@ -15,7 +15,7 @@ public class ConnectMessageTest {
         jsonMessage.put("applicationId", "com.example.testapp");
         jsonMessage.put("versionName", "1.3.3.7");
         jsonMessage.put("nickname", "Cheater");
-        jsonMessage.put("profilePicture","Picture");
+        jsonMessage.put("profilePicture", "Picture");
         assertEquals(jsonMessage.toString(), connectMessage.getJsonString());
     }
 
@@ -25,7 +25,7 @@ public class ConnectMessageTest {
         jsonMessage.put("applicationId", "com.example.testapp");
         jsonMessage.put("versionName", "1.3.3.7");
         jsonMessage.put("nickname", "Cheater");
-        jsonMessage.put("profilePicture","Picture");
+        jsonMessage.put("profilePicture", "Picture");
 
 
         ConnectMessage testMessage = new ConnectMessage(jsonMessage.toString());

@@ -14,9 +14,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
-
-    private List<ChatMessage> messageList;
     Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private List<ChatMessage> messageList;
     private ChatFragment chatFragment;
 
     public MessageAdapter(List<ChatMessage> messageList, ChatFragment chatFragment) {
@@ -89,10 +88,9 @@ public class MessageAdapter extends RecyclerView.Adapter {
         void bind(final ChatMessage message) {
             messageText.setText(message.getMessageText());
             timeText.setText(dateFormat.format(message.getTimestamp()));
-            if(message.getMessageEdited()){
+            if (message.getMessageEdited()) {
                 textEditedIndicator.setText("edited");
-            }
-            else{
+            } else {
                 textEditedIndicator.setText("");
             }
             messageText.setOnLongClickListener(new View.OnLongClickListener() {
@@ -120,10 +118,9 @@ public class MessageAdapter extends RecyclerView.Adapter {
         void bind(ChatMessage message) {
             timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
-            if(message.getMessageEdited()){
+            if (message.getMessageEdited()) {
                 textEditedIndicator.setText("edited");
-            }
-            else{
+            } else {
                 textEditedIndicator.setText("");
             }
         }

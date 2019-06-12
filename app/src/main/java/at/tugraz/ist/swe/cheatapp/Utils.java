@@ -40,7 +40,7 @@ public class Utils {
         final RectF rectF = new RectF(rect);
         final float roundPx = roundPixelSize;
         paint.setAntiAlias(true);
-        canvas.drawRoundRect(rectF,roundPx,roundPx, paint);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;

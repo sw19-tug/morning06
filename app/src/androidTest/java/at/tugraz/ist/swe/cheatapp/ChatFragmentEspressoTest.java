@@ -30,10 +30,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.StringEndsWith.endsWith;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -80,7 +79,7 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void testIfNicknameChangesAtReconnect(){
+    public void testIfNicknameChangesAtReconnect() {
         onView(withText("Test Nickname")).check(matches(isDisplayed()));
         onView(withId(R.id.btn_con_disconnect)).perform(click());
 

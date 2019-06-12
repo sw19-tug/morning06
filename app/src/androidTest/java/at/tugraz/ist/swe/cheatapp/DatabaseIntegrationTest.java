@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -131,8 +130,7 @@ public class DatabaseIntegrationTest {
         assertEquals(allMessages.size(), 1);
     }
 
-    private void assertMessageEqual(ChatMessage original, ChatMessage copy)
-    {
+    private void assertMessageEqual(ChatMessage original, ChatMessage copy) {
         assertEquals(original.getMessageText(), copy.getMessageText());
         assertEquals(original.getMessageUUID(), copy.getMessageUUID());
         assertEquals(original.getTimestamp(), copy.getTimestamp());

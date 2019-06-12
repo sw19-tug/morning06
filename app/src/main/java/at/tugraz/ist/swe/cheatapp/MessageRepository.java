@@ -35,7 +35,7 @@ public class MessageRepository {
         }.execute();
     }
 
-    public AsyncTask<Void, Void, Void> updateMessage(final ChatMessage message){
+    public AsyncTask<Void, Void, Void> updateMessage(final ChatMessage message) {
         return new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {

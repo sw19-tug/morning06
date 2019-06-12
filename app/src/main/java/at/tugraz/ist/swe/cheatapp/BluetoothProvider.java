@@ -22,10 +22,6 @@ public abstract class BluetoothProvider {
 
     public abstract void sendMessage(ChatMessage message);
 
-    public void setOwnNickname(String ownNickname) { this.ownNickname = ownNickname; }
-
-    public void setOwnProfilePicture(String ownProfilePicture) { this.ownProfilePicture = ownProfilePicture; }
-
     public abstract void disconnect();
 
     public void registerHandler(BluetoothEventHandler handler) {
@@ -40,7 +36,17 @@ public abstract class BluetoothProvider {
         return ownNickname;
     }
 
-    public String getOwnProfilePicture() { return ownProfilePicture; }
+    public void setOwnNickname(String ownNickname) {
+        this.ownNickname = ownNickname;
+    }
+
+    public String getOwnProfilePicture() {
+        return ownProfilePicture;
+    }
+
+    public void setOwnProfilePicture(String ownProfilePicture) {
+        this.ownProfilePicture = ownProfilePicture;
+    }
 
     protected void onConnected() {
         setConnectionFinished();
@@ -93,7 +99,7 @@ public abstract class BluetoothProvider {
     }
 
     public synchronized void waitForConnectionFinished() throws InterruptedException {
-        if(!connectionFinished)
+        if (!connectionFinished)
             this.wait();
     }
 }

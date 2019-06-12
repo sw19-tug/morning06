@@ -101,7 +101,7 @@
             android:layout_toStartOf="@+id/btn_chat_send"
             android:layout_toEndOf="@+id/btn_chat_emojiKeyboard"
             android:background="@drawable/edit_text_round_corners"
-            android:hint="Enter Text Here"
+            android:hint="@string/hint_text"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"

@@ -2,9 +2,7 @@ package at.tugraz.ist.swe.cheatapp;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 import org.junit.runner.RunWith;
-
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -18,6 +16,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Base64;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -50,7 +49,7 @@ public class FileEncoderTest {
     @Test
     public void testEncodeBase64() throws IOException {
         File testImage = new File("sampledata/test_img_1.png");
-        assert(testImage.exists());
+        assert (testImage.exists());
         byte[] fileContent = Files.readAllBytes(testImage.toPath());
 
         String encodedFile = encoder.encodeBase64(testImage);
@@ -61,13 +60,13 @@ public class FileEncoderTest {
     @Test
     public void testDecodeBase64() throws IOException {
         File testImageEncoded = new File("sampledata/test_img_1_encoded.txt");
-        assert(testImageEncoded.exists());
+        assert (testImageEncoded.exists());
         byte[] encodedBytes = Files.readAllBytes(testImageEncoded.toPath());
         String encodedString = new String(encodedBytes);
 
         byte[] decodedFile = encoder.decodeBase64(encodedString);
         byte[] decodedFileCheck = Base64.getDecoder().decode(encodedString);
-        assert(Arrays.equals(decodedFile, decodedFileCheck));
+        assert (Arrays.equals(decodedFile, decodedFileCheck));
     }
 
 
@@ -77,8 +76,8 @@ public class FileEncoderTest {
         String originalString = "abcde";
         assertEquals(new String(originalByte), originalString);
 
-        File originalFile = new File ("sampledata/test_encode_decode.txt");
-        assert(originalFile.exists());
+        File originalFile = new File("sampledata/test_encode_decode.txt");
+        assert (originalFile.exists());
         PrintWriter writer = new PrintWriter(originalFile.getPath());
         writer.print(originalString);
         writer.close();
@@ -86,20 +85,20 @@ public class FileEncoderTest {
         String encoderTest = encoder.encodeBase64(originalFile);
         byte[] decoderTest = encoder.decodeBase64(encoderTest);
 
-        assert(Arrays.equals(decoderTest, originalByte));
+        assert (Arrays.equals(decoderTest, originalByte));
         assertEquals(new String(decoderTest), originalString);
     }
 
     @Test
     public void testEncodeDecodeWithTestImage() throws IOException {
         File testImage = new File("sampledata/test_img_1.png");
-        assert(testImage.exists());
+        assert (testImage.exists());
         byte[] originalByte = Files.readAllBytes(testImage.toPath());
 
         String encoderTest = encoder.encodeBase64(testImage);
         byte[] decoderTest = encoder.decodeBase64(encoderTest);
 
-        assert(Arrays.equals(decoderTest, originalByte));
+        assert (Arrays.equals(decoderTest, originalByte));
     }
 
 }
