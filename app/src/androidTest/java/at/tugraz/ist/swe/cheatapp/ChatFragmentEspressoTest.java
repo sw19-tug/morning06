@@ -114,7 +114,7 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void clearTextField() {
+    public void testClearTextField() {
         String testText = "This text is redundant because it will be cleared anyway ;-)";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -122,7 +122,7 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void saveTextIntoDummyDevice() throws InterruptedException {
+    public void testSaveTextIntoDummyDevice() throws InterruptedException {
         String testText = "Hello World";
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
@@ -136,13 +136,13 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void chatHistoryVisible() {
+    public void testChatHistoryVisible() {
         onView(withId(R.id.rvChat)).check(matches(isDisplayed()));
     }
 
     @Test
     // TODO this test does not check anything
-    public void chatHistoryScrollable() {
+    public void testChatHistoryScrollable() {
         messageRepository.insertMessage(new ChatMessage(1, "Hi, how are you?", true, false));
         messageRepository.insertMessage(new ChatMessage(1, "I'm fine. Thanks.", false, false));
         messageRepository.insertMessage(new ChatMessage(1, "What are you doing?", true, false));
@@ -194,7 +194,7 @@ public class ChatFragmentEspressoTest {
 
 
     @Test
-    public void timestampVisibleOnSend() throws InterruptedException {
+    public void testTimestampVisibleOnSend() throws InterruptedException {
         String testText = "Hello, I is there a timestamp?";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
