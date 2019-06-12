@@ -18,7 +18,7 @@
         android:paddingRight="5dp">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvChat"
+            android:id="@+id/rv_chat"
             android:transcriptMode="alwaysScroll"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -29,7 +29,7 @@
             android:paddingBottom="5dp" />
 
         <Button
-            android:id="@+id/btn_emoji_keyboard"
+            android:id="@+id/btn_chat_emojiKeyboard"
             style="@style/Widget.AppCompat.ImageButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -58,7 +58,7 @@
             />
 
         <Button
-            android:id="@+id/btn_edit_send"
+            android:id="@+id/btn_chat_editSend"
             style="@style/Widget.AppCompat.ImageButton"
             android:visibility="invisible"
             android:layout_width="48dp"
@@ -73,17 +73,17 @@
             />
 
         <Button
-            android:id="@+id/btn_abort_edit"
+            android:id="@+id/btn_chat_editAbort"
             style="@style/Widget.AppCompat.ImageButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_toStartOf="@+id/btn_edit_send"
+            android:layout_toStartOf="@+id/btn_chat_editSend"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="false"
             android:background="@drawable/abort_edit"
             android:drawableStart="@drawable/ic_close_white_24dp"
             android:paddingLeft="11dp"
-            android:layout_above="@id/btn_edit_send"
+            android:layout_above="@id/btn_chat_editSend"
             android:layout_marginBottom="5dp"
             android:textColor="@android:color/background_light"
             android:visibility="invisible"
@@ -99,9 +99,9 @@
             android:layout_marginEnd="14dp"
             android:layout_marginBottom="7dp"
             android:layout_toStartOf="@+id/btn_chat_send"
-            android:layout_toEndOf="@+id/btn_emoji_keyboard"
+            android:layout_toEndOf="@+id/btn_chat_emojiKeyboard"
             android:background="@drawable/edit_text_round_corners"
-            android:hint="Enter Text Here"
+            android:hint="@string/hint_text"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"

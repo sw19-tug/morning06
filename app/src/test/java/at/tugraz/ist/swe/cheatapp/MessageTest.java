@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import java.lang.reflect.Type;
 import java.util.UUID;
 
 import static junit.framework.TestCase.assertTrue;
@@ -61,8 +60,7 @@ public class MessageTest {
     }
 
     @Test
-    public void testBluetoothMessageClass() throws JSONException
-    {
+    public void testBluetoothMessageClass() throws JSONException {
         JSONObject chatJson = new JSONObject();
         String uuid = UUID.randomUUID().toString();
 

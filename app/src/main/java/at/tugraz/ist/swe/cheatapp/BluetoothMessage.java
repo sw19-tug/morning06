@@ -5,13 +5,10 @@ import org.json.JSONObject;
 
 public class BluetoothMessage {
 
-    enum Type {CONNECT, DISCONNECT, CHAT, FILE}
-
     private Type messageType;
     private ChatMessage message = null;
     private ConnectMessage connectMessage = null;
     private DisconnectMessage disconnectMessage = null;
-
     public BluetoothMessage(ChatMessage message) {
         messageType = Type.CHAT;
         this.message = message;
@@ -25,45 +22,6 @@ public class BluetoothMessage {
     public BluetoothMessage(DisconnectMessage disconnectMessage) {
         this.messageType = Type.DISCONNECT;
         this.disconnectMessage = disconnectMessage;
-    }
-
-    public  Type getMessageType() {
-        return messageType;
-    }
-
-    public ChatMessage getMessage() {
-        return message;
-    }
-
-    public ConnectMessage getConnectMessage() {
-        return connectMessage;
-    }
-
-    public DisconnectMessage getDisconnectMessage() {
-        return disconnectMessage;
-    }
-
-    public String toJSONString() throws JSONException{
-
-        JSONObject serializedMessage = new JSONObject();
-        serializedMessage.put("type", messageType.toString());
-
-        String payload = "";
-
-        switch (messageType) {
-            case CHAT:
-                payload = message.getJsonString();
-                break;
-            case CONNECT:
-                payload = connectMessage.getJsonString();
-                break;
-            case DISCONNECT:
-                payload = "";
-                break;
-        }
-
-        serializedMessage.put("payload", payload);
-        return serializedMessage.toString();
     }
 
     public static BluetoothMessage fromJSONString(String json) throws JSONException {
@@ -90,4 +48,45 @@ public class BluetoothMessage {
 
         return null;
     }
+
+    public Type getMessageType() {
+        return messageType;
+    }
+
+    public ChatMessage getMessage() {
+        return message;
+    }
+
+    public ConnectMessage getConnectMessage() {
+        return connectMessage;
+    }
+
+    public DisconnectMessage getDisconnectMessage() {
+        return disconnectMessage;
+    }
+
+    public String toJSONString() throws JSONException {
+
+        JSONObject serializedMessage = new JSONObject();
+        serializedMessage.put("type", messageType.toString());
+
+        String payload = "";
+
+        switch (messageType) {
+            case CHAT:
+                payload = message.getJsonString();
+                break;
+            case CONNECT:
+                payload = connectMessage.getJsonString();
+                break;
+            case DISCONNECT:
+                payload = "";
+                break;
+        }
+
+        serializedMessage.put("payload", payload);
+        return serializedMessage.toString();
+    }
+
+    enum Type {CONNECT, DISCONNECT, CHAT, FILE}
 }

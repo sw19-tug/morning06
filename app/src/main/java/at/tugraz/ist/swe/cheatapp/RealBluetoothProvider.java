@@ -86,13 +86,13 @@ public class RealBluetoothProvider extends BluetoothProvider {
                 break;
             case CONNECT:
                 String nickname = bluetoothMessage.getConnectMessage().getNickname();
-                if(nickname.isEmpty()) {
+                if (nickname.isEmpty()) {
                     nickname = this.bluetoothThread.getConnectedDevice().getDeviceName();
                 }
                 this.bluetoothThread.getConnectedDevice().setNickname(nickname);
 
                 String profilePicture = bluetoothMessage.getConnectMessage().getProfilePicture();
-                if(profilePicture.isEmpty()) {
+                if (profilePicture.isEmpty()) {
                     profilePicture = Constants.EMPTY_PROFILE_PICTURE;
                 }
                 this.bluetoothThread.getConnectedDevice().setProfilePicture(profilePicture);

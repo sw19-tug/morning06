@@ -14,9 +14,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
-
-    private List<ChatMessage> messageList;
     Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private List<ChatMessage> messageList;
     private ChatFragment chatFragment;
 
     public MessageAdapter(List<ChatMessage> messageList, ChatFragment chatFragment) {
@@ -80,19 +79,18 @@ public class MessageAdapter extends RecyclerView.Adapter {
         SentMessageHolder(final View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.txt_message_body);
-            timeText = itemView.findViewById(R.id.txt_message_time);
-            textEditedIndicator = itemView.findViewById(R.id.txt_message_edited);
+            messageText = itemView.findViewById(R.id.txt_message_messageBody);
+            timeText = itemView.findViewById(R.id.txt_message_messageTime);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_messageEdited);
 
         }
 
         void bind(final ChatMessage message) {
             messageText.setText(message.getMessageText());
             timeText.setText(dateFormat.format(message.getTimestamp()));
-            if(message.getMessageEdited()){
+            if (message.getMessageEdited()) {
                 textEditedIndicator.setText("edited");
-            }
-            else{
+            } else {
                 textEditedIndicator.setText("");
             }
             messageText.setOnLongClickListener(new View.OnLongClickListener() {
@@ -112,18 +110,17 @@ public class MessageAdapter extends RecyclerView.Adapter {
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.txt_message_body);
-            timeText = itemView.findViewById(R.id.txt_message_time);
-            textEditedIndicator = itemView.findViewById(R.id.txt_message_edited);
+            messageText = itemView.findViewById(R.id.txt_message_messageBody);
+            timeText = itemView.findViewById(R.id.txt_message_messageTime);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_messageEdited);
         }
 
         void bind(ChatMessage message) {
             timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
-            if(message.getMessageEdited()){
+            if (message.getMessageEdited()) {
                 textEditedIndicator.setText("edited");
-            }
-            else{
+            } else {
                 textEditedIndicator.setText("");
             }
         }

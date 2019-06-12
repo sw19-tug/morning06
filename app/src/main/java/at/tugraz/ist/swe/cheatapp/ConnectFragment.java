@@ -54,7 +54,7 @@ public class ConnectFragment extends Fragment {
             }
         });
 
-        swipeRefreshLayout = view.findViewById(R.id.swp_pull_to_refresh);
+        swipeRefreshLayout = view.findViewById(R.id.swp_con_pullToRefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

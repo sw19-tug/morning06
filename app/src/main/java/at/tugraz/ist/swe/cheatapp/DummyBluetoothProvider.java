@@ -21,7 +21,7 @@ public class DummyBluetoothProvider extends BluetoothProvider {
     public List<Device> getPairedDevices() {
         return this.devices;
     }
-    
+
     @Override
     public void connectToDevice(final Device device) {
         thread = new Thread(new Runnable() {
@@ -100,7 +100,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         return this.eventHandlerList;
     }
 
-    // TODO just for testing purposes, maybe remove later
     public void setReceivedMessage(final ChatMessage message) {
         super.onMessageReceived(message);
     }
@@ -116,10 +115,8 @@ public class DummyBluetoothProvider extends BluetoothProvider {
 
     @Override
     public Device getDeviceByID(long deviceID) {
-        for(Device device : devices)
-        {
-            if(device.getDeviceId() == deviceID)
-            {
+        for (Device device : devices) {
+            if (device.getDeviceId() == deviceID) {
                 return device;
             }
         }

@@ -30,14 +30,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.StringEndsWith.endsWith;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.hamcrest.core.StringContains.containsString;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentEspressoTest {
@@ -81,9 +79,9 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void testIfNicknameChangesAtReconnect(){
+    public void testIfNicknameChangesAtReconnect() {
         onView(withText("Test Nickname")).check(matches(isDisplayed()));
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
 
         openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).perform(click());
@@ -110,11 +108,11 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void testDisconnectButtonVisible() {
-        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_con_disconnect)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void clearTextField() {
+    public void testClearTextField() {
         String testText = "This text is redundant because it will be cleared anyway ;-)";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -122,7 +120,7 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void saveTextIntoDummyDevice() throws InterruptedException {
+    public void testSaveTextIntoDummyDevice() throws InterruptedException {
         String testText = "Hello World";
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
@@ -136,13 +134,12 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    public void chatHistoryVisible() {
-        onView(withId(R.id.rvChat)).check(matches(isDisplayed()));
+    public void testChatHistoryVisible() {
+        onView(withId(R.id.rv_chat)).check(matches(isDisplayed()));
     }
 
     @Test
-    // TODO this test does not check anything
-    public void chatHistoryScrollable() {
+    public void testChatHistoryScrollable() {
         messageRepository.insertMessage(new ChatMessage(1, "Hi, how are you?", true, false));
         messageRepository.insertMessage(new ChatMessage(1, "I'm fine. Thanks.", false, false));
         messageRepository.insertMessage(new ChatMessage(1, "What are you doing?", true, false));
@@ -169,10 +166,10 @@ public class ChatFragmentEspressoTest {
         messageRepository.insertMessage(new ChatMessage(1, ":P", true, false));
         messageRepository.insertMessage(new ChatMessage(1, ":)", true, false));
 
-        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
-        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
-        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(20));
-        onView(withId(R.id.rvChat)).perform(RecyclerViewActions.scrollToPosition(0));
+        onView(withId(R.id.rv_chat)).perform(RecyclerViewActions.scrollToPosition(20));
+        onView(withId(R.id.rv_chat)).perform(RecyclerViewActions.scrollToPosition(0));
+        onView(withId(R.id.rv_chat)).perform(RecyclerViewActions.scrollToPosition(20));
+        onView(withId(R.id.rv_chat)).perform(RecyclerViewActions.scrollToPosition(0));
     }
 
     @Test
@@ -182,7 +179,6 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        // TODO solve race condition
         int listLength = 0;
         while (listLength == 0) {
             listLength = messageRepository.getRawMessagesByUserId(1).size();
@@ -194,7 +190,7 @@ public class ChatFragmentEspressoTest {
 
 
     @Test
-    public void timestampVisibleOnSend() throws InterruptedException {
+    public void testTimestampVisibleOnSend() throws InterruptedException {
         String testText = "Hello, I is there a timestamp?";
         onView(withId(R.id.txt_chat_entry)).perform(typeText(testText), closeSoftKeyboard());
         onView(withId(R.id.btn_chat_send)).perform(click());
@@ -232,7 +228,7 @@ public class ChatFragmentEspressoTest {
         activity.getChatFragment().clearTextEntry();
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
-        onView(withId(R.id.btn_edit_send)).perform(click());
+        onView(withId(R.id.btn_chat_editSend)).perform(click());
         provider.getThread().join();
 
         ChatMessage receiveMessage = messageRepository.getRawMessagesByUserId(1).get(0);
@@ -269,8 +265,8 @@ public class ChatFragmentEspressoTest {
         provider.getThread().join();
 
         onView(withText(testText)).perform(longClick());
-        onView(withId(R.id.btn_abort_edit)).check(matches(isDisplayed()));
-        onView(withId(R.id.btn_edit_send)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_chat_editAbort)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_chat_editSend)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -296,16 +292,16 @@ public class ChatFragmentEspressoTest {
 
     @Test
     public void testIfEmojiButtonVisible() {
-        onView(withId(R.id.btn_emoji_keyboard)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_chat_emojiKeyboard)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testIfEmojiKeyboardIsShown() throws InterruptedException {
         assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
-        onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        onView(withId(R.id.btn_chat_emojiKeyboard)).perform(click());
         Thread.sleep(300);
         assertTrue(activity.getChatFragment().isEmojiKeyboardShowing());
-        onView(withId(R.id.btn_emoji_keyboard)).perform(click());
+        onView(withId(R.id.btn_chat_emojiKeyboard)).perform(click());
         Thread.sleep(300);
         assertFalse(activity.getChatFragment().isEmojiKeyboardShowing());
     }
@@ -324,11 +320,11 @@ public class ChatFragmentEspressoTest {
         activity.getChatFragment().clearTextEntry();
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
-        onView(withId(R.id.btn_edit_send)).perform(click());
+        onView(withId(R.id.btn_chat_editSend)).perform(click());
         provider.getThread().join();
 
 
-        onView(withId(R.id.txt_message_edited)).check(matches(withText("edited")));
+        onView(withId(R.id.txt_message_messageEdited)).check(matches(withText("edited")));
     }
 
     @Test
@@ -349,9 +345,9 @@ public class ChatFragmentEspressoTest {
         activity.getChatFragment().clearTextEntry();
 
         onView(withId(R.id.txt_chat_entry)).perform(typeText(editText), closeSoftKeyboard());
-        onView(withId(R.id.btn_edit_send)).perform(click());
+        onView(withId(R.id.btn_chat_editSend)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.txt_message_time)).check(matches(not((withText(dateFormat.format(currentTimestamp))))));
+        onView(withId(R.id.txt_message_messageTime)).check(matches(not((withText(dateFormat.format(currentTimestamp))))));
     }
 }
