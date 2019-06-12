@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class BluetoothMessage {
 
-    enum Type {CONNECT, DISCONNECT, CHAT, FILE}
+    enum Type {CONNECT, DISCONNECT, CHAT, IMAGE}
 
     private Type messageType;
     private ChatMessage message = null;
@@ -54,6 +54,9 @@ public class BluetoothMessage {
             case CHAT:
                 payload = message.getJsonString();
                 break;
+            case IMAGE:
+                payload = message.getJsonString();
+                break;
             case CONNECT:
                 payload = connectMessage.getJsonString();
                 break;
@@ -74,6 +77,11 @@ public class BluetoothMessage {
 
         switch (messageType) {
             case CHAT: {
+                ChatMessage chatMessage = new ChatMessage(payload, false);
+                return new BluetoothMessage(chatMessage);
+            }
+
+            case IMAGE: {
                 ChatMessage chatMessage = new ChatMessage(payload, false);
                 return new BluetoothMessage(chatMessage);
             }
