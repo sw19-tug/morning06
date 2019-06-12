@@ -8,7 +8,7 @@
     android:elevation="1dp">
 
     <ImageButton
-        android:id="@+id/btn_connect_disconnect"
+        android:id="@+id/btn_con_disconnect"
         android:scaleType="center"
         android:scaleX="0.5"
         android:scaleY="0.5"

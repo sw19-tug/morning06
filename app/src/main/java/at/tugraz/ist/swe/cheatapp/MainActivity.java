@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         connectFragment = new ConnectFragment();
         chatFragment = new ChatFragment();
-        connectDisconnectButton = findViewById(R.id.btn_connect_disconnect);
+        connectDisconnectButton = findViewById(R.id.btn_con_disconnect);
 
         connectDisconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothProvider.registerHandler(bluetoothEventHandler);
 
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
         profilePicturePath = this.getApplicationContext().getFilesDir().toString() + "/" +
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.placeholder_frame, fragment);
+        transaction.replace(R.id.placeholder_frame_main, fragment);
         transaction.commitNowAllowingStateLoss();
     }
 

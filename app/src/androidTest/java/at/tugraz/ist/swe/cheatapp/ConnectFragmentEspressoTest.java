@@ -61,7 +61,7 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testButtonsVisible() {
-        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_con_disconnect)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
 
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
@@ -84,7 +84,7 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testConnectWithoutSelection() {
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
 
         assertFalse(provider.isConnected());
         assertNull(provider.getConnectedDevice());
@@ -95,7 +95,7 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
 
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
 
         assertTrue(provider.isConnected());
@@ -107,8 +107,8 @@ public class ConnectFragmentEspressoTest {
     public void testChangeViewOnConnect() throws InterruptedException {
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
-        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
 
         onView(withId(R.id.btn_chat_send)).check(matches(isDisplayed()));
@@ -118,13 +118,13 @@ public class ConnectFragmentEspressoTest {
     public void testChangeViewOnDisconnect() throws InterruptedException {
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.btn_connect_disconnect)).check(matches(isDisplayed()));
+        onView(withId(R.id.btn_con_disconnect)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -132,10 +132,10 @@ public class ConnectFragmentEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
 
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
 
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
 
         assertFalse(provider.isConnected());
@@ -147,7 +147,7 @@ public class ConnectFragmentEspressoTest {
 
     @Test
     public void testRefreshOnSwipe() throws InterruptedException {
-        onView(withId(R.id.swp_pull_to_refresh)).check(matches(isDisplayed()));
+        onView(withId(R.id.swp_con_pullToRefresh)).check(matches(isDisplayed()));
 
         Thread.sleep(500);
         int count = activity.getListView().getAdapter().getCount();
@@ -166,7 +166,7 @@ public class ConnectFragmentEspressoTest {
     public void testConnectedDeviceSavedInSharedPreferences() throws InterruptedException {
         onData(allOf(is(instanceOf(String.class)), is("1")))
                 .perform(click());
-        onView(withId(R.id.btn_connect_disconnect)).perform(click());
+        onView(withId(R.id.btn_con_disconnect)).perform(click());
         provider.getThread().join();
         Thread.sleep(100);
         SharedPreferences sharedPreferences =

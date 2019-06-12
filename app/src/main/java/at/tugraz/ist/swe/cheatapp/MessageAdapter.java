@@ -80,9 +80,9 @@ public class MessageAdapter extends RecyclerView.Adapter {
         SentMessageHolder(final View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.txt_message_body);
-            timeText = itemView.findViewById(R.id.txt_message_time);
-            textEditedIndicator = itemView.findViewById(R.id.txt_message_edited);
+            messageText = itemView.findViewById(R.id.txt_message_messageBody);
+            timeText = itemView.findViewById(R.id.txt_message_messageTime);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_messageEdited);
 
         }
 
@@ -112,9 +112,9 @@ public class MessageAdapter extends RecyclerView.Adapter {
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.txt_message_body);
-            timeText = itemView.findViewById(R.id.txt_message_time);
-            textEditedIndicator = itemView.findViewById(R.id.txt_message_edited);
+            messageText = itemView.findViewById(R.id.txt_message_messageBody);
+            timeText = itemView.findViewById(R.id.txt_message_messageTime);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_messageEdited);
         }
 
         void bind(ChatMessage message) {

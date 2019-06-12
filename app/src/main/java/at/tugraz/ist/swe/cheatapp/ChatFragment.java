@@ -53,9 +53,9 @@ public class ChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         textEntry = view.findViewById(R.id.txt_chat_entry);
         sendButton = view.findViewById(R.id.btn_chat_send);
-        editButton = view.findViewById(R.id.btn_edit_send);
-        abortEditButton = view.findViewById(R.id.btn_abort_edit);
-        emojiKeyboardButton = view.findViewById(R.id.btn_emoji_keyboard);
+        editButton = view.findViewById(R.id.btn_chat_editSend);
+        abortEditButton = view.findViewById(R.id.btn_chat_editAbort);
+        emojiKeyboardButton = view.findViewById(R.id.btn_chat_emojiKeyboard);
 
         ViewGroup rootView = view.findViewById(R.id.relativeLayout1);
 
@@ -135,7 +135,7 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        messageRecycler = view.findViewById(R.id.rvChat);
+        messageRecycler = view.findViewById(R.id.rv_chat);
         messageAdapter = new MessageAdapter(messageList, this);
         messageRecycler.setAdapter(messageAdapter);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
