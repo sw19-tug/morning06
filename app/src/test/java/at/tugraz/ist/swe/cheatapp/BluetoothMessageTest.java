@@ -20,7 +20,7 @@ public class BluetoothMessageTest {
     @Test
     public void testConnectMessageConstructor() {
         ConnectMessage connectMessage = new ConnectMessage("com.example.testapp",
-                "1.3.3.7", "Nickname");
+                "1.3.3.7", "Nickname", "Picture");
         BluetoothMessage btMessage = new BluetoothMessage(connectMessage);
 
         assertEquals(btMessage.getMessageType(), BluetoothMessage.Type.CONNECT);
@@ -30,7 +30,7 @@ public class BluetoothMessageTest {
     @Test
     public void testToJSONStringWithConnectMessage() throws JSONException {
         ConnectMessage connectMessage = new ConnectMessage("com.example.testapp",
-                "1.3.3.7", "Nickname");
+                "1.3.3.7", "Nickname", "Picture");
         BluetoothMessage connectBluetoothMessage = new BluetoothMessage(connectMessage);
 
         JSONObject jsonBluetoothMessage = new JSONObject();
@@ -56,7 +56,7 @@ public class BluetoothMessageTest {
     @Test
     public void testFromJSONStringWithConnectMessage() throws JSONException {
         ConnectMessage connectMessage = new ConnectMessage("com.example.testapp",
-                "1.3.3.7", "Nickname");
+                "1.3.3.7", "Nickname", "Picture");
         BluetoothMessage connectBluetoothMessage1 = new BluetoothMessage(connectMessage);
         BluetoothMessage connectBluetoothMessage2 = BluetoothMessage.fromJSONString(connectBluetoothMessage1.toJSONString());
 

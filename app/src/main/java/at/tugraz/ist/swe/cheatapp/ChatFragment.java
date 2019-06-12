@@ -3,6 +3,9 @@ package at.tugraz.ist.swe.cheatapp;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
@@ -83,6 +85,7 @@ public class ChatFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
+        BluetoothProvider provider = activity.getBluetoothProvider();
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,14 +106,21 @@ public class ChatFragment extends Fragment {
             messageRepository = MessageRepository.createInMemoryRepository(this.getContext());
         }
 
-        Device connectedDevice = null;
-        while (connectedDevice == null) {
-            connectedDevice = activity.getBluetoothProvider().getConnectedDevice();
-            Thread.yield();
+        try {
+            provider.waitForConnectionFinished();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            activity.showToast(e.getMessage());
         }
+
+        Device connectedDevice = provider.getConnectedDevice();
         connectedDeviceId = connectedDevice.getDeviceId();
 
         activity.getSupportActionBar().setTitle(connectedDevice.getNickname());
+        FileEncoder fileEncoder = new FileEncoder();
+        byte[] profilePicture = fileEncoder.decodeBase64(connectedDevice.getProfilePicture());
+        Drawable image = new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(profilePicture, 0, profilePicture.length));
+        activity.getToolbar().setNavigationIcon(image);
 
         final List<ChatMessage> messageList = new ArrayList<>();
         messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() { // TODO: change user id to the id of the chat partner

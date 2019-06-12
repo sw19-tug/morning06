@@ -7,6 +7,8 @@ public abstract class BluetoothProvider {
     protected List<BluetoothEventHandler> eventHandlerList;
     protected Device connectedDevice;
     protected String ownNickname;
+    protected String ownProfilePicture;
+    protected boolean connectionFinished = false;
 
     public BluetoothProvider() {
         this.eventHandlerList = new ArrayList<>();
@@ -20,9 +22,9 @@ public abstract class BluetoothProvider {
 
     public abstract void sendMessage(ChatMessage message);
 
-    public void setOwnNickname(String ownNickname) {
-        this.ownNickname = ownNickname;
-    }
+    public void setOwnNickname(String ownNickname) { this.ownNickname = ownNickname; }
+
+    public void setOwnProfilePicture(String ownProfilePicture) { this.ownProfilePicture = ownProfilePicture; }
 
     public abstract void disconnect();
 
@@ -38,13 +40,17 @@ public abstract class BluetoothProvider {
         return ownNickname;
     }
 
+    public String getOwnProfilePicture() { return ownProfilePicture; }
+
     protected void onConnected() {
+        setConnectionFinished();
         for (BluetoothEventHandler handler : eventHandlerList) {
             handler.onConnected();
         }
     }
 
     protected void onDisconnected() {
+        clearConnectionFinished();
         for (BluetoothEventHandler handler : eventHandlerList) {
             handler.onDisconnected();
         }
@@ -75,5 +81,19 @@ public abstract class BluetoothProvider {
                 onError(ex.getMessage());
             }
         };
+    }
+
+    private synchronized void setConnectionFinished() {
+        connectionFinished = true;
+        this.notify();
+    }
+
+    private synchronized void clearConnectionFinished() {
+        connectionFinished = false;
+    }
+
+    public synchronized void waitForConnectionFinished() throws InterruptedException {
+        if(!connectionFinished)
+            this.wait();
     }
 }

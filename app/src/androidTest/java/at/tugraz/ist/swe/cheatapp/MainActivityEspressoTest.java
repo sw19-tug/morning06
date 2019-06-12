@@ -2,14 +2,22 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.annotation.UiThreadTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.Toolbar;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.InputStream;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -64,7 +72,7 @@ public class MainActivityEspressoTest {
     public void testSetNicknameDialogVisible() {
         openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).check(matches(isDisplayed()));
-        onView(withText(R.string.menu_set_nickname)).perform(click()); // TODO: This only works on a physical Android 9 device with Animations disabled
+        onView(withText(R.string.menu_set_nickname)).perform(click());
         onView(withId(android.R.id.button1)).check(matches(isDisplayed())); // positive button (save)
         onView(withId(android.R.id.button2)).check(matches(isDisplayed())); // negative button (cancel)
     }
@@ -77,6 +85,19 @@ public class MainActivityEspressoTest {
         onView(withId(android.R.id.button1)).check(matches(isDisplayed())); // positive button (close)
         onView(withText(R.string.title_about_page)).check(matches(isDisplayed()));
         onView(withText(R.string.text_about_page)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @UiThreadTest
+    public void testIfProfilePictureIsSet() {
+        Toolbar toolbar = activity.getToolbar();
+        Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.test_image);
+        Drawable drawable = new BitmapDrawable(activity.getResources(), bmp);
+        toolbar.setNavigationIcon(drawable);
+
+        Drawable drawableTest = toolbar.getNavigationIcon();
+        Bitmap bitmapTest = ((BitmapDrawable) drawableTest).getBitmap();
+        assertEquals(bmp, bitmapTest);
     }
 
     @Test

@@ -63,7 +63,6 @@ public class ConnectFragment extends Fragment {
             }
         });
 
-
         long lastConnectedDeviceID = activity.getLastConnectedDeviceID();
         SharedPreferences.Editor preferencesEditor =
                 activity.getSharedPreferences("CheatAppSharedPreferences", Context.MODE_PRIVATE).edit();

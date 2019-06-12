@@ -101,4 +101,5 @@ public class FileEncoderTest {
 
         assert(Arrays.equals(decoderTest, originalByte));
     }
+
 }
