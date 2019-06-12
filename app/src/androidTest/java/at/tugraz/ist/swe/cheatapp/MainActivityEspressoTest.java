@@ -1,7 +1,6 @@
 package at.tugraz.ist.swe.cheatapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +11,6 @@ import android.support.test.annotation.UiThreadTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,9 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.junit.Assert.assertSame;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -76,7 +72,7 @@ public class MainActivityEspressoTest {
     public void testSetNicknameDialogVisible() {
         openActionBarOverflowOrOptionsMenu(activity.getApplicationContext());
         onView(withText(R.string.menu_set_nickname)).check(matches(isDisplayed()));
-        onView(withText(R.string.menu_set_nickname)).perform(click()); // TODO: This only works on a physical Android 9 device with Animations disabled
+        onView(withText(R.string.menu_set_nickname)).perform(click());
         onView(withId(android.R.id.button1)).check(matches(isDisplayed())); // positive button (save)
         onView(withId(android.R.id.button2)).check(matches(isDisplayed())); // negative button (cancel)
     }
@@ -98,7 +94,7 @@ public class MainActivityEspressoTest {
         InputStream testPicture = activity.getClass().getResourceAsStream("trump.png");
         Bitmap bmp = BitmapFactory.decodeStream(testPicture);
 
-        Drawable drawable = new BitmapDrawable(bmp);
+        Drawable drawable = new BitmapDrawable(activity.getApplicationContext().getResources(), bmp);
         toolbar.setNavigationIcon(drawable);
 
         Drawable drawableTest = toolbar.getNavigationIcon();
