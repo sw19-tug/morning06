@@ -50,7 +50,7 @@ public class MessageRepository {
         return cheatAppDatabase.messageDao().getMessageByMessageUUID(uuid);
     }
 
-    public List<ChatMessage> getRawMessagesByUserId(long userId) {                   //For testing purposes
+    public List<ChatMessage> getRawMessagesByUserId(long userId) {
         return cheatAppDatabase.messageDao().getRawMessagesByUserId(userId);
     }
 

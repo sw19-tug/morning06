@@ -141,7 +141,6 @@ public class ChatFragmentEspressoTest {
     }
 
     @Test
-    // TODO this test does not check anything
     public void testChatHistoryScrollable() {
         messageRepository.insertMessage(new ChatMessage(1, "Hi, how are you?", true, false));
         messageRepository.insertMessage(new ChatMessage(1, "I'm fine. Thanks.", false, false));
@@ -182,7 +181,6 @@ public class ChatFragmentEspressoTest {
         onView(withId(R.id.btn_chat_send)).perform(click());
         provider.getThread().join();
 
-        // TODO solve race condition
         int listLength = 0;
         while (listLength == 0) {
             listLength = messageRepository.getRawMessagesByUserId(1).size();

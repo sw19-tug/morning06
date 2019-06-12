@@ -100,7 +100,6 @@ public class DummyBluetoothProvider extends BluetoothProvider {
         return this.eventHandlerList;
     }
 
-    // TODO just for testing purposes, maybe remove later
     public void setReceivedMessage(final ChatMessage message) {
         super.onMessageReceived(message);
     }

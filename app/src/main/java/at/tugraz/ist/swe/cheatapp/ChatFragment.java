@@ -123,7 +123,7 @@ public class ChatFragment extends Fragment {
         activity.getToolbar().setNavigationIcon(image);
 
         final List<ChatMessage> messageList = new ArrayList<>();
-        messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() { // TODO: change user id to the id of the chat partner
+        messageRepository.getMessagesByUserId(connectedDeviceId).observe(this, new Observer<List<ChatMessage>>() {
             @Override
             public void onChanged(@Nullable List<ChatMessage> messages) {
                 messageList.clear();

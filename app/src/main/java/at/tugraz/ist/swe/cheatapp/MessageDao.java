@@ -15,7 +15,7 @@ public interface MessageDao {
     Long insertMessage(ChatMessage message);
 
     @Query("SELECT * FROM ChatMessage WHERE userId=:userId ORDER BY messageId asc")
-    List<ChatMessage> getRawMessagesByUserId(long userId);       //For testing purposes
+    List<ChatMessage> getRawMessagesByUserId(long userId);
 
     @Query("SELECT * FROM ChatMessage WHERE userId=:userId ORDER BY messageId asc")
     LiveData<List<ChatMessage>> getMessagesByUserId(long userId);
