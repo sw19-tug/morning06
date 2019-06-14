@@ -9,15 +9,23 @@ import java.util.List;
 
 public class MessageRepository {
 
-    private String DB_NAME = "cheatapp_db";
+    private static String DB_NAME = "cheatapp_db";
 
     private CheatAppDatabase cheatAppDatabase;
 
-    public MessageRepository(Context context) {
-        cheatAppDatabase = Room.databaseBuilder(context, CheatAppDatabase.class, DB_NAME).build();
+    private MessageRepository(CheatAppDatabase cheatAppDatabase) {
+        this.cheatAppDatabase = cheatAppDatabase;
     }
 
-    public AsyncTask<Void, Void, Void> insertMessage(final Message newMessage) {
+    public static MessageRepository createRepository(Context context) {
+        return new MessageRepository(Room.databaseBuilder(context, CheatAppDatabase.class, MessageRepository.DB_NAME).build());
+    }
+
+    public static MessageRepository createInMemoryRepository(Context context) {
+        return new MessageRepository(Room.inMemoryDatabaseBuilder(context, CheatAppDatabase.class).build());
+    }
+
+    public AsyncTask<Void, Void, Void> insertMessage(final ChatMessage newMessage) {
         return new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -27,11 +35,26 @@ public class MessageRepository {
         }.execute();
     }
 
-    public List<Message> getRawMessagesByUserId(int userId) {                   //For testing purposes
+    public AsyncTask<Void, Void, Void> updateMessage(final ChatMessage message) {
+        return new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                cheatAppDatabase.messageDao().updateMessage(message);
+                return null;
+            }
+        }.execute();
+    }
+
+
+    public List<ChatMessage> getMessagesByMessageUUID(String uuid) {
+        return cheatAppDatabase.messageDao().getMessageByMessageUUID(uuid);
+    }
+
+    public List<ChatMessage> getRawMessagesByUserId(long userId) {
         return cheatAppDatabase.messageDao().getRawMessagesByUserId(userId);
     }
 
-    public LiveData<List<Message>> getMessagesByUserId(int userId) {
+    public LiveData<List<ChatMessage>> getMessagesByUserId(long userId) {
         return cheatAppDatabase.messageDao().getMessagesByUserId(userId);
     }
 }

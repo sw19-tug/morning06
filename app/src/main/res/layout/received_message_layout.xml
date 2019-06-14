@@ -8,8 +8,8 @@
     android:layout_height="wrap_content"
     android:paddingTop="8dp">
 
-    <TextView
-        android:id="@+id/txt_message_body"
+    <com.vanniktech.emoji.EmojiTextView
+        android:id="@+id/txt_message_messageBody"
         android:text=""
         android:background="@drawable/received_message_view"
         android:layout_width="wrap_content"
@@ -22,13 +22,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txt_message_time"
-        android:text=""
+        android:id="@+id/txt_message_messageTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text=""
         android:textSize="10sp"
-        android:layout_marginLeft="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_message_body"
-        app:layout_constraintLeft_toRightOf="@+id/txt_message_body" />
+        app:layout_constraintStart_toStartOf="@+id/txt_message_messageBody"
+        app:layout_constraintTop_toBottomOf="@+id/txt_message_messageBody" />
+
+    <TextView
+        android:id="@+id/txt_message_messageEdited"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@+id/txt_message_messageBody"
+        app:layout_constraintTop_toBottomOf="@+id/txt_message_messageTime" />
 
 </android.support.constraint.ConstraintLayout>

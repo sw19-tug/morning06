@@ -2,29 +2,16 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.bluetooth.BluetoothDevice;
 
-public class RealDevice implements Device {
-    private BluetoothDevice device;
+public class RealDevice extends Device {
+    private BluetoothDevice androidDevice;
 
     public RealDevice(BluetoothDevice device) {
-        this.device = device;
+        this.androidDevice = device;
+        this.deviceName = device.getName();
+        this.deviceId = Utils.idStringToLong(device.getAddress());
     }
 
-    @Override
-    public String getID() {
-        return device.getName();
-    }
-
-    public BluetoothDevice getDevice() {
-        return device;
-    }
-
-    @Override
-    public String getMessage() {
-        return null;
-    }
-
-    @Override
-    public void sendMessage(String message) {
-
+    public BluetoothDevice getAndroidDevice() {
+        return this.androidDevice;
     }
 }

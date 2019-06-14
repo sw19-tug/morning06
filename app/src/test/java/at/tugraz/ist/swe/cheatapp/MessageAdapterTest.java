@@ -13,17 +13,17 @@ public class MessageAdapterTest {
 
     @Test
     public void testGetItemViewType() {
-        Message messageSent = new Message(1, "Hi, how are you?", true);
-        Message messageReceived = new Message(2, "I'm fine. Thanks.", false);
+        ChatMessage messageSent = new ChatMessage(1, "Hi, how are you?", true, false);
+        ChatMessage messageReceived = new ChatMessage(2, "I'm fine. Thanks.", false, false);
 
-        List<Message> messageList = new ArrayList<>();
+        List<ChatMessage> messageList = new ArrayList<>();
         messageList.add(messageSent);
         messageList.add(messageReceived);
 
-        MessageAdapter messageListAdapter = new MessageAdapter(messageList);
+        ChatFragment chatFragment = new ChatFragment();
+        MessageAdapter messageListAdapter = new MessageAdapter(messageList, chatFragment);
         assertEquals(VIEW_TYPE_MESSAGE_SENT, messageListAdapter.getItemViewType(0));
         assertEquals(VIEW_TYPE_MESSAGE_RECEIVED, messageListAdapter.getItemViewType(1));
         assertEquals(messageList.size(), messageListAdapter.getItemCount());
     }
-
 }

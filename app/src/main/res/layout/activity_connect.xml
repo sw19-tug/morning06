@@ -11,25 +11,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
-
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/lv_con_devices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="5" />
-
-        <LinearLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swp_con_pullToRefresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btn_con_connect"
-                android:layout_width="wrap_content"
+            <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/lv_con_devices"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/connect" />
-        </LinearLayout>
+                android:layout_weight="5" />
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

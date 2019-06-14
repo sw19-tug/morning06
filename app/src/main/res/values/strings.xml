@@ -1,5 +1,28 @@
 <resources>
     <string name="app_name">CheatApp</string>
-    <string name="enter_text">Enter Text</string>
-    <string name="connect">Connect</string>
+    <string name="hint_text">Enter Text Here</string>
+    <string name="connected">Connected</string>
+    <string name="bluetooth_disabled">Please enable bluetooth!</string>
+    <string name="image_loading_failed">Selected image could not be loaded</string>
+    <string name="storage_permissions_needed">You have to grant permissions to set a profile picture.</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="no_device_selected">No device selected</string>
+    <string name="menu_set_nickname">Set Nickname</string>
+    <string name="menu_about_page">About Page</string>
+    <string name="title_set_nickname_dialog">Set Nickname</string>
+    <string name="title_about_page">About</string>
+    <string name="profile_picture_name">profile_picture.png</string>
+    <string name="text_about_page"><b>The Team</b> \n Philipp Diethard\n
+Stefan Ertl\n
+Karl Petschl\n
+Elisabeth Salomon\n
+Thomas Schuster\n
+Peter Stroissnig\n
+Johannes Trattner\n
+Lukas Wagner\n
+</string>
+    <string name="close_button">Close</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="trying_to_reconnect">Try to reconnect...</string>
 </resources>

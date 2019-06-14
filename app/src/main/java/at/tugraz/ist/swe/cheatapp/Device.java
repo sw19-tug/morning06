@@ -1,9 +1,37 @@
 package at.tugraz.ist.swe.cheatapp;
 
-public interface Device {
-    String getID();
+public abstract class Device {
+    protected String deviceName;
+    protected long deviceId; // MAC address used as unique identifier
+    protected String nickname;
+    protected String profilePicture;
 
-    String getMessage();
+    public static long idStringToLong(String idString) {
+        idString = idString.replace(":", "");
+        return Long.valueOf(idString, 16);
+    }
 
-    void sendMessage(String message);
+    public String getDeviceName() {
+        return this.deviceName;
+    }
+
+    public long getDeviceId() {
+        return this.deviceId;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getProfilePicture() {
+        return this.profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }

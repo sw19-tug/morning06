@@ -2,90 +2,32 @@ package at.tugraz.ist.swe.cheatapp;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 
 public class RealBluetoothProvider extends BluetoothProvider {
+    private final static String TAG = "RealBluetoothProvider";
 
-
-    private final Queue<String> sentMessageQueue;
-    private final ConnectThread connectThread;
     private BluetoothAdapter adapter;
-    private Thread communicationThread;
+    private BluetoothThread bluetoothThread;
 
     public RealBluetoothProvider() throws BluetoothException {
+        initialize();
+    }
+
+    public void initialize() throws BluetoothException {
         adapter = BluetoothAdapter.getDefaultAdapter();
-        sentMessageQueue = new LinkedList<>();
 
         if (adapter == null) {
-            throw new BluetoothException("No bluetooth adapter available");
+            throw new BluetoothException("Hardware has no bluetooth support");
         }
 
-        Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable ex) {
-                onError(ex.getMessage());
-            }
-        };
+        Log.d(TAG, "Starting bluetooth thread");
 
-        this.connectThread = new ConnectThread(adapter);
-        this.connectThread.setUncaughtExceptionHandler(exceptionHandler);
-        this.connectThread.start();
-
-        System.out.println("RealBluetoothProvider Start Communication Thread");
-
-        this.communicationThread = new Thread(new Runnable() {
-            BluetoothSocket socket;
-
-            @Override
-            public void run() {
-                try {
-                    synchronized (RealBluetoothProvider.this.connectThread) {
-                        RealBluetoothProvider.this.connectThread.wait();
-                    }
-
-
-                    socket = RealBluetoothProvider.this.connectThread.getSocket();
-                    RealBluetoothProvider.this.onConnected();
-
-                    BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    OutputStreamWriter outputWriter = new OutputStreamWriter(socket.getOutputStream());
-
-                    while (true) {
-                        if (inputReader.ready()) {
-                            String receivedMessage = inputReader.readLine();
-                            onMessageReceived(receivedMessage);
-                        } else {
-                            String sentMessage;
-
-                            synchronized (sentMessageQueue) {
-                                sentMessage = sentMessageQueue.poll();
-                            }
-
-                            if (sentMessage != null) {
-                                outputWriter.write(sentMessage);
-                            }
-                        }
-
-                    }
-                } catch (InterruptedException e) {
-                    onError(e.getMessage());
-                } catch (IOException e) {
-                    onDisconnected();
-                }
-            }
-
-        });
-        this.communicationThread.start();
+        initBluetoothThread();
     }
 
     @Override
@@ -103,34 +45,100 @@ public class RealBluetoothProvider extends BluetoothProvider {
 
     @Override
     public void connectToDevice(Device device) {
-        System.out.println("Request connection as client;");
-        connectThread.requestConnection((RealDevice) device);
+        connectedDevice = device;
+        bluetoothThread.connectToDevice(device);
     }
 
     @Override
-    protected void onConnected() {
-
-    }
-
-    @Override
-    public void sendMessage(String message) {
-        synchronized (sentMessageQueue) {
-            sentMessageQueue.add(message);
-        }
+    public void sendMessage(final ChatMessage message) {
+        final BluetoothMessage btMessage = new BluetoothMessage(message);
+        bluetoothThread.sendBluetoothMessage(btMessage);
     }
 
     @Override
     public void disconnect() {
-
+        final BluetoothMessage btMessage = new BluetoothMessage(new DisconnectMessage());
+        bluetoothThread.sendBluetoothMessage(btMessage);
+        bluetoothThread.setRunning(false);
     }
 
     @Override
-    protected void onMessageReceived(String message) {
-
+    protected void onMessageReceived(final ChatMessage message) {
+        super.onMessageReceived(message);
     }
 
     @Override
     protected void onDisconnected() {
+        try {
+            initialize();
+        } catch (BluetoothException ex) {
+            ex.printStackTrace();
+            onError(ex.getMessage());
+        }
+        connectedDevice = null;
+        super.onDisconnected();
+    }
 
+    public void handleBluetoothMessage(final BluetoothMessage bluetoothMessage) {
+        switch (bluetoothMessage.getMessageType()) {
+            case CHAT:
+                onMessageReceived(bluetoothMessage.getMessage());
+                break;
+            case CONNECT:
+                String nickname = bluetoothMessage.getConnectMessage().getNickname();
+                if (nickname.isEmpty()) {
+                    nickname = this.bluetoothThread.getConnectedDevice().getDeviceName();
+                }
+                this.bluetoothThread.getConnectedDevice().setNickname(nickname);
+
+                String profilePicture = bluetoothMessage.getConnectMessage().getProfilePicture();
+                if (profilePicture.isEmpty()) {
+                    profilePicture = Constants.EMPTY_PROFILE_PICTURE;
+                }
+                this.bluetoothThread.getConnectedDevice().setProfilePicture(profilePicture);
+
+                onConnected();
+                break;
+            case DISCONNECT:
+                bluetoothThread.setRunning(false);
+                break;
+        }
+    }
+
+    @Override
+    public Device getConnectedDevice() {
+        return this.bluetoothThread.getConnectedDevice();
+    }
+
+    public BluetoothAdapter getAdapter() {
+        return adapter;
+    }
+
+    @Override
+    public boolean isBluetoothEnabled() {
+        if (adapter.isEnabled()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Device getDeviceByID(long deviceID) {
+        Set<BluetoothDevice> btDevices = adapter.getBondedDevices();
+
+        for (BluetoothDevice device : btDevices) {
+            if (Utils.idStringToLong(device.getAddress()) == deviceID) {
+                return new RealDevice(device);
+            }
+        }
+
+        return null;
+    }
+
+    private void initBluetoothThread() {
+        bluetoothThread = new BluetoothThread(this);
+        bluetoothThread.setUncaughtExceptionHandler(createExceptionHandler());
+        bluetoothThread.start();
     }
 }

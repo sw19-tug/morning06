@@ -6,17 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private List<ChatMessage> messageList;
+    private ChatFragment chatFragment;
 
-    private List<Message> messageList;
-
-    public MessageAdapter(List<Message> messageList) {
+    public MessageAdapter(List<ChatMessage> messageList, ChatFragment chatFragment) {
         this.messageList = messageList;
+        this.chatFragment = chatFragment;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        Message message = messageList.get(position);
+        ChatMessage message = messageList.get(position);
         if (message.getMessageSent()) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -52,7 +56,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message message = messageList.get(position);
+        ChatMessage message = messageList.get(position);
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
@@ -63,33 +67,62 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public List<ChatMessage> getMessageList() {
+        return messageList;
+    }
+
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
+        TextView textEditedIndicator;
 
-        SentMessageHolder(View itemView) {
+
+        SentMessageHolder(final View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.txt_message_body);
-            timeText = itemView.findViewById(R.id.txt_message_time);
+            messageText = itemView.findViewById(R.id.txt_message_messageBody);
+            timeText = itemView.findViewById(R.id.txt_message_messageTime);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_messageEdited);
+
         }
 
-        void bind(Message message) {
+        void bind(final ChatMessage message) {
             messageText.setText(message.getMessageText());
+            timeText.setText(dateFormat.format(message.getTimestamp()));
+            if (message.getMessageEdited()) {
+                textEditedIndicator.setText("edited");
+            } else {
+                textEditedIndicator.setText("");
+            }
+            messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    chatFragment.onMessageEdit(message);
+                    return true;
+                }
+            });
         }
     }
 
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
+        TextView textEditedIndicator;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = itemView.findViewById(R.id.txt_message_body);
-            timeText = itemView.findViewById(R.id.txt_message_time);
+            messageText = itemView.findViewById(R.id.txt_message_messageBody);
+            timeText = itemView.findViewById(R.id.txt_message_messageTime);
+            textEditedIndicator = itemView.findViewById(R.id.txt_message_messageEdited);
         }
 
-        void bind(Message message) {
+        void bind(ChatMessage message) {
+            timeText.setText(dateFormat.format(message.getTimestamp()));
             messageText.setText(message.getMessageText());
+            if (message.getMessageEdited()) {
+                textEditedIndicator.setText("edited");
+            } else {
+                textEditedIndicator.setText("");
+            }
         }
     }
 }
